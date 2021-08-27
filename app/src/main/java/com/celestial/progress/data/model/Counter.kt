@@ -2,26 +2,27 @@ package com.celestial.progress.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import org.joda.time.DurationFieldType
+import org.joda.time.LocalDate
+import org.joda.time.Period
+import org.joda.time.PeriodType
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+
 @Entity
 class Counter(
-    val title: String,
-    val startDate: String,
-    val endDate: String,
-    val isElapsed: Boolean,
-    val color: Int,
-    val note: String,
+        val title: String,
+        val startDate: String,
+        val endDate: String,
+        val isElapsed: Boolean,
+        val color: Int,
+        val note: String,
 
-    @PrimaryKey
-    val id: Int? = null
+        @PrimaryKey
+        val id: Int? = null
 ) {
 
     fun dayDifferenceBetweenTwoDates(): Long{
@@ -37,17 +38,30 @@ class Counter(
 
 
 
-    fun getDetail(){
-        
+    fun getDetail(): Period{
+
+        val start = LocalDate.parse(startDate)
+        val end = LocalDate.parse(endDate)
+
+        val fields = PeriodType.forFields(arrayOf(DurationFieldType.years(),
+                DurationFieldType.months(), DurationFieldType.days()
+        ))
+        val period = Period(start, end) // normalize to months and days
+                .normalizedStandard(fields)
+
+        println("Year: ${period.years}, Months: ${period.months}, Days: ${period.days}")
+
+        return period
+
     }
 
 }
 
 fun Calendar.resetToMidnight(date: Date): Calendar{
     this.time = date
-    this.set(Calendar.HOUR_OF_DAY,0)
-    this.set(Calendar.MINUTE,0)
-    this.set(Calendar.MILLISECOND,0)
+    this.set(Calendar.HOUR_OF_DAY, 0)
+    this.set(Calendar.MINUTE, 0)
+    this.set(Calendar.MILLISECOND, 0)
     return this
 }
 

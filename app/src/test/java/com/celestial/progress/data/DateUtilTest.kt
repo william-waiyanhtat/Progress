@@ -42,6 +42,8 @@ class DateUtilTest {
         )
         println("Day Difference between two dates: ${c.dayDifferenceBetweenTwoDates()}")
 
+        c.getDetail()
+
         assert(c.dayDifferenceBetweenTwoDates() == 5L)
 
 
