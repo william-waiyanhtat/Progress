@@ -39,7 +39,6 @@ class Counter(
 
 
     fun getDetail(): Period{
-
         val start = LocalDate.parse(startDate)
         val end = LocalDate.parse(endDate)
 
@@ -48,11 +47,8 @@ class Counter(
         ))
         val period = Period(start, end) // normalize to months and days
                 .normalizedStandard(fields)
-
         println("Year: ${period.years}, Months: ${period.months}, Days: ${period.days}")
-
         return period
-
     }
 
 }
