@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CE93D8"
-    tools:context=".ui.DashboardFragment">
+    tools:context=".ui.DashboardFragment"
+    android:orientation="vertical">
+
+
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#CE93D8"
+        android:layout_height="wrap_content"
         android:text="Dashboard Fragment" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/counterRcy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -19,4 +25,4 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="8dp"/>
 
-</FrameLayout>
+</LinearLayout>
