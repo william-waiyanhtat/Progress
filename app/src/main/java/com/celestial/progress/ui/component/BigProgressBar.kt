@@ -11,6 +11,10 @@ import android.view.View
 const val TAG = "BigProgressBar"
 
 class BigProgressBar: View, ValueAnimator.AnimatorUpdateListener {
+
+    //todo 1: define progress bar type (indeterminate, determinate)
+    //todo 2: attribute type
+
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
@@ -42,7 +46,7 @@ class BigProgressBar: View, ValueAnimator.AnimatorUpdateListener {
 
 
         paint.shader = createGradient()
-        canvas?.drawRect(0f, 0f, WIDTH / 3.toFloat(), 20f, paint)
+        canvas?.drawRect(0f, 0f, WIDTH / 2.toFloat(), 20f, paint)
 
         Log.i("ProgressBar:", "WIDTH:${WIDTH}, WIDTH/2:${WIDTH / 2}")
     }
