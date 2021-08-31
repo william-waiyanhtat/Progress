@@ -3,7 +3,9 @@ package com.celestial.progress.di
 import android.content.Context
 import androidx.room.Room
 import com.celestial.progress.Constants
+import com.celestial.progress.data.CounterDao
 import com.celestial.progress.data.CounterDatabase
+import com.celestial.progress.data.CounterRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +27,10 @@ class AppModule {
         @ApplicationContext context: Context,
     ) = Room.databaseBuilder(context, CounterDatabase::class.java, Constants.DBNAME)
 
+
+    @Singleton
+    @Provides
+    fun provideCounterRepository(
+        dao: CounterDao
+    ) = CounterRepository(dao)
 }

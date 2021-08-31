@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.DashboardFragment"
+    android:layout_margin="@dimen/spacing_normal"
     android:orientation="vertical">
 
 
@@ -12,12 +14,15 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Dashboard Fragment" />
+        android:text="Dashboard"
+        android:textSize="20sp"
+        android:layout_margin="@dimen/spacing_normal"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/counterRcy"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_normal"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"

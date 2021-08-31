@@ -7,6 +7,54 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="10dp"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_small">
+
+            <TextView
+                android:id="@+id/greeting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="Good Afternoon"
+                android:textSize="@dimen/text_large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/username_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vanessa"
+                android:textSize="@dimen/text_normal"
+                app:layout_constraintStart_toStartOf="@+id/greeting_text"
+                app:layout_constraintTop_toBottomOf="@+id/greeting_text" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/e"
+                app:civ_border_color="#FF6F00"
+                app:civ_border_width="2dp"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="1dp"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
@@ -19,28 +67,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:defaultNavHost="true"
         android:layout_weight="1"
+        android:visibility="invisible"
         app:navGraph="@navigation/nav_graph" />
 
-    <com.ismaeldivita.chipnavigation.ChipNavigationBar
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_btm_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#8C8C8C"
         android:layout_gravity="bottom"
-        app:cnb_badgeColor="#F48FB1"
-        app:cnb_iconSize="24dp"
-        app:cnb_menuResource="@menu/btm_menu"
-        app:cnb_orientationMode="horizontal"
-        app:cnb_radius="24dp"
-        app:cnb_unselectedColor="#A5D6A7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:cnb_addBottomInset="false"
-        app:cnb_addLeftInset="false"
-        app:cnb_addRightInset="false"
-        app:cnb_addTopInset="false"
-
-        />
+        app:menu="@menu/btm_menu"/>
 
 </LinearLayout>
