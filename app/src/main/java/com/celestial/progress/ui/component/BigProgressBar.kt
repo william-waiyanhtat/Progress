@@ -32,34 +32,50 @@ class BigProgressBar: View, ValueAnimator.AnimatorUpdateListener {
     var MIN: Int? = null
     var MAX: Int? = null
 
+    var animatedValue = 0f
+
+    var valueAnimator = ValueAnimator.ofFloat(0f,1000f)
+
+
+
     init {
         this.color1 = Color.RED
         this.color2 = Color.BLUE
         MIN = 25
         MAX = 100
+
+        valueAnimator.apply {
+            this.repeatMode  = ValueAnimator.RESTART
+            this.repeatCount = ValueAnimator.INFINITE
+            this.duration = 2000
+            this.addUpdateListener(this@BigProgressBar)
+            this.start()
+        }
     }
 
     override fun onDraw(canvas: Canvas?) {
         paint.color = color1
-        canvas?.drawRect(0f, 0f, WIDTH.toFloat(), 20f, paint)
+     //   canvas?.drawRect(0f, 0f, WIDTH.toFloat(), 20f, paint)
         paint.color = color2
-
-
         paint.shader = createGradient()
-        canvas?.drawRect(0f, 0f, WIDTH / 2.toFloat(), 20f, paint)
+     //   canvas?.drawRect(0f, 0f, WIDTH / 2.toFloat(), 20f, paint)
 
         Log.i("ProgressBar:", "WIDTH:${WIDTH}, WIDTH/2:${WIDTH / 2}")
+
+        canvas?.drawRoundRect(0f,0f,WIDTH.toFloat(),20f,10f,10f,paint)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         WIDTH = w
         HEIGHT = h
+
         Log.i(TAG, "Width: $w, Height $h")
     }
 
     override fun onAnimationUpdate(animation: ValueAnimator?) {
-
+            animatedValue = animation?.animatedValue as Float
+            invalidate()
     }
 
 
@@ -71,8 +87,9 @@ class BigProgressBar: View, ValueAnimator.AnimatorUpdateListener {
 
 
     fun createGradient():Shader{
+//        val linearGradientShader: Shader = LinearGradient(0f, 0f, 100f, 20f, intArrayOf(Color.RED, Color.BLUE), floatArrayOf(animatedValue, animatedValue+10f), Shader.TileMode.CLAMP)
+        val linearGradientShader: Shader = LinearGradient(0f, 0f, animatedValue+WIDTH, 20f,Color.RED, Color.BLUE, Shader.TileMode.CLAMP)
 
-        val linearGradientShader: Shader = LinearGradient(0f, 0f, 300f, 20f, intArrayOf(Color.RED, Color.BLUE), floatArrayOf(0f, 1f), Shader.TileMode.CLAMP)
         return linearGradientShader
     }
 }
