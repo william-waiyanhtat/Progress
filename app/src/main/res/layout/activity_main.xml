@@ -67,7 +67,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:defaultNavHost="true"
         android:layout_weight="1"
-        android:visibility="invisible"
         app:navGraph="@navigation/nav_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

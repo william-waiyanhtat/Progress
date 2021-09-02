@@ -35,4 +35,5 @@ class ItemAdapter(): RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
     override fun getItemCount(): Int {
        return 100
     }
+
 }
