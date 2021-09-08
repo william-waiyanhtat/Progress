@@ -1,11 +1,15 @@
-package com.celestial.progress.ui
+package com.celestial.progress.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.adapter.ItemAdapter
 import com.celestial.progress.databinding.FragmentDashboardBinding
@@ -15,6 +19,7 @@ import com.celestial.progress.databinding.FragmentDashboardBinding
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+private val TAG = DashboardFragment::class.java.name
 
 class DashboardFragment : Fragment() {
 
@@ -43,7 +48,22 @@ class DashboardFragment : Fragment() {
         binding.counterRcy.adapter = ItemAdapter()
         binding.counterRcy.layoutManager = LinearLayoutManager(context)
 
+        setListener()
+
         return view
+    }
+
+    fun setListener(){
+        binding.textView.setOnClickListener{
+            (activity as MainActivity).callback()
+            Log.d(TAG, "Click on Listener")
+        }
+
+        binding.fab.setOnClickListener {
+            (activity as MainActivity).showHideAppBar(false)
+            findNavController().navigate(R.id.createFragment)
+
+        }
     }
 
     override fun onDestroy() {

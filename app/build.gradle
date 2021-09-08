@@ -30,6 +30,10 @@ android {
     }
 
     buildTypes {
+        debug{
+            clean
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -46,6 +50,8 @@ android {
 
 dependencies {
 
+    implementation 'androidx.wear:wear:1.1.0'
+    compileOnly 'com.google.android.wearable:wearable:2.8.1'
     def nav_version = "2.3.5"
 
     // Kotlin

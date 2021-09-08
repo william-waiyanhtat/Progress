@@ -7,7 +7,15 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.celestial.progress.ui.DashboardFragment"
+        android:name="com.celestial.progress.ui.fragment.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+    </fragment>
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="com.celestial.progress.ui.fragment.CreateFragment"
+        android:label="fragment_create"
+        tools:layout="@layout/fragment_create"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"/>
 </navigation>

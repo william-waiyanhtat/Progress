@@ -1,7 +1,8 @@
-package com.celestial.progress.data
+package com.celestial.progress.ui
 
 
 import androidx.lifecycle.ViewModel
+import com.celestial.progress.data.CounterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

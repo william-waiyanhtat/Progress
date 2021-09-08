@@ -2,4 +2,21 @@
     <string name="app_name">Progress</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_create">CreateActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+
+    <string-array name="show_mode">
+        <item>By Day</item>
+        <item>By Week-Day</item>
+        <item>By Month-Week-Day</item>
+        <item>By Year-Month-Day</item>
+        <item>By Year-Month-Week-Day</item>
+    </string-array>
+
+    <string name="counter_display_label">Counter Display Format</string>
+    <string name="choose_color_label">Choose Counter Color</string>
 </resources>
