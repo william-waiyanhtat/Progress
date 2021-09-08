@@ -8,4 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#717171</color>
+    <color name="makeup">#F88484</color>
+    <color name="tha_nat_khar">#FBE7C6</color>
+
 </resources>
