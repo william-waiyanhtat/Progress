@@ -7,21 +7,16 @@ import javax.inject.Inject
 class CounterRepository @Inject constructor(
     private val counterDao: CounterDao): DefaultRepository {
     override suspend fun insertCounterItem(counterItem: Counter) {
-        TODO("Not yet implemented")
+        counterDao.insertCounter(counterItem)
     }
 
     override suspend fun deleteCounterItem(counterItem: Counter) {
-        TODO("Not yet implemented")
+        counterDao.deleteCounter(counterItem)
     }
 
     override fun observeAllCounterItem(): LiveData<List<Counter>> {
-        TODO("Not yet implemented")
+       return counterDao.observeAllShoppingItems()
     }
-
-    override fun observeTotalPrice(): LiveData<Float> {
-        TODO("Not yet implemented")
-    }
-
 
     suspend fun insert100Records(){
         for(i in 1..100) {

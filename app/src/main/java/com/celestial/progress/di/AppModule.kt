@@ -2,7 +2,7 @@ package com.celestial.progress.di
 
 import android.content.Context
 import androidx.room.Room
-import com.celestial.progress.Constants
+import com.celestial.progress.others.Constants
 import com.celestial.progress.data.CounterDao
 import com.celestial.progress.data.CounterDatabase
 import com.celestial.progress.data.CounterRepository

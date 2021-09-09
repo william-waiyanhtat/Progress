@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "38bad1a4880681dbc5e4edc03d901b1b",
+    "identityHash": "2191d879e1f94c14edd9cce4ea462da6",
     "entities": [
       {
         "tableName": "Counter",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT, `isElapsed` INTEGER NOT NULL, `color` INTEGER NOT NULL, `note` TEXT NOT NULL, `id` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT, `isElapsed` INTEGER, `color` INTEGER, `note` TEXT, `requiredNotification` INTEGER NOT NULL, `displayFormat` TEXT NOT NULL, `id` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "title",
@@ -30,17 +30,29 @@
             "fieldPath": "isElapsed",
             "columnName": "isElapsed",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "color",
             "columnName": "color",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "note",
             "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "requiredNotification",
+            "columnName": "requiredNotification",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "displayFormat",
+            "columnName": "displayFormat",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -64,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '38bad1a4880681dbc5e4edc03d901b1b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2191d879e1f94c14edd9cce4ea462da6')"
     ]
   }
 }

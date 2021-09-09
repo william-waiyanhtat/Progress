@@ -19,4 +19,10 @@
 
     <string name="counter_display_label">Counter Display Format</string>
     <string name="choose_color_label">Choose Counter Color</string>
+
+<!--    Create Fragment-->
+    <string name="create_btn_txt">Create Counter</string>
+
+
+    <string name="input_counter_name_error">Counter name can\'t be empty</string>
 </resources>

@@ -17,7 +17,12 @@ class ItemAdapter(): RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     }
 
-    inner class ItemViewHolder(val binding: ProgressItemBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ItemViewHolder(val binding: ProgressItemBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(){
+            binding.itemTitleId.text = itemList[adapterPosition].title
+            binding.tvCounting.text = itemList[adapterPosition].endDate
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ProgressItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
@@ -28,6 +33,7 @@ class ItemAdapter(): RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
        with(holder){
             this.binding.itemTitleId.text = position.toString()
+     //      holder.bind()
 
        }
     }

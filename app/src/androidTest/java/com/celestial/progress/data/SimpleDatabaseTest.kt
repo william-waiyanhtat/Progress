@@ -47,7 +47,7 @@ class SimpleDatabaseTest {
         val d1: Date = Calendar.getInstance().time
         val d2: Date = Calendar.getInstance().time
 
-        val smpf: SimpleDateFormat = SimpleDateFormat("YYYY-MM-DDTHH-mm-ss")
+        val smpf: SimpleDateFormat = SimpleDateFormat("YYYY-MM-DD'T'HH-mm-ss")
         val startDate = smpf.format(d1)
         val endDate = smpf.format(d2)
 
@@ -60,7 +60,7 @@ class SimpleDatabaseTest {
             "Test Note"
         )
 
-       // counterDao.insertCounter(counter)
+        counterDao.insertCounter(counter)
 
         val c = counterDao.observeAllShoppingItems().getOrAwaitValue()
 

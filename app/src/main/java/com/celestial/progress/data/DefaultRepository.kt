@@ -10,6 +10,4 @@ interface DefaultRepository {
 
     fun observeAllCounterItem(): LiveData<List<Counter>>
 
-    fun observeTotalPrice(): LiveData<Float>
-
 }
