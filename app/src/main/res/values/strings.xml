@@ -20,7 +20,7 @@
     <string name="counter_display_label">Counter Display Format</string>
     <string name="choose_color_label">Choose Counter Color</string>
 
-<!--    Create Fragment-->
+    <!--    Create Fragment-->
     <string name="create_btn_txt">Create Counter</string>
 
 

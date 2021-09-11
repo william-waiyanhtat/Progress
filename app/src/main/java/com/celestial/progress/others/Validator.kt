@@ -41,7 +41,6 @@ object Validator {
             return Resource.error(errorMinCharCount, false)
 
         return Resource.success(true)
-
     }
 
     fun verifyInputDateString(startDate: String, endDate: String?): Resource<Boolean> {

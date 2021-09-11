@@ -41,22 +41,21 @@ class Counter(
         val start = LocalDate.parse(startDate)
         val end = LocalDate.parse(endDate)
 
-       print(Days.daysBetween(start,end).days)
+        print(Days.daysBetween(start, end).days)
 
-        if(displayFormat.equals(DisplayFormat.DAY)||displayFormat.equals(DisplayFormat.WEEK_DAY)){
-            val days = Days.daysBetween(start,end).days
-            return when(displayFormat){
+        if (displayFormat == DisplayFormat.DAY || displayFormat == DisplayFormat.WEEK_DAY) {
+            val days = Days.daysBetween(start, end).days
+            return when (displayFormat) {
                 DisplayFormat.DAY -> "$days Day(s)"
                 else -> {
-                    val wk = days/7
-                    val day = days%7
+                    val wk = days / 7
+                    val day = days % 7
 
                     "$wk Week(s), $day Day(s)"
                 }
             }
 
-        }else {
-
+        } else {
             var field = when (displayFormat) {
                 (DisplayFormat.WEEK_DAY) -> PeriodType.forFields(
                     arrayOf(
@@ -89,8 +88,6 @@ class Counter(
 
             val period = Period(start, end) // normalize to months and days
                 .normalizedStandard(field)
-            println("Year: ${period.years}, Months: ${period.months}, Days: ${period.days}")
-
 
             return when (displayFormat) {
                 DisplayFormat.YEAR_MONTH_WEEK_DAY -> "${period.years} Year(s), ${period.months} Month(s), ${period.weeks} Week(s), ${period.days} Day(s)"

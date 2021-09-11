@@ -2,22 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.celestial.progress">
 
-
-
-
-
     <application
         android:name=".ProgressApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_app"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Progress">
-        <activity
-            android:name=".ui.activity.CreateActivity"
-            android:label="@string/title_activity_create"></activity>
-
+        <activity android:name=".MainActivity2"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

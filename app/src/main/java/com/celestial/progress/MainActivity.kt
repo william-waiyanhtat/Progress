@@ -1,13 +1,14 @@
 package com.celestial.progress
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.celestial.progress.data.adapter.ItemAdapter
 import com.celestial.progress.databinding.ActivityMainBinding
+import com.celestial.progress.others.Utils.showNotification
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -39,6 +40,10 @@ class MainActivity : AppCompatActivity() {
             makeVisible()
             Log.d(TAG,"Callback method call")
         }
+
+        showNotification(this,"ABC","DEF")
+
+
     }
 
     fun makeVisible(){
@@ -68,9 +73,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//
+//    }
 
 }
 
