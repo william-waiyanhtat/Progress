@@ -53,4 +53,11 @@ private val counterRepository: CounterRepository
         Log.d(TAG,"read live data")
        return counterRepository.observeAllCounterItem()
     }
+
+    override fun updateCounter(counter: Counter) {
+       viewModelScope.launch {
+           counterRepository.updateCounter(counter)
+
+       }
+    }
 }

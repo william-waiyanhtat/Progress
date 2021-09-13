@@ -27,6 +27,10 @@ class CounterRepository @Inject constructor(
        return counterDao.observeAllShoppingItems()
     }
 
+    override suspend fun updateCounter(counter: Counter) {
+       counterDao.updateCounter(counter)
+    }
+
     suspend fun insert100Records(){
         for(i in 1..100) {
             val counter = Counter(

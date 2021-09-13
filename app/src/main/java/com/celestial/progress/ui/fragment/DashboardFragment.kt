@@ -1,26 +1,27 @@
 package com.celestial.progress.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.adapter.ItemAdapter
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.FragmentDashboardBinding
 import com.celestial.progress.ui.CounterViewModel
+import kotlinx.coroutines.launch
 
 
 private val TAG = DashboardFragment::class.java.name
@@ -43,17 +44,21 @@ class DashboardFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val view = binding.root
 
 
         viewModel = ViewModelProvider(requireActivity())[CounterViewModel::class.java]
-        adapter = ItemAdapter()
+        adapter = ItemAdapter(expandCollapse)
         binding.counterRcy.adapter = adapter
         binding.counterRcy.layoutManager = LinearLayoutManager(context)
+        val itemTouchHelper = ItemTouchHelper(itemTouchSimpleCallback)
+        itemTouchHelper.attachToRecyclerView(binding.counterRcy)
 
         setListener()
         observeData()
@@ -65,7 +70,7 @@ class DashboardFragment : Fragment() {
     private fun observeData() {
       viewModel?.let {
           it.readAllCounters().observe(viewLifecycleOwner, Observer {
-              Log.d(TAG,"Data get ${it.size}")
+              Log.d(TAG, "Data get ${it.size}")
 
               adapter.submitList(it)
               binding.counterRcy.layoutManager?.onRestoreInstanceState(rcyState)
@@ -86,10 +91,10 @@ class DashboardFragment : Fragment() {
             if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
                 val extras = FragmentNavigator.Extras.Builder()
                     .addSharedElement(
-                        binding.fab,"fabBtn"
+                        binding.fab, "fabBtn"
                     ).build()
 
-               findNavController().navigate(R.id.navigateToCreateFragment,null,null,extras)
+               findNavController().navigate(R.id.navigateToCreateFragment, null, null, extras)
             }
         }
     }
@@ -114,5 +119,48 @@ class DashboardFragment : Fragment() {
         super.onResume()
         Log.d(TAG, "On Resume")
        // binding.counterRcy.layoutManager?.onRestoreInstanceState(rcyState)
+    }
+
+    val itemTouchSimpleCallback = object: ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
+        0
+    ){
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            val from = viewHolder.adapterPosition
+            val to = target.adapterPosition
+
+            val counterFrom = (recyclerView.adapter as ItemAdapter).currentList[from]
+            val counterTo = (recyclerView.adapter as ItemAdapter).currentList[to]
+            counterFrom.order = to
+            counterTo.order = from
+
+
+            lifecycleScope.launch {
+                viewModel.updateCounter(counterFrom)
+                viewModel.updateCounter(counterTo)
+            }
+
+
+        //    recyclerView.adapter?.notifyItemMoved(from,to)
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            TODO("Not yet implemented")
+        }
+
+    }
+
+    val expandCollapse: (Counter) -> Unit = {
+        
+        Log.d(TAG,"EXPAND COLLAPSE CALLED")
+        lifecycleScope.launch {
+            viewModel.updateCounter(it)
+        }
+
     }
 }

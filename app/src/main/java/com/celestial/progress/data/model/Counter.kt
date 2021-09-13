@@ -18,8 +18,9 @@ class Counter(
     val note: String?,
     val requiredNotification: Boolean = false,
     val displayFormat: DisplayFormat = DisplayFormat.DAY,
-    val order: Int? = null,
+    var order: Int? = null,
     val createdDate: String = Calendar.getInstance().toString(),
+    var isExpand: Boolean = false,
 
     @PrimaryKey
     val id: Int? = null

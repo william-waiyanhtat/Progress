@@ -12,4 +12,5 @@ interface ViewModelUseCase {
 
     fun readAllCounters(): LiveData<List<Counter>>
 
+    fun updateCounter(counter: Counter)
 }

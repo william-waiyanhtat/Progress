@@ -12,6 +12,9 @@ interface CounterDao {
     @Delete
     suspend fun deleteCounter(counter: Counter)
 
-    @Query("SELECT * FROM counter")
+    @Query("SELECT * FROM counter ORDER BY `order` ASC")
     fun observeAllShoppingItems(): LiveData<List<Counter>>
+
+    @Update
+    suspend fun updateCounter(counter: Counter)
 }
