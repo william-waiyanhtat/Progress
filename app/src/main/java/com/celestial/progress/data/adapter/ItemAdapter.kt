@@ -1,26 +1,52 @@
 package com.celestial.progress.data.adapter
 
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
 
-class ItemAdapter(): RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter: ListAdapter<Counter, ItemAdapter.ItemViewHolder>(DIFF_UTIL) {
 
-    var itemList = ArrayList<Counter>()
+    companion object{
+        val DIFF_UTIL = object: DiffUtil.ItemCallback<Counter>() {
+            override fun areItemsTheSame(oldItem: Counter, newItem: Counter): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-
-    init {
-
+            override fun areContentsTheSame(oldItem: Counter, newItem: Counter): Boolean {
+               return oldItem.title == newItem.title && oldItem.createdDate == newItem.createdDate
+            }
+        }
     }
 
     inner class ItemViewHolder(val binding: ProgressItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(){
-            binding.itemTitleId.text = itemList[adapterPosition].title
-            binding.tvCounting.text = itemList[adapterPosition].endDate
+            binding.itemTitleId.text = getItem(adapterPosition).title
+            binding.tvCounting.text = getItem(adapterPosition).endDate
+
+            itemView.setOnClickListener {
+                val tv = binding.tvDetail
+
+                if(tv.visibility == View.GONE){
+                    tv.visibility = View.VISIBLE
+                    notifyItemChanged(-1)
+                }else{
+
+                    tv.visibility = View.GONE
+                    notifyItemChanged(adapterPosition)
+                }
+
+
+
+
+
+            }
         }
     }
 
@@ -32,14 +58,9 @@ class ItemAdapter(): RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
        with(holder){
-            this.binding.itemTitleId.text = position.toString()
-     //      holder.bind()
-
+           bind()
        }
     }
 
-    override fun getItemCount(): Int {
-       return 100
-    }
 
 }

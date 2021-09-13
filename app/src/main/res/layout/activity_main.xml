@@ -5,66 +5,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:orientation="vertical"
     android:id="@+id/mainLayout"
     app:layoutDescription="@xml/activity_main_scene"
     tools:context=".MainActivity">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_margin="@dimen/spacing_small"
-        android:background="@drawable/app_barbg"
-        android:elevation="8dp"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/appBar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="70dp"-->
+<!--        android:layout_margin="@dimen/spacing_small"-->
+<!--        android:background="@drawable/app_barbg"-->
+<!--        android:elevation="8dp"-->
+<!--        android:padding="8dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <TextView
-        android:id="@+id/greeting_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:elevation="10dp"
-        android:text="Good Afternoon"
-        android:textSize="@dimen/text_large"
-        app:layout_constraintStart_toEndOf="@+id/imgv_profile"
-        app:layout_constraintTop_toTopOf="@+id/imgv_profile" />
+<!--    <TextView-->
+<!--        android:id="@+id/greeting_text"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:elevation="10dp"-->
+<!--        android:text="Good Afternoon"-->
+<!--        android:textSize="@dimen/text_large"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/imgv_profile"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/imgv_profile" />-->
 
-    <TextView
-        android:id="@+id/username_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="10dp"
-        android:text="Vanessa"
-        android:textSize="@dimen/text_normal"
-        app:layout_constraintStart_toStartOf="@+id/greeting_text"
-        app:layout_constraintTop_toBottomOf="@+id/greeting_text" />
+<!--    <TextView-->
+<!--        android:id="@+id/username_text"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:elevation="10dp"-->
+<!--        android:text="Vanessa"-->
+<!--        android:textSize="@dimen/text_normal"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/greeting_text"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/greeting_text" />-->
 
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/imgv_profile"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:elevation="10dp"
-        android:src="@drawable/e"
-        app:civ_border_color="#FF6F00"
-        app:civ_border_width="2dp"
-        app:civ_shadow="true"
-        app:civ_shadow_radius="1dp"
-        app:layout_constraintBottom_toBottomOf="@+id/appBar"
-        app:layout_constraintStart_toStartOf="@+id/appBar"
-        app:layout_constraintTop_toTopOf="@+id/appBar" />
+<!--    <com.mikhaellopez.circularimageview.CircularImageView-->
+<!--        android:id="@+id/imgv_profile"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:elevation="10dp"-->
+<!--        android:src="@drawable/e"-->
+<!--        app:civ_border_color="#FF6F00"-->
+<!--        app:civ_border_width="2dp"-->
+<!--        app:civ_shadow="true"-->
+<!--        app:civ_shadow_radius="1dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/appBar"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/appBar"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/appBar" />-->
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"

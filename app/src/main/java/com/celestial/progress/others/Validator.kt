@@ -16,7 +16,7 @@ object Validator {
 
     val p = Pattern.compile("[^a-z0-9]", Pattern.CASE_INSENSITIVE)
 
-    val emptyStartDateError = "Start date can't be empty"
+    val emptyStartDateError = "Start date can't be empty!"
 
     val startDateEarlierError = "Start date can't be earlier than End date"
 
@@ -40,7 +40,7 @@ object Validator {
         if (input.length < Constants.counterNameCharMinimum)
             return Resource.error(errorMinCharCount, false)
 
-        return Resource.success(true)
+        return Resource.success(true,null)
     }
 
     fun verifyInputDateString(startDate: String, endDate: String?): Resource<Boolean> {
@@ -62,7 +62,7 @@ object Validator {
 
         }
 
-        return Resource.success(true)
+        return Resource.success(true,null)
     }
 
 }

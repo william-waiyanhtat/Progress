@@ -2,12 +2,21 @@ package com.celestial.progress.data
 
 import androidx.lifecycle.LiveData
 import com.celestial.progress.data.model.Counter
+import com.celestial.progress.others.RepoStatus
+import com.celestial.progress.others.Resource
 import javax.inject.Inject
 
 class CounterRepository @Inject constructor(
+
     private val counterDao: CounterDao): DefaultRepository {
-    override suspend fun insertCounterItem(counterItem: Counter) {
-        counterDao.insertCounter(counterItem)
+    override suspend fun insertCounterItem(counterItem: Counter, status: RepoStatus) {
+        val result = counterDao.insertCounter(counterItem)
+
+        if(result>=0)
+            status.success(result,"New Counter Added Successfully!")
+        else
+            status.equals("Error inserting new counter!")
+
     }
 
     override suspend fun deleteCounterItem(counterItem: Counter) {

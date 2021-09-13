@@ -7,7 +7,7 @@ import com.celestial.progress.data.model.Counter
 @Dao
 interface CounterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCounter(counter: Counter)
+    suspend fun insertCounter(counter: Counter): Long
 
     @Delete
     suspend fun deleteCounter(counter: Counter)

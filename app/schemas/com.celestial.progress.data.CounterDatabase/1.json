@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2191d879e1f94c14edd9cce4ea462da6",
+    "identityHash": "0e725bfce6a21e13c2f7ebf51871b77b",
     "entities": [
       {
         "tableName": "Counter",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT, `isElapsed` INTEGER, `color` INTEGER, `note` TEXT, `requiredNotification` INTEGER NOT NULL, `displayFormat` TEXT NOT NULL, `id` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT, `isElapsed` INTEGER, `color` INTEGER, `note` TEXT, `requiredNotification` INTEGER NOT NULL, `displayFormat` TEXT NOT NULL, `order` INTEGER, `createdDate` TEXT NOT NULL, `id` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "title",
@@ -57,6 +57,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdDate",
+            "columnName": "createdDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -76,7 +88,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2191d879e1f94c14edd9cce4ea462da6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0e725bfce6a21e13c2f7ebf51871b77b')"
     ]
   }
 }

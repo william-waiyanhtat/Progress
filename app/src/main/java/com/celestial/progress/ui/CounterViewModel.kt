@@ -1,11 +1,14 @@
 package com.celestial.progress.ui
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.celestial.progress.data.CounterRepository
 import com.celestial.progress.data.model.Counter
+import com.celestial.progress.others.RepoStatus
 import com.celestial.progress.others.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,12 +19,30 @@ class CounterViewModel @Inject constructor(
 private val counterRepository: CounterRepository
 ): ViewModel(),ViewModelUseCase {
 
-    override fun createCounter(counter: Counter) {
+    val TAG = CounterViewModel::class.java.name
+
+    override fun createCounter(counter: Counter): LiveData<Resource<Long>> {
+
+        val result = MutableLiveData<Resource<Long>>()
+
          viewModelScope.launch {
-             counterRepository.insertCounterItem(counter)
+             counterRepository.insertCounterItem(counter,object: RepoStatus{
+
+                 override fun success(obj: Any, msg: String?) {
+                     Log.d(TAG,"Success Insert: ${obj as Long}")
+                     result.postValue(Resource.success(obj as Long,msg))
+                 }
+
+                 override fun loading(msg: String) {
+
+                 }
+
+                 override fun failed(obj: Any, errMsg: String) {
+                    result.postValue(Resource.error(errMsg,null))
+                 }
+             })
          }
-
-
+        return result
     }
 
     override fun readCounterDetail(): Counter {
@@ -29,6 +50,7 @@ private val counterRepository: CounterRepository
     }
 
     override fun readAllCounters(): LiveData<List<Counter>> {
+        Log.d(TAG,"read live data")
        return counterRepository.observeAllCounterItem()
     }
 }

@@ -7,6 +7,7 @@
     android:background="@drawable/app_barbg"
     android:elevation="8dp"
     android:padding="8dp"
+    android:animateLayoutChanges="true"
     android:layout_margin="@dimen/spacing_normal">
 
     <TextView
@@ -51,6 +52,18 @@
         app:layout_constraintBottom_toBottomOf="@+id/item_progress_bar_id"
         app:layout_constraintEnd_toEndOf="@+id/item_progress_bar_id"
         app:layout_constraintTop_toTopOf="@+id/item_progress_bar_id" />
+
+
+    <TextView
+        android:id="@+id/tv_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Detail"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_progress_bar_id" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

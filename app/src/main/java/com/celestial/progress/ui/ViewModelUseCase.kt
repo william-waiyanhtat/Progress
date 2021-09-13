@@ -6,10 +6,10 @@ import com.celestial.progress.others.Resource
 
 interface ViewModelUseCase {
 
-    fun createCounter(counter: Counter)
+    fun createCounter(counter: Counter): LiveData<Resource<Long>>
 
     fun readCounterDetail(): Counter
 
-    fun readAllCounters():LiveData<List<Counter>>
+    fun readAllCounters(): LiveData<List<Counter>>
 
 }

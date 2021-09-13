@@ -18,6 +18,8 @@ class Counter(
     val note: String?,
     val requiredNotification: Boolean = false,
     val displayFormat: DisplayFormat = DisplayFormat.DAY,
+    val order: Int? = null,
+    val createdDate: String = Calendar.getInstance().toString(),
 
     @PrimaryKey
     val id: Int? = null
@@ -50,7 +52,6 @@ class Counter(
                 else -> {
                     val wk = days / 7
                     val day = days % 7
-
                     "$wk Week(s), $day Day(s)"
                 }
             }

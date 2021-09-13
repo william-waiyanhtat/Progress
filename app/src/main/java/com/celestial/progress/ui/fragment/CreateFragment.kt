@@ -1,6 +1,8 @@
 package com.celestial.progress.ui.fragment
 
 import android.app.DatePickerDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -15,35 +17,50 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
+import com.celestial.progress.data.model.DisplayFormat
 import com.celestial.progress.databinding.FragmentCreateBinding
 import com.celestial.progress.others.Status
 import com.celestial.progress.others.Validator.verifyCounterName
 import com.celestial.progress.others.Validator.verifyInputDateString
 import com.celestial.progress.ui.CounterViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import petrov.kristiyan.colorpicker.ColorPicker
 import petrov.kristiyan.colorpicker.ColorPicker.OnChooseColorListener
 import java.util.*
 
 
-
-class CreateFragment : Fragment(){
+class CreateFragment : Fragment() {
 
     lateinit var binding: FragmentCreateBinding
     lateinit var toolbar: Toolbar
     lateinit var viewModel: CounterViewModel
     lateinit var arrayColorPicker: Array<View>
+
+    var startDate = ""
+    var endDate = ""
+    var displayFormat = ""
+
     val TAG = CreateFragment::class.simpleName
+
+
+    fun goBack() {
+        NavHostFragment.findNavController(this@CreateFragment)
+            .popBackStack(R.id.dashboardFragment, false)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-             //   findNavController(this@CreateFragment).popBackStack()
-                NavHostFragment.findNavController(this@CreateFragment).popBackStack(R.id.dashboardFragment,false)
+                //   findNavController(this@CreateFragment).popBackStack()
+                goBack()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
@@ -70,21 +87,31 @@ class CreateFragment : Fragment(){
 
 
     private fun setUpViewModel() {
-        viewModel  = ViewModelProvider(requireActivity())[CounterViewModel::class.java]
-        viewModel.createCounter(
-            Counter(
-                "abc",
-                "ss",
-                "ss",
-                false,
-                Color.RED,
-                "some"
-            )
-        )
+        viewModel = ViewModelProvider(requireActivity())[CounterViewModel::class.java]
     }
 
     private fun setUpListener() {
-        arrayColorPicker = arrayOf(binding.presetColor1,binding.presetColor2,binding.presetColor3,binding.presetColor4)
+
+        binding.parentLayout.setOnClickListener {
+            unfocus(binding.textInputLayout)
+        }
+
+        //backbutton
+        binding.toolbarCreate.setNavigationOnClickListener {
+            goBack()
+        }
+
+        binding.inputName.setOnClickListener {
+
+
+        }
+
+        arrayColorPicker = arrayOf(
+            binding.presetColor1,
+            binding.presetColor2,
+            binding.presetColor3,
+            binding.presetColor4
+        )
 
         binding.inputName.doOnTextChanged { text, start, before, count ->
             binding.textInputLayout.error = null
@@ -98,11 +125,6 @@ class CreateFragment : Fragment(){
             showDatePickerDialog(it as TextView)
         }
 
-        binding.dateInputEdt.setOnClickListener {
-            showDatePickerDialog(it)
-
-        }
-
 
         //setSpinnerAdapter
         val adapter: ArrayAdapter<*> = ArrayAdapter.createFromResource(
@@ -114,15 +136,24 @@ class CreateFragment : Fragment(){
         binding.spinnerDisplayformat.adapter = adapter
 
 
-        binding.spinnerDisplayformat.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Log.d(TAG, parent?.getItemAtPosition(position).toString())
-            }
+        binding.spinnerDisplayformat.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    unfocus(binding.textInputLayout)
+                    displayFormat = parent?.getItemAtPosition(position).toString()
+                    Log.d(TAG, parent?.getItemAtPosition(position).toString())
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    unfocus(binding.textInputLayout)
+                }
             }
-        }
 
         binding.btnCustomColor.setOnClickListener {
             val colorPicker = ColorPicker(activity)
@@ -139,25 +170,61 @@ class CreateFragment : Fragment(){
         }
 
         binding.btnCreate.setOnClickListener {
-            if(!validateCounterNameInput()) return@setOnClickListener
+            if (!validateCounterNameInput()) {
+                binding.textInputLayout.requestFocus()
+                return@setOnClickListener
+            }
 
-            if(!validateDateInput()) return@setOnClickListener
+            if (!validateDateInput()){
+                binding.parentLayout.requestChildFocus(binding.startDateInput,binding.startDateInput)
+                return@setOnClickListener
+            }
+            createCounter()
 
         }
-
         chooseColorCompoundListener()
 
+
+
+    }
+
+    private fun createCounter() {
+        val counter = Counter(
+            binding.inputName.text.toString(),
+            startDate,
+            endDate,
+            false,
+            Color.RED,
+            "",
+            false,
+            DisplayFormat.DAY
+        )
+
+        (requireActivity() as MainActivity).insertCounter(counter,{goBack()})
+
+//        lifecycleScope.launch {
+//            viewModel.createCounter(counter).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//                when(it.status){
+//                   Status.SUCCESS ->{
+//                       Snackbar.make(requireActivity().view,"Success",Snackbar.LENGTH_SHORT)
+//                       goBack()
+//                   }
+//                    Status.ERROR ->{}
+//                }
+//
+//            })
+//        }
     }
 
     private fun validateDateInput(): Boolean {
         val res = verifyInputDateString(
-            binding.startDateInput.text.toString(),
-            binding.endDateInput.text.toString()
+            startDate,
+            endDate
         )
-        return if(res.status == Status.ERROR){
+        return if (res.status == Status.ERROR) {
             binding.tvDateError.text = res.message
             false
-        }else{
+        } else {
             true
         }
 
@@ -165,10 +232,10 @@ class CreateFragment : Fragment(){
 
     private fun validateCounterNameInput(): Boolean {
         val inputRes = verifyCounterName(binding.inputName.text.toString())
-        return if(inputRes.status == Status.ERROR){
+        return if (inputRes.status == Status.ERROR) {
             binding.textInputLayout.error = inputRes.message
             false
-        }else{
+        } else {
             true
         }
     }
@@ -179,8 +246,7 @@ class CreateFragment : Fragment(){
     }
 
 
-    fun showDatePickerDialog(v: View) {
-        binding.textInputLayout.clearFocus()
+    fun showDatePickerDialog(v: TextView) {
         binding.inputName.clearFocus()
 
         v.isSelected = true
@@ -189,34 +255,57 @@ class CreateFragment : Fragment(){
         val datePickerDialog: DatePickerDialog = DatePickerDialog(
             requireActivity(),
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                //v.text = "$year-$month-$dayOfMonth"
+                if (v.id == R.id.startDateInput){
+                    startDate = "$year-$month-$dayOfMonth"
+                    v.text = "Start Date: $year-$month-$dayOfMonth"
+                }
+
+                else{
+                    endDate = "$year-$month-$dayOfMonth"
+                    v.text = "End Date: $year-$month-$dayOfMonth"
+                }
+
                 v.isSelected = false
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
-        )
+        ).apply {
+            setButton(
+                Dialog.BUTTON_NEGATIVE,
+                getString(R.string.cancel_label),
+                DialogInterface.OnClickListener { dialog, which ->
+                    when (which) {
+                        DialogInterface.BUTTON_NEGATIVE -> {
+                            Log.d(TAG, "Cancel Press")
+                            v.isSelected = false
+                        }
+                    }
+
+                })
+        }
 
         datePickerDialog.show()
     }
 
-    fun chooseColorCompoundListener(){
+    private fun chooseColorCompoundListener() {
 
-        for(a in arrayColorPicker){
+        for (a in arrayColorPicker) {
             a.setOnClickListener(colorClickListener)
         }
 
     }
 
     private val colorClickListener = View.OnClickListener {
-        for(a in arrayColorPicker){
+        for (a in arrayColorPicker) {
             a.foreground = null
         }
 
 
         it.foreground = requireActivity().getDrawable(R.drawable.ic_check)
     }
+}
 
-
-
+fun Fragment.unfocus(v: View) {
+    v.clearFocus()
 }
