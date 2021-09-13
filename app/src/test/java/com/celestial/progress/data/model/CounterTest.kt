@@ -4,6 +4,7 @@ import android.graphics.Color
 import com.google.common.truth.Truth.assertThat
 
 import org.junit.Test
+import java.util.*
 
 class CounterTest {
 
@@ -92,5 +93,32 @@ class CounterTest {
         assertThat(counter.getDetail()).isEqualTo("1 Year(s), 1 Month(s), 9 Day(s)")
     }
 
+    @Test
+    fun oneDayBefore(){
+        val counter = Counter(
+            "1Day",
+            "2021-09-12",
+            "2021-09-13",
+            isElapsed = true,
+            Color.RED,
+            "Empty",
+            false,
+            DisplayFormat.DAY
+        )
+
+        val result = counter.getDetail()
+        println(result+ "***")
+        assertThat(result).isEqualTo("1 Day(s)")
+    }
+
+    @Test
+    fun DateStringFromCalendarInstance(){
+        val cal = Calendar.getInstance()
+        val st = cal.getCurrentDateString()
+
+        println(st)
+
+        assertThat(st).isEqualTo("2021-09-13")
+    }
 
 }

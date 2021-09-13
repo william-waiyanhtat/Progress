@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
+import android.transition.ChangeBounds
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +18,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.NavHostFragment.findNavController
+
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
@@ -77,6 +78,8 @@ class CreateFragment : Fragment() {
         val view = binding.root
 
         toolbar = binding.toolbarCreate
+
+        sharedElementEnterTransition = ChangeBounds()
 
         setUpListener()
 
@@ -255,14 +258,16 @@ class CreateFragment : Fragment() {
         val datePickerDialog: DatePickerDialog = DatePickerDialog(
             requireActivity(),
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                val mONTH = month + 1
+
                 if (v.id == R.id.startDateInput){
-                    startDate = "$year-$month-$dayOfMonth"
-                    v.text = "Start Date: $year-$month-$dayOfMonth"
+                    startDate = "$year-$mONTH-$dayOfMonth"
+                    v.text = "Start Date: $year-$mONTH-$dayOfMonth"
                 }
 
                 else{
-                    endDate = "$year-$month-$dayOfMonth"
-                    v.text = "End Date: $year-$month-$dayOfMonth"
+                    endDate = "$year-$mONTH-$dayOfMonth"
+                    v.text = "End Date: $year-$mONTH-$dayOfMonth"
                 }
 
                 v.isSelected = false

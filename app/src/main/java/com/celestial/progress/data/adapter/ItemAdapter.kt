@@ -1,6 +1,7 @@
 package com.celestial.progress.data.adapter
 
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,9 @@ import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
 
 class ItemAdapter: ListAdapter<Counter, ItemAdapter.ItemViewHolder>(DIFF_UTIL) {
+
+
+    val TAG = ItemAdapter::class.java.name
 
     companion object{
         val DIFF_UTIL = object: DiffUtil.ItemCallback<Counter>() {
@@ -27,24 +31,26 @@ class ItemAdapter: ListAdapter<Counter, ItemAdapter.ItemViewHolder>(DIFF_UTIL) {
 
     inner class ItemViewHolder(val binding: ProgressItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(){
-            binding.itemTitleId.text = getItem(adapterPosition).title
-            binding.tvCounting.text = getItem(adapterPosition).endDate
+            val model = getItem(adapterPosition)
+
+            binding.itemTitleId.text = model.title
+            binding.tvCounting.text = model.getDetail()
+
+            binding.itemProgressBarId.isIndeterminate = model.isElapsed!!
+
+
+            Log.d(TAG,"${model.title} - "+model.startDate+" : ${model.getDetail()} -")
 
             itemView.setOnClickListener {
-                val tv = binding.tvDetail
-
-                if(tv.visibility == View.GONE){
-                    tv.visibility = View.VISIBLE
-                    notifyItemChanged(-1)
-                }else{
-
-                    tv.visibility = View.GONE
-                    notifyItemChanged(adapterPosition)
-                }
-
-
-
-
+//                val tv = binding.tvDetail
+//
+//                if(tv.visibility == View.GONE){
+//                    tv.visibility = View.VISIBLE
+//                    notifyItemChanged(-1)
+//                }else{
+//                    tv.visibility = View.GONE
+//                    notifyItemChanged(adapterPosition)
+//                }
 
             }
         }

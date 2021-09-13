@@ -10,6 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.celestial.progress.MainActivity
@@ -79,8 +82,15 @@ class DashboardFragment : Fragment() {
 
         binding.fab.setOnClickListener {
             (activity as MainActivity).showHideAppBar(false)
-            findNavController().navigate(R.id.createFragment)
 
+            if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
+                val extras = FragmentNavigator.Extras.Builder()
+                    .addSharedElement(
+                        binding.fab,"fabBtn"
+                    ).build()
+
+               findNavController().navigate(R.id.navigateToCreateFragment,null,null,extras)
+            }
         }
     }
 

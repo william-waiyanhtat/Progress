@@ -1,276 +1,292 @@
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.fragment.CreateFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/parentLayout"
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_create"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:elevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title="Create Counter" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_create"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/toolbar_parent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/parentLayout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="Create Counter" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:hint="@string/counter_name_input_label"
-            app:boxStrokeErrorColor="@android:color/holo_red_dark"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            app:errorTextColor="@android:color/holo_red_dark"
-            app:counterMaxLength="20"
-            app:counterEnabled="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_create">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/input_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:maxLength="20"
-                android:maxLines="1"
-                android:singleLine="true" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <TextView
-            android:id="@+id/startDateInput"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/datepick_background"
-            android:drawableLeft="@drawable/ic_calendar"
-            android:drawablePadding="@dimen/spacing_normal"
-            android:gravity="center"
-            android:hint="Start Date"
-            android:paddingLeft="@dimen/spacing_normal"
-            android:paddingTop="@dimen/spacing_large"
-            android:paddingRight="@dimen/spacing_normal"
-            android:paddingBottom="@dimen/spacing_large"
-            android:textColorHint="@drawable/textview_color"
-            android:textSize="@dimen/text_normal"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
-            app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout"></TextView>
-
-
-        <TextView
-            android:id="@+id/endDateInput"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/datepick_background"
-            android:drawableLeft="@drawable/ic_calendar"
-            android:drawablePadding="@dimen/spacing_normal"
-            android:gravity="center"
-            android:hint="End Date"
-            android:paddingLeft="@dimen/spacing_normal"
-            android:paddingTop="@dimen/spacing_large"
-            android:paddingRight="@dimen/spacing_normal"
-            android:paddingBottom="@dimen/spacing_large"
-            android:textSize="@dimen/text_normal"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
-            app:layout_constraintStart_toStartOf="@+id/startDateInput"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox2">
-
-        </TextView>
-
-        <Spinner
-            android:id="@+id/spinner_displayformat"
-            style="@style/spinner_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:autofillHints="abc"
-            android:paddingLeft="@dimen/spacing_normal"
-            android:paddingTop="@dimen/spacing_large"
-            android:paddingRight="@dimen/spacing_normal"
-            android:paddingBottom="@dimen/spacing_large"
-            android:textSize="@dimen/text_normal"
-            app:layout_constraintEnd_toEndOf="@+id/endDateInput"
-            app:layout_constraintStart_toStartOf="@+id/startDateInput"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/counter_display_label"
-            app:layout_constraintStart_toStartOf="@+id/startDateInput"
-            app:layout_constraintTop_toBottomOf="@+id/endDateInput" />
-
-        <ImageView
-            android:id="@+id/preset_color1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:padding="@dimen/spacing_small"
-            android:src="@color/teal_200"
-            app:layout_constraintEnd_toStartOf="@+id/preset_color2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-        <ImageView
-            android:id="@+id/preset_color2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="@dimen/spacing_small"
-            android:src="@color/purple_200"
-            app:layout_constraintBottom_toBottomOf="@+id/preset_color1"
-            app:layout_constraintEnd_toStartOf="@+id/preset_color3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/preset_color1"
-            app:layout_constraintTop_toTopOf="@+id/preset_color1" />
-
-        <ImageView
-            android:id="@+id/preset_color3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="@dimen/spacing_small"
-            android:src="@color/makeup"
-            app:layout_constraintBottom_toBottomOf="@+id/preset_color2"
-            app:layout_constraintEnd_toStartOf="@+id/preset_color4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/preset_color2"
-            app:layout_constraintTop_toTopOf="@+id/preset_color2"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <ImageView
-            android:id="@+id/preset_color4"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="@dimen/spacing_small"
-            android:src="@color/tha_nat_khar"
-            app:layout_constraintBottom_toBottomOf="@+id/preset_color3"
-            app:layout_constraintEnd_toStartOf="@+id/btn_CustomColor"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/preset_color3"
-            app:layout_constraintTop_toTopOf="@+id/preset_color3"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <ImageView
-            android:id="@+id/btn_CustomColor"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="@dimen/spacing_small"
-            android:src="@drawable/ic_add"
-            app:layout_constraintBottom_toBottomOf="@+id/preset_color4"
-            app:layout_constraintEnd_toEndOf="@+id/spinner_displayformat"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/preset_color4"
-            app:layout_constraintTop_toTopOf="@+id/preset_color4" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/choose_color_label"
-            app:layout_constraintStart_toStartOf="@+id/spinner_displayformat"
-            app:layout_constraintTop_toBottomOf="@+id/tv_example_format" />
-
-
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Required Notification"
-            app:layout_constraintStart_toStartOf="@+id/preset_color1"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
-
-        <Button
-            android:id="@+id/btn_create"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:text="@string/create_btn_txt"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/btn_CustomColor"
-            app:layout_constraintStart_toStartOf="@+id/checkBox"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
-
-        <TextView
-            android:id="@+id/tv_date_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/spacing_large"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/holo_red_dark"
-            android:textSize="@dimen/text_nsmall"
-            app:layout_constraintStart_toStartOf="@+id/startDateInput"
-            app:layout_constraintTop_toBottomOf="@+id/startDateInput"
-            tools:text="Start Date can't be empty" />
-
-        <TextView
-            android:id="@+id/tv_example_format"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/spinner_displayformat"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_displayformat" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:hint="@string/note_label"
-            app:layout_constraintEnd_toEndOf="@+id/btn_CustomColor"
-            app:layout_constraintStart_toStartOf="@+id/preset_color1"
-            app:layout_constraintTop_toBottomOf="@+id/preset_color3">
+            android:transitionName="fabBtn">
 
-            <com.google.android.material.textfield.TextInputEditText
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:hint="@string/counter_name_input_label"
+                app:boxStrokeErrorColor="@android:color/holo_red_dark"
+                app:counterEnabled="true"
+                app:counterMaxLength="20"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:errorTextColor="@android:color/holo_red_dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <CheckBox
-            android:id="@+id/checkBox2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="@string/count_down_chkbox_label"
-            app:layout_constraintBottom_toTopOf="@+id/endDateInput"
-            app:layout_constraintStart_toStartOf="@+id/startDateInput"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date_error" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
-        <CheckBox
-            android:id="@+id/checkBox4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CheckBox"
-            app:layout_constraintStart_toEndOf="@+id/checkBox2"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date_error"
-            android:visibility="invisible"
-            />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.core.widget.NestedScrollView>
+            <TextView
+                android:id="@+id/startDateInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/datepick_background"
+                android:drawableLeft="@drawable/ic_calendar"
+                android:drawablePadding="@dimen/spacing_normal"
+                android:gravity="center"
+                android:hint="Start Date"
+                android:paddingLeft="@dimen/spacing_normal"
+                android:paddingTop="@dimen/spacing_large"
+                android:paddingRight="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_large"
+                android:textColorHint="@drawable/textview_color"
+                android:textSize="@dimen/text_normal"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout"></TextView>
+
+
+            <TextView
+                android:id="@+id/endDateInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/datepick_background"
+                android:drawableLeft="@drawable/ic_calendar"
+                android:drawablePadding="@dimen/spacing_normal"
+                android:gravity="center"
+                android:hint="End Date"
+                android:paddingLeft="@dimen/spacing_normal"
+                android:paddingTop="@dimen/spacing_large"
+                android:paddingRight="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_large"
+                android:textSize="@dimen/text_normal"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/startDateInput"
+                app:layout_constraintTop_toBottomOf="@+id/checkBox2">
+
+            </TextView>
+
+            <Spinner
+                android:id="@+id/spinner_displayformat"
+                style="@style/spinner_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:autofillHints="abc"
+                android:paddingLeft="@dimen/spacing_normal"
+                android:paddingTop="@dimen/spacing_large"
+                android:paddingRight="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_large"
+                android:textSize="@dimen/text_normal"
+                app:layout_constraintEnd_toEndOf="@+id/endDateInput"
+                app:layout_constraintStart_toStartOf="@+id/startDateInput"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/counter_display_label"
+                app:layout_constraintStart_toStartOf="@+id/startDateInput"
+                app:layout_constraintTop_toBottomOf="@+id/endDateInput" />
+
+            <ImageView
+                android:id="@+id/preset_color1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:padding="@dimen/spacing_small"
+                android:src="@color/teal_200"
+                app:layout_constraintEnd_toStartOf="@+id/preset_color2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <ImageView
+                android:id="@+id/preset_color2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="@dimen/spacing_small"
+                android:src="@color/purple_200"
+                app:layout_constraintBottom_toBottomOf="@+id/preset_color1"
+                app:layout_constraintEnd_toStartOf="@+id/preset_color3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/preset_color1"
+                app:layout_constraintTop_toTopOf="@+id/preset_color1" />
+
+            <ImageView
+                android:id="@+id/preset_color3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="@dimen/spacing_small"
+                android:src="@color/makeup"
+                app:layout_constraintBottom_toBottomOf="@+id/preset_color2"
+                app:layout_constraintEnd_toStartOf="@+id/preset_color4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/preset_color2"
+                app:layout_constraintTop_toTopOf="@+id/preset_color2"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/preset_color4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="@dimen/spacing_small"
+                android:src="@color/tha_nat_khar"
+                app:layout_constraintBottom_toBottomOf="@+id/preset_color3"
+                app:layout_constraintEnd_toStartOf="@+id/btn_CustomColor"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/preset_color3"
+                app:layout_constraintTop_toTopOf="@+id/preset_color3"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/btn_CustomColor"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="@dimen/spacing_small"
+                android:src="@drawable/ic_add"
+                app:layout_constraintBottom_toBottomOf="@+id/preset_color4"
+                app:layout_constraintEnd_toEndOf="@+id/spinner_displayformat"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/preset_color4"
+                app:layout_constraintTop_toTopOf="@+id/preset_color4" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/choose_color_label"
+                app:layout_constraintStart_toStartOf="@+id/spinner_displayformat"
+                app:layout_constraintTop_toBottomOf="@+id/tv_example_format" />
+
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Required Notification"
+                app:layout_constraintStart_toStartOf="@+id/preset_color1"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+            <Button
+                android:id="@+id/btn_create"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="24dp"
+                android:text="@string/create_btn_txt"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btn_CustomColor"
+                app:layout_constraintStart_toStartOf="@+id/checkBox"
+                app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+
+            <TextView
+                android:id="@+id/tv_date_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_large"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="@dimen/text_nsmall"
+                app:layout_constraintStart_toStartOf="@+id/startDateInput"
+                app:layout_constraintTop_toBottomOf="@+id/startDateInput"
+                tools:text="Start Date can't be empty" />
+
+            <TextView
+                android:id="@+id/tv_example_format"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/spinner_displayformat"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_displayformat" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="@string/note_label"
+                app:layout_constraintEnd_toEndOf="@+id/btn_CustomColor"
+                app:layout_constraintStart_toStartOf="@+id/preset_color1"
+                app:layout_constraintTop_toBottomOf="@+id/preset_color3">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/count_down_chkbox_label"
+                app:layout_constraintBottom_toTopOf="@+id/endDateInput"
+                app:layout_constraintStart_toStartOf="@+id/startDateInput"
+                app:layout_constraintTop_toBottomOf="@+id/tv_date_error" />
+
+            <CheckBox
+                android:id="@+id/checkBox4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CheckBox"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@+id/checkBox2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_date_error" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

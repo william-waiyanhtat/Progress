@@ -41,9 +41,14 @@ class Counter(
 
     fun getDetail(): String {
         val start = LocalDate.parse(startDate)
-        val end = LocalDate.parse(endDate)
+        val end = if(!endDate?.isEmpty()!!){
+            LocalDate.parse(endDate)
+        }else{
+           LocalDate.parse(Calendar.getInstance().getCurrentDateString())
+        }
 
-        print(Days.daysBetween(start, end).days)
+
+      //  print(Days.daysBetween(start, end).days)
 
         if (displayFormat == DisplayFormat.DAY || displayFormat == DisplayFormat.WEEK_DAY) {
             val days = Days.daysBetween(start, end).days
@@ -128,5 +133,11 @@ enum class DisplayFormat() {
     MONTH_WEEK_DAY,
     YEAR_MONTH_WEEK_DAY,
     YEAR_MONTH_DAY;
+}
 
+fun Calendar.getCurrentDateString(): String{
+    val cal = Calendar.getInstance()
+    val date = cal.time
+    val sdf = SimpleDateFormat("yyyy-MM-dd")
+    return sdf.format(date)
 }
