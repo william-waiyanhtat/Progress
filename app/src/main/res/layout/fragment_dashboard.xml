@@ -7,16 +7,17 @@
     android:animateLayoutChanges="true"
     tools:context=".ui.fragment.DashboardFragment">
 
-
-    <TextView
-        android:id="@+id/textView"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_create"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/spacing_normal"
-        android:text="Dashboard"
-        android:textSize="20sp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:elevation="8dp"
+        android:transitionName="fabBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-         />
+        app:title="DashBoard" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/counterRcy"
@@ -26,8 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_create" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -37,7 +37,7 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="8dp"
         android:src="@drawable/ic_add"
-        android:transitionName="fabBtn"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

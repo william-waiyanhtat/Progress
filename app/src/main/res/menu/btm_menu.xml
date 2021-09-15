@@ -2,35 +2,46 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Dashboard"
-        android:id="@+id/abc"
-        android:enabled="true"
-        android:icon="@drawable/ic_baseline_dashboard_24"
-        app:cnb_backgroundColor="#606060"
-        app:cnb_iconColor="#FFAB91"
-        app:cnb_iconTintMode="src_in"
-        app:cnb_textColor="#90CAF9"/>
+<!--    <item android:title="Dashboard"-->
+<!--        android:id="@+id/abc"-->
+<!--        android:enabled="true"-->
+<!--        android:icon="@drawable/ic_baseline_dashboard_24"-->
+<!--        app:cnb_backgroundColor="#606060"-->
+<!--        app:cnb_iconColor="#FFAB91"-->
+<!--        app:cnb_iconTintMode="src_in"-->
+<!--        app:cnb_textColor="#90CAF9"/>-->
 
-    <item android:title="Detail"
-        android:id="@+id/bc"
-        android:enabled="true"
-        android:icon="@drawable/ic_baseline_dashboard_24"
-        app:cnb_backgroundColor="#606060"
-        app:cnb_iconColor="#FFAB91"
-        app:cnb_iconTintMode="src_in"
-        app:cnb_textColor="#90CAF9"/>
 
     <item android:title="Add"
-        android:id="@+id/def"
+        android:id="@+id/Add"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_dashboard_24"
+        android:icon="@drawable/ic_add"
+        app:cnb_backgroundColor="#606060"
+        app:cnb_iconColor="#FFAB91"
+        app:showAsAction="always"
+        app:cnb_iconTintMode="src_in"
+        app:cnb_textColor="#90CAF9"/>
+
+    <item android:title="Archive"
+        android:id="@+id/archive"
+        android:enabled="true"
+        android:icon="@drawable/ic_archive"
         app:cnb_backgroundColor="#606060"
         app:cnb_iconColor="#FFAB91"
         app:cnb_iconTintMode="src_in"
         app:cnb_textColor="#90CAF9"/>
 
+<!--    <item android:title="Add"-->
+<!--        android:id="@+id/def"-->
+<!--        android:enabled="true"-->
+<!--        android:icon="@drawable/ic_baseline_dashboard_24"-->
+<!--        app:cnb_backgroundColor="#606060"-->
+<!--        app:cnb_iconColor="#FFAB91"-->
+<!--        app:cnb_iconTintMode="src_in"-->
+<!--        app:cnb_textColor="#90CAF9"/>-->
+
     <item android:title="Setting"
-        android:id="@+id/ghi"
+        android:id="@+id/setting"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_dashboard_24"
         app:cnb_backgroundColor="#606060"
