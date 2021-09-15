@@ -10,20 +10,21 @@ import java.util.concurrent.TimeUnit
 
 @Entity
 class Counter(
-    val title: String,
-    val startDate: String,
-    val endDate: String?,
-    val isElapsed: Boolean? = true,
-    val color: Int?,
-    val note: String?,
-    val requiredNotification: Boolean = false,
-    val displayFormat: DisplayFormat = DisplayFormat.DAY,
-    var order: Int? = null,
-    val createdDate: String = Calendar.getInstance().toString(),
-    var isExpand: Boolean = false,
+        val title: String,
+        val startDate: String,
+        val endDate: String?,
+        val isElapsed: Boolean? = true,
+        val color: Int?,
+        val note: String?,
+        val requiredNotification: Boolean = false,
+        val displayFormat: DisplayFormat = DisplayFormat.DAY,
+        var order: Int? = null,
+        val createdDate: String = Calendar.getInstance().toString(),
+        var isExpand: Boolean = false,
+        var isArchived: Boolean = false,
 
-    @PrimaryKey
-    val id: Int? = null
+        @PrimaryKey
+        val id: Int? = null
 ) {
 
     fun dayDifferenceBetweenTwoDates(): Long? {
@@ -42,14 +43,14 @@ class Counter(
 
     fun getDetail(): String {
         val start = LocalDate.parse(startDate)
-        val end = if(!endDate?.isEmpty()!!){
+        val end = if (!endDate?.isEmpty()!!) {
             LocalDate.parse(endDate)
-        }else{
-           LocalDate.parse(Calendar.getInstance().getCurrentDateString())
+        } else {
+            LocalDate.parse(Calendar.getInstance().getCurrentDateString())
         }
 
 
-      //  print(Days.daysBetween(start, end).days)
+        //  print(Days.daysBetween(start, end).days)
 
         if (displayFormat == DisplayFormat.DAY || displayFormat == DisplayFormat.WEEK_DAY) {
             val days = Days.daysBetween(start, end).days
@@ -65,36 +66,36 @@ class Counter(
         } else {
             var field = when (displayFormat) {
                 (DisplayFormat.WEEK_DAY) -> PeriodType.forFields(
-                    arrayOf(
-                        DurationFieldType.weeks(),
-                        DurationFieldType.days()
-                    )
+                        arrayOf(
+                                DurationFieldType.weeks(),
+                                DurationFieldType.days()
+                        )
                 )
                 (DisplayFormat.MONTH_WEEK_DAY) -> PeriodType.forFields(
-                    arrayOf(
-                        DurationFieldType.months(),
-                        DurationFieldType.weeks(), DurationFieldType.days()
-                    )
+                        arrayOf(
+                                DurationFieldType.months(),
+                                DurationFieldType.weeks(), DurationFieldType.days()
+                        )
                 )
                 (DisplayFormat.YEAR_MONTH_DAY) -> PeriodType.forFields(
-                    arrayOf(
-                        DurationFieldType.years(),
-                        DurationFieldType.months(), DurationFieldType.days()
-                    )
+                        arrayOf(
+                                DurationFieldType.years(),
+                                DurationFieldType.months(), DurationFieldType.days()
+                        )
                 )
                 (DisplayFormat.YEAR_MONTH_WEEK_DAY) -> PeriodType.forFields(
-                    arrayOf(
-                        DurationFieldType.years(),
-                        DurationFieldType.months(),
-                        DurationFieldType.weeks(),
-                        DurationFieldType.days()
-                    )
+                        arrayOf(
+                                DurationFieldType.years(),
+                                DurationFieldType.months(),
+                                DurationFieldType.weeks(),
+                                DurationFieldType.days()
+                        )
                 )
                 else -> PeriodType.forFields(arrayOf(DurationFieldType.days()))
             }
 
             val period = Period(start, end) // normalize to months and days
-                .normalizedStandard(field)
+                    .normalizedStandard(field)
 
             return when (displayFormat) {
                 DisplayFormat.YEAR_MONTH_WEEK_DAY -> "${period.years} Year(s), ${period.months} Month(s), ${period.weeks} Week(s), ${period.days} Day(s)"
@@ -106,7 +107,15 @@ class Counter(
         }
     }
 
-
+    fun isComplete(): Boolean {
+        endDate?.let{
+            if(Calendar.getInstance().time>=it.getDate()){
+                return true
+            }
+            return false
+        }
+        return false
+    }
 }
 
 fun Calendar.resetToMidnight(date: Date): Calendar {
@@ -136,7 +145,7 @@ enum class DisplayFormat() {
     YEAR_MONTH_DAY;
 }
 
-fun Calendar.getCurrentDateString(): String{
+fun Calendar.getCurrentDateString(): String {
     val cal = Calendar.getInstance()
     val date = cal.time
     val sdf = SimpleDateFormat("yyyy-MM-dd")

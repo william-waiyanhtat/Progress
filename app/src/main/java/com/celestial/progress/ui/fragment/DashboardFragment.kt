@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -54,7 +55,7 @@ class DashboardFragment : Fragment() {
 
 
         viewModel = ViewModelProvider(requireActivity())[CounterViewModel::class.java]
-        adapter = ItemAdapter(expandCollapse)
+        adapter = ItemAdapter(expandCollapse, itemMenuShow)
         binding.counterRcy.adapter = adapter
         binding.counterRcy.layoutManager = LinearLayoutManager(context)
         val itemTouchHelper = ItemTouchHelper(itemTouchSimpleCallback)
@@ -160,6 +161,28 @@ class DashboardFragment : Fragment() {
         Log.d(TAG,"EXPAND COLLAPSE CALLED")
         lifecycleScope.launch {
             viewModel.updateCounter(it)
+        }
+    }
+
+    val itemMenuShow: (Counter, View) -> Unit ={ c,v ->
+        Log.d(TAG,"Item Menu : ${c.title}")
+        createPopUpMenuAndShow(v)
+    }
+
+
+    fun createPopUpMenuAndShow(v: View){
+        val popupMenu = PopupMenu(requireActivity(),v)
+        popupMenu.apply {
+            menuInflater.inflate(R.menu.menu_item,popupMenu.menu)
+            setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.item_edit -> {}
+                    R.id.item_archive ->{}
+                }
+                true
+
+            }
+            show()
         }
 
     }

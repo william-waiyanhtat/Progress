@@ -7,7 +7,7 @@
     android:layout_margin="@dimen/spacing_normal"
     android:animateLayoutChanges="true"
     android:background="@drawable/app_barbg"
-    android:elevation="8dp"
+    android:elevation="4dp"
     android:padding="8dp">
 
     <TextView
@@ -28,7 +28,6 @@
         android:id="@+id/item_title_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="This Year"
         android:textSize="@dimen/text_large"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,8 +47,10 @@
         android:id="@+id/item_percent_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:background="#ABFFFFFF"
         android:text="23%"
+        android:padding="@dimen/spacing_small"
         app:layout_constraintBottom_toBottomOf="@+id/item_progress_bar_id"
         app:layout_constraintEnd_toEndOf="@+id/item_progress_bar_id"
         app:layout_constraintTop_toTopOf="@+id/item_progress_bar_id" />
@@ -110,6 +111,29 @@
         app:constraint_referenced_ids="tv_act_edate,tv_act_sdate,tv_startDate,textView4"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp" />
+
+    <ImageView
+        android:id="@+id/item_menu_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/complete_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/complete_bg"
+        android:paddingLeft="@dimen/spacing_normal"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingRight="@dimen/spacing_normal"
+        android:paddingBottom="@dimen/spacing_small"
+        android:text="@string/complete_label"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/item_menu_btn"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
 
-class ItemAdapter(val expandCollapse: (Counter) -> Unit) : ListAdapter<Counter, ItemAdapter.ItemViewHolder>(DIFF_UTIL) {
+class ItemAdapter(val expandCollapse: (Counter) -> Unit,val itemMenuShow:(Counter, View) -> Unit) : ListAdapter<Counter, ItemAdapter.ItemViewHolder>(DIFF_UTIL) {
 
 
     val TAG = ItemAdapter::class.java.name
@@ -54,7 +54,19 @@ class ItemAdapter(val expandCollapse: (Counter) -> Unit) : ListAdapter<Counter, 
                 expandGroup.visibility = View.GONE
             }
 
+            //complete check
+            if(model.isComplete()){
+                binding.completeBadge.visibility = View.VISIBLE
+            }else{
+                binding.completeBadge.visibility = View.GONE
+            }
+
             Log.d(TAG,"${model.title} - "+model.startDate+" : ${model.getDetail()} -")
+
+            binding.itemMenuBtn.setOnClickListener {
+                itemMenuShow.invoke(model, binding.itemMenuBtn)
+
+            }
 
             itemView.setOnClickListener {
 

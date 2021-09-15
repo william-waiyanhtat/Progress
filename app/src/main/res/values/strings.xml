@@ -37,4 +37,6 @@
     <string name="count_down_chkbox_label">Countdown to below date</string>
 
     <string name="color_error_label">Please select one color for counter</string>
+
+    <string name="complete_label">COMPLETE</string>
 </resources>
