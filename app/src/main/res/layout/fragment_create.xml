@@ -104,7 +104,7 @@
                 android:textSize="@dimen/text_normal"
                 app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
                 app:layout_constraintStart_toStartOf="@+id/startDateInput"
-                app:layout_constraintTop_toBottomOf="@+id/checkBox2">
+                app:layout_constraintTop_toBottomOf="@+id/countdownChkBox">
 
             </TextView>
 
@@ -135,37 +135,35 @@
                 app:layout_constraintStart_toStartOf="@+id/startDateInput"
                 app:layout_constraintTop_toBottomOf="@+id/endDateInput" />
 
-            <ImageView
+            <View
                 android:id="@+id/preset_color1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="16dp"
                 android:padding="@dimen/spacing_small"
-                android:src="@color/teal_200"
+               android:background="@color/teal_200"
                 app:layout_constraintEnd_toStartOf="@+id/preset_color2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="@+id/textView3"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                app:layout_constraintStart_toStartOf="@+id/colorChooseLabel"
+                app:layout_constraintTop_toBottomOf="@+id/colorChooseLabel" />
 
-            <ImageView
+            <View
                 android:id="@+id/preset_color2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="@dimen/spacing_small"
-                android:src="@color/purple_200"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/purple_200"
                 app:layout_constraintBottom_toBottomOf="@+id/preset_color1"
                 app:layout_constraintEnd_toStartOf="@+id/preset_color3"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/preset_color1"
                 app:layout_constraintTop_toTopOf="@+id/preset_color1" />
 
-            <ImageView
+            <View
                 android:id="@+id/preset_color3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="@dimen/spacing_small"
-                android:src="@color/makeup"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/makeup"
                 app:layout_constraintBottom_toBottomOf="@+id/preset_color2"
                 app:layout_constraintEnd_toStartOf="@+id/preset_color4"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -173,12 +171,11 @@
                 app:layout_constraintTop_toTopOf="@+id/preset_color2"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <ImageView
+            <View
                 android:id="@+id/preset_color4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="@dimen/spacing_small"
-                android:src="@color/tha_nat_khar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/tha_nat_khar"
                 app:layout_constraintBottom_toBottomOf="@+id/preset_color3"
                 app:layout_constraintEnd_toStartOf="@+id/btn_CustomColor"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -188,9 +185,8 @@
 
             <ImageView
                 android:id="@+id/btn_CustomColor"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="@dimen/spacing_small"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@drawable/ic_add"
                 app:layout_constraintBottom_toBottomOf="@+id/preset_color4"
                 app:layout_constraintEnd_toEndOf="@+id/spinner_displayformat"
@@ -199,7 +195,7 @@
                 app:layout_constraintTop_toTopOf="@+id/preset_color4" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/colorChooseLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -209,7 +205,7 @@
 
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/requiredNotiChkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Required Notification"
@@ -225,8 +221,8 @@
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/btn_CustomColor"
-                app:layout_constraintStart_toStartOf="@+id/checkBox"
-                app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+                app:layout_constraintStart_toStartOf="@+id/requiredNotiChkBox"
+                app:layout_constraintTop_toBottomOf="@+id/requiredNotiChkBox" />
 
             <TextView
                 android:id="@+id/tv_date_error"
@@ -260,7 +256,7 @@
                 android:hint="@string/note_label"
                 app:layout_constraintEnd_toEndOf="@+id/btn_CustomColor"
                 app:layout_constraintStart_toStartOf="@+id/preset_color1"
-                app:layout_constraintTop_toBottomOf="@+id/preset_color3">
+                app:layout_constraintTop_toBottomOf="@+id/tv_color_error">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -268,7 +264,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <CheckBox
-                android:id="@+id/checkBox2"
+                android:id="@+id/countdownChkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
@@ -283,8 +279,20 @@
                 android:layout_height="wrap_content"
                 android:text="CheckBox"
                 android:visibility="invisible"
-                app:layout_constraintStart_toEndOf="@+id/checkBox2"
+                app:layout_constraintStart_toEndOf="@+id/countdownChkBox"
                 app:layout_constraintTop_toBottomOf="@+id/tv_date_error" />
+
+            <TextView
+                android:id="@+id/tv_color_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="@dimen/text_nsmall"
+                app:layout_constraintStart_toStartOf="@+id/preset_color1"
+                app:layout_constraintTop_toBottomOf="@+id/preset_color1"
+                tools:text="Choose Color" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

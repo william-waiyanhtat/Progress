@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.util.Log
@@ -30,8 +31,6 @@ import com.celestial.progress.others.Status
 import com.celestial.progress.others.Validator.verifyCounterName
 import com.celestial.progress.others.Validator.verifyInputDateString
 import com.celestial.progress.ui.CounterViewModel
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 import petrov.kristiyan.colorpicker.ColorPicker
 import petrov.kristiyan.colorpicker.ColorPicker.OnChooseColorListener
 import java.util.*
@@ -47,6 +46,10 @@ class CreateFragment : Fragment() {
     var startDate = ""
     var endDate = ""
     var displayFormat = ""
+    var note = ""
+
+    var colorValue: Int? = null
+
 
     val TAG = CreateFragment::class.simpleName
 
@@ -164,6 +167,9 @@ class CreateFragment : Fragment() {
             colorPicker.setOnChooseColorListener(object : OnChooseColorListener {
                 override fun onChooseColor(position: Int, color: Int) {
                     binding.btnCustomColor.setBackgroundColor(color)
+                    colorValue = color
+                    clearColorPickUI()
+                    resetColorErrorText()
                 }
 
                 override fun onCancel() {
@@ -182,6 +188,12 @@ class CreateFragment : Fragment() {
                 binding.parentLayout.requestChildFocus(binding.startDateInput,binding.startDateInput)
                 return@setOnClickListener
             }
+
+            if(!validateColorChoice()){
+                binding.tvColorError.text = getString(R.string.color_error_label)
+                return@setOnClickListener
+            }
+            resetColorErrorText()
             createCounter()
 
         }
@@ -191,15 +203,19 @@ class CreateFragment : Fragment() {
 
     }
 
+    private fun resetColorErrorText() {
+      binding.tvColorError.text = ""
+    }
+
     private fun createCounter() {
         val counter = Counter(
             binding.inputName.text.toString(),
             startDate,
             endDate,
-            false,
-            Color.RED,
-            "",
-            false,
+            !binding.countdownChkBox.isChecked,
+            colorValue,
+            note,
+            binding.requiredNotiChkBox.isChecked,
             DisplayFormat.DAY
         )
 
@@ -241,6 +257,10 @@ class CreateFragment : Fragment() {
         } else {
             true
         }
+    }
+
+    private fun validateColorChoice(): Boolean{
+        return colorValue != null
     }
 
     companion object {
@@ -294,7 +314,6 @@ class CreateFragment : Fragment() {
     }
 
     private fun chooseColorCompoundListener() {
-
         for (a in arrayColorPicker) {
             a.setOnClickListener(colorClickListener)
         }
@@ -302,14 +321,21 @@ class CreateFragment : Fragment() {
     }
 
     private val colorClickListener = View.OnClickListener {
+        clearColorPickUI()
+        clearColorPickUI()
+        colorValue = (it.background as ColorDrawable).color
+        Log.d(TAG,"Color : ${colorValue}")
+        it.foreground = requireActivity().getDrawable(R.drawable.ic_check)
+    }
+
+    private fun clearColorPickUI(){
         for (a in arrayColorPicker) {
             a.foreground = null
         }
-
-
-        it.foreground = requireActivity().getDrawable(R.drawable.ic_check)
     }
 }
+
+
 
 fun Fragment.unfocus(v: View) {
     v.clearFocus()

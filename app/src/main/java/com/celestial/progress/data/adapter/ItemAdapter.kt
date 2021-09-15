@@ -1,5 +1,6 @@
 package com.celestial.progress.data.adapter
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +45,8 @@ class ItemAdapter(val expandCollapse: (Counter) -> Unit) : ListAdapter<Counter, 
             binding.itemTitleId.text = model.title
             binding.tvCounting.text = model.getDetail()
 
-            binding.itemProgressBarId.isIndeterminate = model.isElapsed!!
+            binding.itemProgressBarId.indeterminate = model.isElapsed!!
+            binding.itemProgressBarId.color1 = model.color!!
 
             if(model.isExpand){
                 expandGroup.visibility = View.VISIBLE

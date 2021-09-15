@@ -17,6 +17,10 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
     var color1: Int
+    set(value) {
+        field = value
+        color2 = DeviceUtils.darker(value, 0.6f)
+    }
 
     var color2: Int
 

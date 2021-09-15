@@ -41,4 +41,16 @@ object DeviceUtils {
                 Math.max((g * factor).toInt(), 0),
                 Math.max((b * factor).toInt(), 0))
     }
+
+    private fun getTransparentColor(color: Int): Int {
+        var alpha = Color.alpha(color)
+        val red = Color.red(color)
+        val green = Color.green(color)
+        val blue = Color.blue(color)
+
+        // Set alpha based on your logic, here I'm making it 25% of it's initial value.
+        alpha = (alpha * 0.25).toInt()
+
+        return Color.argb(alpha, red, green, blue)
+    }
 }
