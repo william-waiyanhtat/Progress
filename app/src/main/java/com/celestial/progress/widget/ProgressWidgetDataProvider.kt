@@ -43,11 +43,18 @@ class ProgressWidgetDataProvider(val ctx: Context, val intent: Intent, val repos
     override fun getViewAt(position: Int): RemoteViews {
         val rv = RemoteViews(ctx.packageName, R.layout.listview_item)
         rv.setTextViewText(R.id.tv_title_widget_list, counterList[position].title)
+        rv.setTextViewText(R.id.tv_note_widget_list, counterList[position].note)
+        rv.setTextViewText(R.id.tv_detail_widget_list, counterList[position].getDetail())
+        rv.setProgressBar(R.id.progress_widget_list,0,0,counterList[position].isElapsed!!)
+        if(!counterList[position].isElapsed!!){
+            rv.setProgressBar(R.id.progress_widget_list,100,
+                counterList[position].getPercent()?.toInt()!!,false)
+            rv.setTextViewText(R.id.tv_percent_widget_list,counterList[position].getPercent().toString()+"%")
+        }
         return rv
     }
 
     override fun getLoadingView(): RemoteViews? {
-
         return null
     }
 

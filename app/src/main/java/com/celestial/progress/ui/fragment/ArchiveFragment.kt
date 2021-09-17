@@ -20,7 +20,9 @@ import kotlinx.coroutines.launch
 
 class ArchiveFragment : Fragment() {
 
-    lateinit var binding: FragmentArchiveBinding
+    private var _binding: FragmentArchiveBinding? = null
+
+    private val binding get() = _binding!!
 
     lateinit var adapter: ItemAdapter
 
@@ -33,7 +35,7 @@ class ArchiveFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = FragmentArchiveBinding.inflate(inflater, container, false)
+        _binding = FragmentArchiveBinding.inflate(inflater, container, false)
         val view = binding.root
 
         initUI()
@@ -114,6 +116,10 @@ class ArchiveFragment : Fragment() {
             }
             show()
         }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -3,7 +3,6 @@ package com.celestial.progress.ui.fragment
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.transition.ChangeBounds
@@ -38,10 +37,12 @@ import java.util.*
 
 class CreateFragment : Fragment() {
 
-    lateinit var binding: FragmentCreateBinding
+    private var _binding: FragmentCreateBinding? = null
     lateinit var toolbar: Toolbar
     lateinit var viewModel: CounterViewModel
     lateinit var arrayColorPicker: Array<View>
+
+    private val binding get() = _binding!!
 
     var startDate = ""
     var endDate = ""
@@ -77,7 +78,7 @@ class CreateFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        binding = FragmentCreateBinding.inflate(inflater, container, false)
+        _binding = FragmentCreateBinding.inflate(inflater, container, false)
         val view = binding.root
 
         toolbar = binding.toolbarCreate
@@ -332,6 +333,11 @@ class CreateFragment : Fragment() {
         for (a in arrayColorPicker) {
             a.foreground = null
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 

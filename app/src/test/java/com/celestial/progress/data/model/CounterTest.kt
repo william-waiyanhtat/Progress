@@ -112,13 +112,32 @@ class CounterTest {
     }
 
     @Test
-    fun DateStringFromCalendarInstance(){
+    fun dateStringFromCalendarInstance(){
         val cal = Calendar.getInstance()
         val st = cal.getCurrentDateString()
 
         println(st)
 
         assertThat(st).isEqualTo("2021-09-13")
+    }
+
+    @Test
+    fun dayCountPercentTest(){
+        val counter = Counter(
+        "50 Percent Test",
+        "2021-09-16",
+        "2021-09-18",
+        true,
+        Color.RED,
+        "Empty",
+        false,
+        DisplayFormat.DAY
+        )
+
+        val result = counter.getPercent()
+
+        print("Percent: $result")
+        assertThat(result).isEqualTo(50L)
     }
 
 }

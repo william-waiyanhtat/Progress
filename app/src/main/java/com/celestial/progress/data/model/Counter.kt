@@ -1,5 +1,6 @@
 package com.celestial.progress.data.model
 
+import android.util.Log
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.joda.time.*
@@ -26,6 +27,9 @@ class Counter(
         @PrimaryKey
         val id: Int? = null
 ) {
+
+
+
 
     fun dayDifferenceBetweenTwoDates(): Long? {
         val d1 = this.startDate.getDate()
@@ -117,9 +121,25 @@ class Counter(
         return false
     }
 
-    fun getPercent(): Int{
+    fun getPercent(): Long? {
+        endDate?.let {
+            val currentDate = Calendar.getInstance().apply {
+                resetToMidnight(this.time)
+            }
+            val dayReach = dayDifferenceBetweenTwoDates(startDate,currentDate.getCurrentDateString())
 
-        //TODO: to implement the functionality
+            val dayTotal = dayDifferenceBetweenTwoDates()
+
+            println("DayReach: ${dayReach.toString()}")
+            println("DayTotal: ${dayTotal.toString()}")
+
+            val percent: Float? = (dayReach?.toFloat()?.div(dayTotal?.toFloat()!!))
+
+            println("Result : ${percent.toString()}")
+
+            return percent?.times(100)?.toLong()
+        }
+
         return 0
     }
 }
@@ -131,6 +151,21 @@ fun Calendar.resetToMidnight(date: Date): Calendar {
     this.set(Calendar.MILLISECOND, 0)
     return this
 }
+
+fun dayDifferenceBetweenTwoDates(date1: String, date2: String): Long? {
+    val d1 = date1.getDate()
+    val d2 = date2.getDate()
+
+    d2?.let {
+        val calendar1 = Calendar.getInstance().resetToMidnight(d1)
+        val calendar2 = Calendar.getInstance().resetToMidnight(it)
+        println("Calendar1 ${calendar1.toString()}")
+        println("Calendar2 ${calendar2.toString()}")
+        return TimeUnit.MILLISECONDS.toDays(Math.abs(calendar1.timeInMillis - calendar2.timeInMillis))
+    }
+    return null
+}
+
 
 fun String.getDate(): Date {
     var date: Date? = null
