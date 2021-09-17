@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_normal"
+    android:padding="@dimen/spacing_normal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title_widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ABC"
+        tools:text="Anniversary" />
+
+    <TextView
+        android:id="@+id/tv_note_widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Note" />
+
+    <TextView
+        android:id="@+id/tv_detail_widget_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        tools:text="3Month(s) 4Day(s) Left" />
+
+    <ProgressBar
+        android:id="@+id/progress_widget_list"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="78" />
+
+    <TextView
+        android:id="@+id/tv_percent_widget_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        tools:text="78%" />
+
+</LinearLayout>

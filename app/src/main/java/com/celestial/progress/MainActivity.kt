@@ -1,14 +1,12 @@
 package com.celestial.progress
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.celestial.progress.data.adapter.ItemAdapter
+import com.celestial.progress.ui.adapter.ItemAdapter
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ActivityMainBinding
 import com.celestial.progress.others.Status

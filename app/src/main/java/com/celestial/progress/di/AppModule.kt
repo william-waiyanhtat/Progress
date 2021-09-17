@@ -7,6 +7,7 @@ import com.celestial.progress.data.CounterDao
 import com.celestial.progress.data.CounterDatabase
 import com.celestial.progress.data.CounterRepository
 import com.celestial.progress.data.DefaultRepository
+import com.celestial.progress.widget.ProgressWidgetDataProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,4 +41,6 @@ object AppModule {
     fun provideCounterRepository(
         dao: CounterDao
     ) = CounterRepository(dao) as DefaultRepository
+
+
 }

@@ -14,4 +14,7 @@ interface DefaultRepository {
 
     suspend fun updateCounter(counter: Counter)
 
+    fun observeAllArchiveCounterItem(): LiveData<List<Counter>>
+
+    fun readAllValidCounters(): List<Counter>
 }

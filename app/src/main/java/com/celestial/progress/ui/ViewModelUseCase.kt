@@ -13,4 +13,8 @@ interface ViewModelUseCase {
     fun readAllCounters(): LiveData<List<Counter>>
 
     fun updateCounter(counter: Counter)
+
+    fun readArchiveCounters():LiveData<List<Counter>>
+
+    fun deleteCounter(counter: Counter)
 }

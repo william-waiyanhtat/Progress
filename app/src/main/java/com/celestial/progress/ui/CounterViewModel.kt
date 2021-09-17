@@ -60,4 +60,15 @@ private val counterRepository: CounterRepository
 
        }
     }
+
+    override fun readArchiveCounters(): LiveData<List<Counter>> {
+       return counterRepository.observeAllArchiveCounterItem()
+    }
+
+    override fun deleteCounter(counter: Counter) {
+        viewModelScope.launch {
+            counterRepository.deleteCounterItem(counter)
+        }
+
+    }
 }

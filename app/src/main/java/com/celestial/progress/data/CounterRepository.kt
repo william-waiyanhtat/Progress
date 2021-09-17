@@ -9,6 +9,7 @@ import javax.inject.Inject
 class CounterRepository @Inject constructor(
 
     private val counterDao: CounterDao): DefaultRepository {
+
     override suspend fun insertCounterItem(counterItem: Counter, status: RepoStatus) {
         val result = counterDao.insertCounter(counterItem)
 
@@ -29,6 +30,14 @@ class CounterRepository @Inject constructor(
 
     override suspend fun updateCounter(counter: Counter) {
        counterDao.updateCounter(counter)
+    }
+
+    override fun observeAllArchiveCounterItem(): LiveData<List<Counter>> {
+        return counterDao.observeAllShoppingItems(isArchived = true)
+    }
+
+    override  fun readAllValidCounters(): List<Counter> {
+       return counterDao.readAllValidCounters(isArchived = false)
     }
 
     suspend fun insert100Records(){

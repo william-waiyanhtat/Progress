@@ -116,6 +116,12 @@ class Counter(
         }
         return false
     }
+
+    fun getPercent(): Int{
+
+        //TODO: to implement the functionality
+        return 0
+    }
 }
 
 fun Calendar.resetToMidnight(date: Date): Calendar {

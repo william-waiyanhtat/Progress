@@ -5,7 +5,6 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.*
 import android.widget.PopupMenu
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
-import com.celestial.progress.data.adapter.ItemAdapter
+import com.celestial.progress.ui.adapter.ItemAdapter
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.FragmentDashboardBinding
 import com.celestial.progress.ui.CounterViewModel
@@ -95,6 +94,16 @@ class DashboardFragment : Fragment() {
 //                            ).build()
                             findNavController().navigate(R.id.action_dashboardFragment_to_archiveFragment)
                        // findNavController().navigate(R.id.navigateToCreateFragment, null, null, extras)
+                    }
+                }
+                R.id.setting ->{
+                    if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
+//                        val extras = FragmentNavigator.Extras.Builder()
+//                                .addSharedElement(
+//                                        binding.toolbarCreate, "fabBtn"
+//                                ).build()
+
+                        findNavController().navigate(R.id.dashToSetting)
                     }
                 }
             }
@@ -189,7 +198,6 @@ class DashboardFragment : Fragment() {
     }
 
     val expandCollapse: (Counter) -> Unit = {
-        
         Log.d(TAG, "EXPAND COLLAPSE CALLED")
         lifecycleScope.launch {
             viewModel.updateCounter(it)
@@ -198,19 +206,26 @@ class DashboardFragment : Fragment() {
 
     val itemMenuShow: (Counter, View) -> Unit ={ c, v ->
         Log.d(TAG, "Item Menu : ${c.title}")
-        createPopUpMenuAndShow(v)
+        createPopUpMenuAndShow(v,c)
     }
 
 
-    fun createPopUpMenuAndShow(v: View){
+    fun createPopUpMenuAndShow(v: View, c: Counter){
         val popupMenu = PopupMenu(requireActivity(), v)
         popupMenu.apply {
             menuInflater.inflate(R.menu.menu_item, popupMenu.menu)
             setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.item_edit -> {
+                        TODO("To implement edit counter feature")
                     }
                     R.id.item_archive -> {
+                       lifecycleScope.launch {
+                           var counter = c
+                           counter.isArchived = true
+                           viewModel.updateCounter(counter)
+
+                       }
                     }
                 }
                 true
@@ -220,6 +235,5 @@ class DashboardFragment : Fragment() {
         }
 
     }
-
 
 }
