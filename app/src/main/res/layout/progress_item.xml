@@ -142,7 +142,6 @@
         android:background="@drawable/datepick_background"
         app:layout_constraintEnd_toStartOf="@+id/item_menu_btn"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_check"
         tools:srcCompat="@drawable/ic_check"
         android:visibility="gone"
         app:tint="@color/gray" />

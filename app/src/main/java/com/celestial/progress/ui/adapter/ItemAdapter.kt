@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
 import kotlin.reflect.KClass
@@ -14,11 +15,13 @@ import kotlin.reflect.KProperty1
 
 class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                            val itemMenuShow: ((Counter, View) -> Unit?)? = null,
-                           val t: KClass<T>) :
+                           val t: KClass<T>,
+                           val selectCounter: ((Counter) -> Unit?)? = null) :
         ListAdapter<Counter, RecyclerView.ViewHolder>(DIFF_UTIL) {
 
 
     val TAG = ItemAdapter::class.java.name
+
 
     companion object {
         val DIFF_UTIL = object : DiffUtil.ItemCallback<Counter>() {
@@ -30,9 +33,10 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                 return oldItem.title == newItem.title && oldItem.createdDate == newItem.createdDate && oldItem.order == newItem.order
             }
         }
+
     }
 
-    inner class ItemViewHolder(binding: ProgressItemBinding) :TopLevelHolder(binding) {
+    inner class ItemViewHolder(binding: ProgressItemBinding) : TopLevelHolder(binding) {
         override fun bind() {
             var model = getItem(adapterPosition)
             val expandGroup = binding.expandGroup
@@ -77,38 +81,58 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
         }
     }
 
-    inner class WidgetSelectionViewHolder(binding: ProgressItemBinding): TopLevelHolder(binding){
-
-        override fun bind(){
+    inner class WidgetSelectionViewHolder(binding: ProgressItemBinding) : TopLevelHolder(binding) {
+        override fun bind() {
             super.bind()
             binding.imgvWidgetChkbox.visibility = View.VISIBLE
+
+            itemView.setOnClickListener {
+                    for(c in currentList){
+                        if(c.isCheckedForWidget){
+                            c.isCheckedForWidget = false
+                        }
+                    }
+                model?.isCheckedForWidget = true
+                notifyDataSetChanged()
+            }
+
+            if(model?.isCheckedForWidget!!){
+                binding.imgvWidgetChkbox.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_check))
+                selectCounter?.invoke(model!!)
+            }else{
+                binding.imgvWidgetChkbox.setImageDrawable(null)
+            }
+
         }
+
+
 
     }
 
-    abstract inner class TopLevelHolder(val binding: ProgressItemBinding): RecyclerView.ViewHolder(binding.root){
-        open fun bind(){
-            var model = getItem(adapterPosition)
-            binding.itemTitleId.text = model.title
-            binding.tvCounting.text = model.getDetail()
+    abstract inner class TopLevelHolder(val binding: ProgressItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        var model: Counter? = null
+        open fun bind() {
+            model = getItem(adapterPosition)
+            binding.itemTitleId.text = model?.title
+            binding.tvCounting.text = model?.getDetail()
 
-            binding.itemProgressBarId.indeterminate = model.isElapsed!! && !model.isArchived
-            binding.itemProgressBarId.color1 = model.color!!
+            binding.itemProgressBarId.indeterminate = model?.isElapsed!! && !model?.isArchived!!
+            binding.itemProgressBarId.color1 = model?.color!!
 
-            Log.d(TAG, "${model.title} - " + model.startDate + " : ${model.getDetail()} -")
+            Log.d(TAG, "${model?.title} - " + model?.startDate + " : ${model?.getDetail()} -")
 
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ProgressItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        when(t){
-          ItemViewHolder::class ->{
-                Log.d(TAG,"ITEMVIEW HOlder")
+        when (t) {
+            ItemViewHolder::class -> {
+                Log.d(TAG, "ITEMVIEW HOlder")
                 return ItemViewHolder(binding)
             }
-           WidgetSelectionViewHolder::class ->{
-                Log.d(TAG,"Widget HOlder")
+            WidgetSelectionViewHolder::class -> {
+                Log.d(TAG, "Widget HOlder")
                 return WidgetSelectionViewHolder(binding)
             }
         }
@@ -117,11 +141,11 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder){
-            is ItemAdapter<*>.ItemViewHolder ->{
+        when (holder) {
+            is ItemAdapter<*>.ItemViewHolder -> {
                 holder.bind()
             }
-            is ItemAdapter<*>.WidgetSelectionViewHolder->{
+            is ItemAdapter<*>.WidgetSelectionViewHolder -> {
                 holder.bind()
             }
         }

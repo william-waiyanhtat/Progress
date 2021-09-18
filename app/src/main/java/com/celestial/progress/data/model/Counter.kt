@@ -2,6 +2,7 @@ package com.celestial.progress.data.model
 
 import android.util.Log
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import org.joda.time.*
 import java.text.ParseException
@@ -23,12 +24,11 @@ class Counter(
         val createdDate: String = Calendar.getInstance().toString(),
         var isExpand: Boolean = false,
         var isArchived: Boolean = false,
-
         @PrimaryKey
         val id: Int? = null
 ) {
-
-
+    @Ignore
+    var isCheckedForWidget: Boolean = false
 
 
     fun dayDifferenceBetweenTwoDates(): Long? {

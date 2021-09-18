@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.activity.viewModels
@@ -12,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.celestial.progress.R
+import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ActivityMainBinding
 import com.celestial.progress.databinding.SingleProgressWidgetConfigureBinding
 import com.celestial.progress.ui.adapter.ItemAdapter
@@ -22,6 +24,8 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class SingleProgressWidgetConfigureActivity : AppCompatActivity() {
+    val TAG = SingleProgressWidgetConfigureActivity::class.java.name
+
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private lateinit var appWidgetText: EditText
 
@@ -30,6 +34,8 @@ class SingleProgressWidgetConfigureActivity : AppCompatActivity() {
     private lateinit var rcyView: RecyclerView
 
     private lateinit var adapter: ItemAdapter<ItemAdapter<*>.WidgetSelectionViewHolder>
+
+    private var selectCounter : Counter? = null
 
     private var onClickListener = View.OnClickListener {
         val context = this@SingleProgressWidgetConfigureActivity
@@ -94,7 +100,7 @@ class SingleProgressWidgetConfigureActivity : AppCompatActivity() {
 
     private fun initUI() {
         rcyView = binding.widgetConfigRcy
-        adapter = ItemAdapter(t = ItemAdapter.WidgetSelectionViewHolder::class)
+        adapter = ItemAdapter(t = ItemAdapter.WidgetSelectionViewHolder::class, selectCounter = selectedCounter)
         rcyView.adapter = adapter
     }
 
@@ -102,6 +108,12 @@ class SingleProgressWidgetConfigureActivity : AppCompatActivity() {
         widgetConfigViewModel.observeCounterLiveData().observe(this@SingleProgressWidgetConfigureActivity, Observer {
             adapter.submitList(it)
         })
+    }
+
+    val selectedCounter: (Counter) -> Unit? = {
+        selectCounter = it
+        Log.d(TAG, "Select Counter Name: ${it.title} , ID: ${it.id}")
+        null
     }
 
 }

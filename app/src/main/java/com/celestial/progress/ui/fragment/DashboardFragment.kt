@@ -28,7 +28,7 @@ private val TAG = DashboardFragment::class.java.name
 
 class DashboardFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? =null
+    private var _binding: FragmentDashboardBinding? = null
 
     private val binding get() = _binding!!
 
@@ -45,8 +45,8 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
@@ -56,8 +56,6 @@ class DashboardFragment : Fragment() {
         setListenerToolbar(toolbar)
 
         toolbar.inflateMenu(R.menu.btm_menu)
-
-      //  (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
 
         viewModel = ViewModelProvider(requireActivity())[CounterViewModel::class.java]
         adapter = ItemAdapter(expandCollapse, itemMenuShow, ItemAdapter.ItemViewHolder::class)
@@ -75,28 +73,28 @@ class DashboardFragment : Fragment() {
 
     private fun setListenerToolbar(toolbar: Toolbar) {
         toolbar.setOnMenuItemClickListener {
-            when(it.itemId){
-                R.id.Add ->{
+            when (it.itemId) {
+                R.id.Add -> {
                     if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
                         val extras = FragmentNavigator.Extras.Builder()
-                            .addSharedElement(
-                                binding.toolbarCreate, "fabBtn"
-                            ).build()
+                                .addSharedElement(
+                                        binding.toolbarCreate, "fabBtn"
+                                ).build()
 
                         findNavController().navigate(R.id.navigateToCreateFragment, null, null, extras)
                     }
                 }
-                R.id.archive ->{
+                R.id.archive -> {
                     if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
 //                        val extras = FragmentNavigator.Extras.Builder()
 //                            .addSharedElement(
 //                                binding.fab, "fabBtn"
 //                            ).build()
-                            findNavController().navigate(R.id.action_dashboardFragment_to_archiveFragment)
-                       // findNavController().navigate(R.id.navigateToCreateFragment, null, null, extras)
+                        findNavController().navigate(R.id.action_dashboardFragment_to_archiveFragment)
+                        // findNavController().navigate(R.id.navigateToCreateFragment, null, null, extras)
                     }
                 }
-                R.id.setting ->{
+                R.id.setting -> {
                     if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
 //                        val extras = FragmentNavigator.Extras.Builder()
 //                                .addSharedElement(
@@ -115,18 +113,18 @@ class DashboardFragment : Fragment() {
     }
 
     private fun observeData() {
-      viewModel?.let {
-          it.readAllCounters().observe(viewLifecycleOwner, Observer {
-              Log.d(TAG, "Data get ${it.size}")
+        viewModel?.let {
+            it.readAllCounters().observe(viewLifecycleOwner, Observer {
+                Log.d(TAG, "Data get ${it.size}")
 
-              adapter.submitList(it)
-              binding.counterRcy.layoutManager?.onRestoreInstanceState(rcyState)
-          })
+                adapter.submitList(it)
+                binding.counterRcy.layoutManager?.onRestoreInstanceState(rcyState)
+            })
 
-      }
+        }
     }
 
-    fun setListener(){
+    fun setListener() {
         binding.fab.setOnClickListener {
             (activity as MainActivity).showHideAppBar(false)
 
@@ -161,17 +159,17 @@ class DashboardFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "On Resume")
-       // binding.counterRcy.layoutManager?.onRestoreInstanceState(rcyState)
+        // binding.counterRcy.layoutManager?.onRestoreInstanceState(rcyState)
     }
 
-    val itemTouchSimpleCallback = object: ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
-        0
-    ){
+    val itemTouchSimpleCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
+            0
+    ) {
         override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
         ): Boolean {
             val from = viewHolder.adapterPosition
             val to = target.adapterPosition
@@ -188,7 +186,7 @@ class DashboardFragment : Fragment() {
             }
 
 
-        //    recyclerView.adapter?.notifyItemMoved(from,to)
+            //    recyclerView.adapter?.notifyItemMoved(from,to)
             return false
         }
 
@@ -205,28 +203,28 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    val itemMenuShow: (Counter, View) -> Unit ={ c, v ->
+    val itemMenuShow: (Counter, View) -> Unit = { c, v ->
         Log.d(TAG, "Item Menu : ${c.title}")
-        createPopUpMenuAndShow(v,c)
+        createPopUpMenuAndShow(v, c)
     }
 
 
-    fun createPopUpMenuAndShow(v: View, c: Counter){
+    fun createPopUpMenuAndShow(v: View, c: Counter) {
         val popupMenu = PopupMenu(requireActivity(), v)
         popupMenu.apply {
             menuInflater.inflate(R.menu.menu_item, popupMenu.menu)
             setOnMenuItemClickListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.item_edit -> {
                         TODO("To implement edit counter feature")
                     }
                     R.id.item_archive -> {
-                       lifecycleScope.launch {
-                           var counter = c
-                           counter.isArchived = true
-                           viewModel.updateCounter(counter)
+                        lifecycleScope.launch {
+                            var counter = c
+                            counter.isArchived = true
+                            viewModel.updateCounter(counter)
 
-                       }
+                        }
                     }
                 }
                 true
