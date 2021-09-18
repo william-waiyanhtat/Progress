@@ -10,6 +10,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Progress">
+        <receiver android:name=".widget.SingleProgressWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/single_progress_widget_info" />
+        </receiver>
+
+        <activity android:name=".widget.SingleProgressWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <receiver android:name=".widget.ProgressListWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -21,7 +37,7 @@
         </receiver>
 
         <service
-            android:name="com.celestial.services.ProgressWidgetService"
+            android:name=".services.ProgressWidgetService"
             android:enabled="true"
             android:exported="true" />
 
@@ -35,10 +51,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".widget.MyRemoteViewService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"></service>
-
-
+        <service
+            android:name=".widget.MyRemoteViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

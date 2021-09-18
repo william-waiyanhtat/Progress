@@ -24,7 +24,7 @@ class ArchiveFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    lateinit var adapter: ItemAdapter
+    lateinit var adapter: ItemAdapter<ItemAdapter<*>.ItemViewHolder>
 
     lateinit var viewModel: CounterViewModel
 
@@ -62,7 +62,7 @@ class ArchiveFragment : Fragment() {
             goBack()
         }
 
-        adapter = ItemAdapter(null, itemMenuShow)
+        adapter = ItemAdapter(null, itemMenuShow, ItemAdapter.ItemViewHolder::class)
         val rcyView = binding.archiveRcy
         rcyView.adapter = adapter
 

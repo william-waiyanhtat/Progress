@@ -22,7 +22,7 @@ val TAG = MainActivity::class.java.simpleName
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    lateinit var adapter: ItemAdapter
+    lateinit var adapter: ItemAdapter<ItemAdapter<*>.ItemViewHolder>
 
     private var binding: ActivityMainBinding? = null
 

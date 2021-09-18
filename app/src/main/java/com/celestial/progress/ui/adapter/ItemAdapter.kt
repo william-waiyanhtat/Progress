@@ -9,8 +9,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
+import kotlin.reflect.KClass
+import kotlin.reflect.KProperty1
 
-class ItemAdapter(val expandCollapse: ((Counter) -> Unit)? = null, val itemMenuShow: ((Counter, View) -> Unit?)? = null) : ListAdapter<Counter, ItemAdapter.ItemViewHolder>(DIFF_UTIL) {
+class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
+                           val itemMenuShow: ((Counter, View) -> Unit?)? = null,
+                           val t: KClass<T>) :
+        ListAdapter<Counter, RecyclerView.ViewHolder>(DIFF_UTIL) {
 
 
     val TAG = ItemAdapter::class.java.name
@@ -27,20 +32,16 @@ class ItemAdapter(val expandCollapse: ((Counter) -> Unit)? = null, val itemMenuS
         }
     }
 
-    inner class ItemViewHolder(val binding: ProgressItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind() {
+    inner class ItemViewHolder(binding: ProgressItemBinding) :TopLevelHolder(binding) {
+        override fun bind() {
             var model = getItem(adapterPosition)
-
             val expandGroup = binding.expandGroup
 
             binding.itemTitleId.text = model.title
             binding.tvCounting.text = model.getDetail()
 
             binding.itemProgressBarId.indeterminate = model.isElapsed!! && !model.isArchived
-
-
             binding.itemProgressBarId.color1 = model.color!!
-
             if (model.isExpand) {
                 expandGroup.visibility = View.VISIBLE
             } else {
@@ -60,10 +61,7 @@ class ItemAdapter(val expandCollapse: ((Counter) -> Unit)? = null, val itemMenuS
                 itemMenuShow?.invoke(model, binding.itemMenuBtn)
 
             }
-
             itemView.setOnClickListener {
-
-
                 if (!model.isExpand) {
                     expandGroup.visibility = View.VISIBLE
                     model.isExpand = true
@@ -79,15 +77,53 @@ class ItemAdapter(val expandCollapse: ((Counter) -> Unit)? = null, val itemMenuS
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+    inner class WidgetSelectionViewHolder(binding: ProgressItemBinding): TopLevelHolder(binding){
+
+        override fun bind(){
+            super.bind()
+            binding.imgvWidgetChkbox.visibility = View.VISIBLE
+        }
+
+    }
+
+    abstract inner class TopLevelHolder(val binding: ProgressItemBinding): RecyclerView.ViewHolder(binding.root){
+        open fun bind(){
+            var model = getItem(adapterPosition)
+            binding.itemTitleId.text = model.title
+            binding.tvCounting.text = model.getDetail()
+
+            binding.itemProgressBarId.indeterminate = model.isElapsed!! && !model.isArchived
+            binding.itemProgressBarId.color1 = model.color!!
+
+            Log.d(TAG, "${model.title} - " + model.startDate + " : ${model.getDetail()} -")
+
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ProgressItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        when(t){
+          ItemViewHolder::class ->{
+                Log.d(TAG,"ITEMVIEW HOlder")
+                return ItemViewHolder(binding)
+            }
+           WidgetSelectionViewHolder::class ->{
+                Log.d(TAG,"Widget HOlder")
+                return WidgetSelectionViewHolder(binding)
+            }
+        }
         return ItemViewHolder(binding)
 
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        with(holder) {
-            bind()
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when(holder){
+            is ItemAdapter<*>.ItemViewHolder ->{
+                holder.bind()
+            }
+            is ItemAdapter<*>.WidgetSelectionViewHolder->{
+                holder.bind()
+            }
         }
     }
 

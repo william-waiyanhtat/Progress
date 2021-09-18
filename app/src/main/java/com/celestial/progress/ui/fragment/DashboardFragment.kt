@@ -34,7 +34,7 @@ class DashboardFragment : Fragment() {
 
     lateinit var viewModel: CounterViewModel
 
-    lateinit var adapter: ItemAdapter
+    lateinit var adapter: ItemAdapter<ItemAdapter<*>.ItemViewHolder>
 
     var rcyState: Parcelable? = null
 
@@ -60,7 +60,7 @@ class DashboardFragment : Fragment() {
       //  (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
 
         viewModel = ViewModelProvider(requireActivity())[CounterViewModel::class.java]
-        adapter = ItemAdapter(expandCollapse, itemMenuShow)
+        adapter = ItemAdapter(expandCollapse, itemMenuShow, ItemAdapter.ItemViewHolder::class)
         binding.counterRcy.adapter = adapter
         binding.counterRcy.layoutManager = LinearLayoutManager(context)
         val itemTouchHelper = ItemTouchHelper(itemTouchSimpleCallback)
@@ -176,8 +176,8 @@ class DashboardFragment : Fragment() {
             val from = viewHolder.adapterPosition
             val to = target.adapterPosition
 
-            val counterFrom = (recyclerView.adapter as ItemAdapter).currentList[from]
-            val counterTo = (recyclerView.adapter as ItemAdapter).currentList[to]
+            val counterFrom = (recyclerView.adapter as ItemAdapter<*>).currentList[from]
+            val counterTo = (recyclerView.adapter as ItemAdapter<*>).currentList[to]
             counterFrom.order = to
             counterTo.order = from
 

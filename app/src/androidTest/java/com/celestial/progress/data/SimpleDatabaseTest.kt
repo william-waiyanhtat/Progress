@@ -10,7 +10,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.getOrAwaitValue
-import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
@@ -62,7 +61,7 @@ class SimpleDatabaseTest {
 
         counterDao.insertCounter(counter)
 
-        val c = counterDao.observeAllShoppingItems().getOrAwaitValue()
+        val c = counterDao.observeAllValidCounters().getOrAwaitValue()
 
         val a = Counter(
             "AAA",

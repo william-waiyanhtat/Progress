@@ -1,4 +1,4 @@
-package com.celestial.services
+package com.celestial.progress.services
 
 import android.app.Service
 import android.appwidget.AppWidgetManager

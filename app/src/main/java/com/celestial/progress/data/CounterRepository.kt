@@ -3,7 +3,6 @@ package com.celestial.progress.data
 import androidx.lifecycle.LiveData
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.others.RepoStatus
-import com.celestial.progress.others.Resource
 import javax.inject.Inject
 
 class CounterRepository @Inject constructor(
@@ -25,7 +24,7 @@ class CounterRepository @Inject constructor(
     }
 
     override fun observeAllCounterItem(): LiveData<List<Counter>> {
-       return counterDao.observeAllShoppingItems()
+       return counterDao.observeAllValidCounters()
     }
 
     override suspend fun updateCounter(counter: Counter) {
@@ -33,7 +32,7 @@ class CounterRepository @Inject constructor(
     }
 
     override fun observeAllArchiveCounterItem(): LiveData<List<Counter>> {
-        return counterDao.observeAllShoppingItems(isArchived = true)
+        return counterDao.observeAllValidCounters(isArchived = true)
     }
 
     override  fun readAllValidCounters(): List<Counter> {

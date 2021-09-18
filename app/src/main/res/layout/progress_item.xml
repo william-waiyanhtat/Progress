@@ -49,8 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:background="#ABFFFFFF"
-        android:text="23%"
         android:padding="@dimen/spacing_small"
+        android:text="23%"
         app:layout_constraintBottom_toBottomOf="@+id/item_progress_bar_id"
         app:layout_constraintEnd_toEndOf="@+id/item_progress_bar_id"
         app:layout_constraintTop_toTopOf="@+id/item_progress_bar_id" />
@@ -135,6 +135,17 @@
         app:layout_constraintEnd_toStartOf="@+id/item_menu_btn"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imgv_widget_chkbox"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/datepick_background"
+        app:layout_constraintEnd_toStartOf="@+id/item_menu_btn"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_check"
+        tools:srcCompat="@drawable/ic_check"
+        android:visibility="gone"
+        app:tint="@color/gray" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
