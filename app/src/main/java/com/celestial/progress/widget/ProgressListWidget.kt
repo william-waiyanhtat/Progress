@@ -13,6 +13,7 @@ import android.widget.RemoteViews
 import android.widget.Toast
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
+import com.celestial.progress.widget.services.MyRemoteViewService
 
 
 /**

@@ -213,7 +213,6 @@ class CreateFragment : Fragment() {
             binding.inputName.text.toString(),
             startDate,
             endDate,
-            !binding.countdownChkBox.isChecked,
             colorValue,
             note,
             binding.requiredNotiChkBox.isChecked,

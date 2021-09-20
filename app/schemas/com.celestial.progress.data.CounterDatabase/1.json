@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e9e24d5f2303047e66c6011577534a5e",
+    "identityHash": "ba8c2a8c059bf0224cd96b78443150f5",
     "entities": [
       {
         "tableName": "Counter",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT, `isElapsed` INTEGER, `color` INTEGER, `note` TEXT, `requiredNotification` INTEGER NOT NULL, `displayFormat` TEXT NOT NULL, `order` INTEGER, `createdDate` TEXT NOT NULL, `isExpand` INTEGER NOT NULL, `isArchived` INTEGER NOT NULL, `id` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT, `color` INTEGER, `note` TEXT, `requiredNotification` INTEGER NOT NULL, `displayFormat` TEXT NOT NULL, `order` INTEGER, `createdDate` TEXT NOT NULL, `isExpand` INTEGER NOT NULL, `isArchived` INTEGER NOT NULL, `id` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "title",
@@ -24,12 +24,6 @@
             "fieldPath": "endDate",
             "columnName": "endDate",
             "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "isElapsed",
-            "columnName": "isElapsed",
-            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -100,7 +94,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e9e24d5f2303047e66c6011577534a5e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ba8c2a8c059bf0224cd96b78443150f5')"
     ]
   }
 }

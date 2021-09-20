@@ -44,7 +44,7 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             binding.itemTitleId.text = model.title
             binding.tvCounting.text = model.getDetail()
 
-            binding.itemProgressBarId.indeterminate = model.isElapsed!! && !model.isArchived
+            binding.itemProgressBarId.indeterminate = model.isElapsed() && !model.isArchived
             binding.itemProgressBarId.color1 = model.color!!
             if (model.isExpand) {
                 expandGroup.visibility = View.VISIBLE
@@ -116,7 +116,7 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             binding.itemTitleId.text = model?.title
             binding.tvCounting.text = model?.getDetail()
 
-            binding.itemProgressBarId.indeterminate = model?.isElapsed!! && !model?.isArchived!!
+            binding.itemProgressBarId.indeterminate = model?.isElapsed()!! && !model?.isArchived!!
             binding.itemProgressBarId.color1 = model?.color!!
 
             Log.d(TAG, "${model?.title} - " + model?.startDate + " : ${model?.getDetail()} -")

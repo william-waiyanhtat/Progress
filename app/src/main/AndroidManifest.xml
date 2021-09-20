@@ -36,11 +36,6 @@
                 android:resource="@xml/progress_list_widget_info" />
         </receiver>
 
-        <service
-            android:name=".services.ProgressWidgetService"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity
             android:name=".MainActivity"
             android:configChanges="screenSize|orientation">
@@ -52,8 +47,9 @@
         </activity>
 
         <service
-            android:name=".widget.MyRemoteViewService"
+            android:name=".widget.services.MyRemoteViewService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

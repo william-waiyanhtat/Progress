@@ -30,7 +30,7 @@ private val counterRepository: CounterRepository
 
                  override fun success(obj: Any, msg: String?) {
                      Log.d(TAG,"Success Insert: ${obj as Long}")
-                     result.postValue(Resource.success(obj as Long,msg))
+                     result.postValue(Resource.success(obj ,msg))
                  }
 
                  override fun loading(msg: String) {

@@ -1,9 +1,9 @@
-package com.celestial.progress.widget
+package com.celestial.progress.widget.services
 
-import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViewsService
 import com.celestial.progress.data.CounterRepository
+import com.celestial.progress.widget.ProgressWidgetDataProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

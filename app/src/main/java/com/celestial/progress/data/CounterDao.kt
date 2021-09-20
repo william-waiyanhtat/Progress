@@ -20,4 +20,7 @@ interface CounterDao {
 
     @Query("SELECT * FROM counter where isArchived = :isArchived ORDER BY `order` ASC")
     fun readAllValidCounters(isArchived: Boolean = false): List<Counter>
+
+    @Query("SELECT * FROM counter where isArchived = 0 and id = :id")
+    suspend fun readCounterById(id: Int): Counter
 }

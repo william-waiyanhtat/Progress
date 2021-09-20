@@ -14,13 +14,7 @@
         android:text="ABC"
         tools:text="Anniversary" />
 
-    <TextView
-        android:id="@+id/tv_note_widget_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Note" />
-
-    <TextView
+      <TextView
         android:id="@+id/tv_detail_widget_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

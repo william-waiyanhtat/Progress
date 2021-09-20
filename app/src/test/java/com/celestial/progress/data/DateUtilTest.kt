@@ -36,7 +36,6 @@ class DateUtilTest {
                 "5day Diff",
                 "1991-12-04",
                 "2021-08-27",
-                false,
                     1,
                 "Nothing"
         )
@@ -46,6 +45,21 @@ class DateUtilTest {
 
         assert(c.dayDifferenceBetweenTwoDates() == 5L)
 
+
+    }
+
+    @Test
+    fun isElapsedTest(){
+        val c = Counter(
+                "5day Diff",
+                "1991-12-04",
+                "2021-08-27",
+                1,
+                "Nothing"
+        )
+        println("IsElapsed: ${c.isElapsed()}")
+
+        assert(c.isElapsed())
 
     }
 

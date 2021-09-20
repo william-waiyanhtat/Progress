@@ -17,4 +17,6 @@ interface DefaultRepository {
     fun observeAllArchiveCounterItem(): LiveData<List<Counter>>
 
     fun readAllValidCounters(): List<Counter>
+
+    suspend fun getCounterById(id: Int): Counter
 }

@@ -53,4 +53,9 @@ object DeviceUtils {
 
         return Color.argb(alpha, red, green, blue)
     }
+
+    fun Int.getSecondaryColor(): Int{
+        return darker(this,0.5f)
+    }
+
 }

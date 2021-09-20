@@ -14,7 +14,6 @@ class CounterTest {
             "1day",
             "2020-08-10",
             "2021-09-10",
-            false,
             Color.RED,
             "Empty",
             false,
@@ -31,7 +30,6 @@ class CounterTest {
             "1day",
             "2020-09-01",
             "2021-09-09",
-            false,
             Color.RED,
             "Empty",
             false,
@@ -48,7 +46,6 @@ class CounterTest {
             "1day",
             "2021-06-01",
             "2021-09-10",
-            false,
             Color.RED,
             "Empty",
             false,
@@ -65,7 +62,6 @@ class CounterTest {
             "1day",
             "2020-08-01",
             "2021-09-10",
-            false,
             Color.RED,
             "Empty",
             false,
@@ -82,7 +78,6 @@ class CounterTest {
             "1day",
             "2020-08-01",
             "2021-09-10",
-            false,
             Color.RED,
             "Empty",
             false,
@@ -99,7 +94,6 @@ class CounterTest {
             "1Day",
             "2021-09-12",
             "2021-09-13",
-            isElapsed = true,
             Color.RED,
             "Empty",
             false,
@@ -127,17 +121,50 @@ class CounterTest {
         "50 Percent Test",
         "2021-09-16",
         "2021-09-18",
-        true,
         Color.RED,
         "Empty",
         false,
         DisplayFormat.DAY
         )
-
         val result = counter.getPercent()
-
         print("Percent: $result")
-        assertThat(result).isEqualTo(50L)
+        assertThat(result).isEqualTo(-2L)
+    }
+
+    @Test
+    fun isCompoleteTest(){
+        val counter = Counter(
+                "50 Percent Test",
+                "2021-09-16",
+                "",
+                Color.RED,
+                "Empty",
+                false,
+                DisplayFormat.DAY
+        )
+
+        val result = counter.isComplete()
+
+        print("Result : $result")
+
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun isElapsedCounter(){
+        val counter = Counter(
+                "50 Percent Test",
+                "2021-09-16",
+                "",
+                Color.RED,
+                "Empty",
+                false,
+                DisplayFormat.DAY
+                )
+
+        val result = counter.isElapsed()
+
+        assertThat(result).isTrue()
     }
 
 }

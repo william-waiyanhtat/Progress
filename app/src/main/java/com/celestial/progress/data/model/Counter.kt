@@ -10,12 +10,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+const val COMPLETE = -1L
+const val OVER = -2L
+const val INVALID = 0L
+
 @Entity
 class Counter(
         val title: String,
         val startDate: String,
         val endDate: String?,
-        val isElapsed: Boolean? = true,
         val color: Int?,
         val note: String?,
         val requiredNotification: Boolean = false,
@@ -44,6 +47,16 @@ class Counter(
         }
         return null
     }
+
+    fun isElapsed(): Boolean{
+        if (endDate != null) {
+            if(endDate.isEmpty()){
+                return true
+            }
+        }
+        return false
+    }
+
 
     fun getDetail(): String {
         val start = LocalDate.parse(startDate)
@@ -113,7 +126,10 @@ class Counter(
 
     fun isComplete(): Boolean {
         endDate?.let{
-            if(Calendar.getInstance().time>=it.getDate()){
+            var current: Calendar = Calendar.getInstance().apply {
+                resetToMidnight(this.time)
+            }
+            if(current.time >=it.getDate()){
                 return true
             }
             return false
@@ -122,25 +138,35 @@ class Counter(
     }
 
     fun getPercent(): Long? {
-        endDate?.let {
-            val currentDate = Calendar.getInstance().apply {
-                resetToMidnight(this.time)
+            endDate?.let {
+                val currentDate = Calendar.getInstance().apply {
+                    resetToMidnight(this.time)
+                }
+
+                if(currentDate.time > endDate.getDate()){
+                    return OVER
+                }
+
+                if(currentDate.time == endDate.getDate()){
+                    return COMPLETE
+                }
+
+                val dayReach = dayDifferenceBetweenTwoDates(startDate, currentDate.getCurrentDateString())
+
+                val dayTotal = dayDifferenceBetweenTwoDates()
+
+                println("DayReach: ${dayReach.toString()}")
+                println("DayTotal: ${dayTotal.toString()}")
+
+                val percent: Float? = (dayReach?.toFloat()?.div(dayTotal?.toFloat()!!))
+
+                println("Result : ${percent.toString()}")
+
+                return percent?.times(100)?.toLong()
             }
-            val dayReach = dayDifferenceBetweenTwoDates(startDate,currentDate.getCurrentDateString())
 
-            val dayTotal = dayDifferenceBetweenTwoDates()
+            return INVALID
 
-            println("DayReach: ${dayReach.toString()}")
-            println("DayTotal: ${dayTotal.toString()}")
-
-            val percent: Float? = (dayReach?.toFloat()?.div(dayTotal?.toFloat()!!))
-
-            println("Result : ${percent.toString()}")
-
-            return percent?.times(100)?.toLong()
-        }
-
-        return 0
     }
 }
 
