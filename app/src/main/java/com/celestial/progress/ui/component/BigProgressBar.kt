@@ -54,7 +54,6 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
     var valueAnimator = ValueAnimator.ofFloat(0f, 0f)
 
     init {
-
         this.color1 = Color.RED
         this.color2 = DeviceUtils.darker(this.color1, 0.6f)
         this.color3 = Color.WHITE
@@ -123,6 +122,7 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
         if(valueAnimator.isRunning){
             valueAnimator.cancel()
+            valueAnimator = null
         }
 
         if(indeterminate) {
@@ -163,6 +163,14 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
         val intArray: IntArray = intArrayOf(color4, color3, color4)
         val floatArray: FloatArray = floatArrayOf(0.0f, 0.5f, 0.8f)
         return LinearGradient(0f, 0f, animatedValue*2, 0f, intArray, floatArray, Shader.TileMode.CLAMP)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        if(valueAnimator!= null){
+            valueAnimator.cancel()
+            valueAnimator = null
+        }
     }
 
 }

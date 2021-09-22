@@ -167,4 +167,24 @@ class CounterTest {
         assertThat(result).isTrue()
     }
 
+    @Test
+    fun progressTest(){
+        val counter = Counter(
+                "50 Percent Test",
+                "2021-09-20",
+                "2021-09-23",
+                Color.RED,
+                "Empty",
+                false,
+                DisplayFormat.DAY
+        )
+
+        val result = counter.getPercent()
+
+        println("RESULT: ${result}")
+
+        assertThat(result).isEqualTo(50L)
+
+    }
+
 }

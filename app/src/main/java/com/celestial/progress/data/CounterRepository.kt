@@ -40,7 +40,7 @@ class CounterRepository @Inject constructor(
     }
 
     override suspend fun getCounterById(id: Int): Counter {
-        return counterDao.readCounterById(id)
+        return counterDao.getCounterById(id)
     }
 
     suspend fun insert100Records() {

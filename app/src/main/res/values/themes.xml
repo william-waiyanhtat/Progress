@@ -19,7 +19,8 @@
     </style>
 
     <style name="ThemeOverlay.Progress.AppWidgetContainer" parent="">
-        <item name="appWidgetBackgroundColor">@color/ic_launcher1_background</item>
+<!--        <item name="appWidgetBackgroundColor">@color/ic_launcher1_background</item>-->
+        <item name="appWidgetBackgroundColor">@color/transparent_white</item>
         <item name="appWidgetTextColor">@color/light_blue_50</item>
     </style>
 </resources>

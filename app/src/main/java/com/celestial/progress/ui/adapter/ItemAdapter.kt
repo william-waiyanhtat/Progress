@@ -46,6 +46,17 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
 
             binding.itemProgressBarId.indeterminate = model.isElapsed() && !model.isArchived
             binding.itemProgressBarId.color1 = model.color!!
+
+            if(!model.isElapsed()){
+                val percent =  model.getPercent()?.toInt() ?: 100
+
+                binding.itemProgressBarId.progress = percent
+
+                binding.itemPercentId.text = "$percent %"
+            }else{
+                binding.itemPercentId.visibility = View.GONE
+            }
+
             if (model.isExpand) {
                 expandGroup.visibility = View.VISIBLE
             } else {

@@ -22,5 +22,5 @@ interface CounterDao {
     fun readAllValidCounters(isArchived: Boolean = false): List<Counter>
 
     @Query("SELECT * FROM counter where isArchived = 0 and id = :id")
-    suspend fun readCounterById(id: Int): Counter
+    suspend fun getCounterById(id: Int): Counter
 }

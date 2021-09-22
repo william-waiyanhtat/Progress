@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/appWidgetBackgroundColor"
+    android:background="@drawable/single_widget_background"
     android:padding="@dimen/widget_margin"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.Progress.AppWidgetContainer">

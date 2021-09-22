@@ -11,6 +11,7 @@ import androidx.test.filters.SmallTest
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
@@ -54,7 +55,6 @@ class SimpleDatabaseTest {
             "ABC",
             startDate,
             endDate,
-            true,
             Color.RED,
             "Test Note"
         )
@@ -67,7 +67,6 @@ class SimpleDatabaseTest {
             "AAA",
             startDate,
             endDate,
-            true,
             Color.BLUE,
             ""
         )
@@ -77,11 +76,30 @@ class SimpleDatabaseTest {
     }
 
     @Test
-    fun testHere(){
-        val b = true
+    fun gettingUnavailableID(){
+        val d1: Date = Calendar.getInstance().time
+        val d2: Date = Calendar.getInstance().time
 
-        assert(b)
+        val smpf: SimpleDateFormat = SimpleDateFormat("YYYY-MM-DD'T'HH-mm-ss")
+        val startDate = smpf.format(d1)
+        val endDate = smpf.format(d2)
+
+        val counter = Counter(
+                "ABC",
+                startDate,
+                endDate,
+                Color.RED,
+                "Test Note"
+        )
+
+        val c = runBlocking { counterDao.getCounterById(8) }
+
+        println(c)
+
+        assert(c==null)
+
     }
+
 
 
     @After

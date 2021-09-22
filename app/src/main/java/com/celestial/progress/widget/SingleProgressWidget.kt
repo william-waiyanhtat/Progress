@@ -8,9 +8,11 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.*
 import com.celestial.progress.R
 import com.celestial.progress.data.CounterRepository
@@ -49,17 +51,18 @@ class SingleProgressWidget : AppWidgetProvider() {
         for (appWidgetId in appWidgetIds) {
             GlobalScope.launch {
                 try {
-                    val list = counterRepository.readAllValidCounters()
 
                     val id = loadTitlePref(context, appWidgetId)
-
 
                     Log.d(TAG, "onUpdate: ID: ${id}")
                     val counter = counterRepository.getCounterById(id.toInt())
 
-                    Log.d(TAG, "On Update List Size: ${list.size}" + "Current Thread :${Looper.getMainLooper().isCurrentThread}")
+                    if (counter != null) {
+                        updateAppWidget(context, appWidgetManager, appWidgetId, counter)
+                    }
+                    //Todo add not available counter handling widget here
                     // updateAppWidget(context,appWidgetIds)
-                    updateAppWidget(context, appWidgetManager, appWidgetId, counter)
+
                 } catch (e: Exception) {
 
                 }
@@ -96,20 +99,19 @@ class SingleProgressWidget : AppWidgetProvider() {
                 appWidgetId: Int,
                 counter: Counter?
         ) {
-            // val widgetText = loadTitlePref(context, appWidgetId)
-
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.single_progress_widget)
             views.setTextViewText(R.id.appwidget_text, counter?.title)
+
             views.setTextViewText(R.id.tv_single_widget_detail, counter?.getDetail())
-            //    views.setProgressBar(R.id.pbar_single_widget,100, counter?.getPercent()?.toInt()!!, counter?.isElapsed())
+            views.setViewVisibility(R.id.tv_single_widget_detail,View.VISIBLE)
+
             views.setOnClickPendingIntent(R.id.btn_swidget_update, getRefreshIntent(context))
+            views.setImageViewBitmap(R.id.imgv_single_widget, getProgressView(context, counter))
+            if(counter?.isElapsed()!!) {
+                views.setViewVisibility(R.id.imgv_single_widget, View.GONE)
 
-            views.setImageViewBitmap(R.id.imgv_single_widget, getProgressView(context,counter))
-
-
-         //   getProgressView(counter)
-
+            }
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
@@ -131,10 +133,12 @@ class SingleProgressWidget : AppWidgetProvider() {
 
         }
 
-        private fun makeProgressBitmap(context: Context, progress: Int, color1: Int, color2: Int, sizeInDP: Float, stroke: Float): Bitmap? {
+        private fun makeProgressBitmap(context: Context, progress: Int, color1: Int, color2: Int, sizeInDP: Float, stroke: Float, isElapsed: Boolean): Bitmap? {
+
+            val TAG = SingleProgressWidget::class.java.name
             val paint = Paint()
             paint.isAntiAlias = true
-            paint.color = color1
+
             paint.style = Paint.Style.STROKE
             paint.strokeWidth = stroke
             val size = DeviceUtils.convertDpToPixel(sizeInDP, context)
@@ -143,23 +147,19 @@ class SingleProgressWidget : AppWidgetProvider() {
             val canvas = Canvas(bitmap)
 
             val rectF = RectF(stroke, stroke, size - stroke, size - stroke)
-            paint.color = Color.GRAY
+            paint.color = Color.LTGRAY
             canvas.drawArc(rectF, 270f, 360f, false, paint)
 
             paint.shader = createSweepGradient(size / 2, size / 2, color1, color2).apply {
-
                 val matrix = Matrix()
                 matrix.preRotate(-90f, size / 2 - stroke, size / 2 - stroke)
                 setLocalMatrix(matrix)
-
             }
-            val TAG = SingleProgressWidget::class.java.name
-
             val sweepAngle = progress.toFloat() / 100 * 360f
 
+            Log.d(TAG, "Progress ${progress}")
+
             Log.d(TAG, "Sweep Angle $sweepAngle Progress: $progress")
-
-
 
             canvas.drawArc(rectF, 270f, sweepAngle, false, paint)
             return bitmap
@@ -170,9 +170,10 @@ class SingleProgressWidget : AppWidgetProvider() {
             val color1 = counter?.color
             val color2 = color1?.getSecondaryColor()
 
-            val progress = counter?.getPercent()?.toInt()
+            val p = counter?.getPercent()!!
 
-            return makeProgressBitmap(context, progress!!,color1!!,color2!!, 50f,10f)
+            Log.d("SimpleProgressWidget", "Counter ID ${counter?.id} CounterName: ${counter?.title}  End Date ${counter?.endDate} Progress: ${p}")
+            return makeProgressBitmap(context, p.toInt(), color1!!, color2!!, 50f, 10f, counter.isElapsed())
 
         }
 

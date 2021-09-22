@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 const val COMPLETE = -1L
 const val OVER = -2L
-const val INVALID = 0L
+const val INVALID = -3L
 
 @Entity
 class Counter(
@@ -27,6 +27,8 @@ class Counter(
         val createdDate: String = Calendar.getInstance().toString(),
         var isExpand: Boolean = false,
         var isArchived: Boolean = false,
+        val repeating: Repeating = Repeating.ONCE,
+
         @PrimaryKey
         val id: Int? = null
 ) {
@@ -65,8 +67,6 @@ class Counter(
         } else {
             LocalDate.parse(Calendar.getInstance().getCurrentDateString())
         }
-
-
         //  print(Days.daysBetween(start, end).days)
 
         if (displayFormat == DisplayFormat.DAY || displayFormat == DisplayFormat.WEEK_DAY) {
@@ -138,6 +138,9 @@ class Counter(
     }
 
     fun getPercent(): Long? {
+        if(endDate!!.isEmpty()){
+            return INVALID
+        }
             endDate?.let {
                 val currentDate = Calendar.getInstance().apply {
                     resetToMidnight(this.time)
@@ -210,6 +213,10 @@ enum class DisplayFormat() {
     MONTH_WEEK_DAY,
     YEAR_MONTH_WEEK_DAY,
     YEAR_MONTH_DAY;
+}
+
+enum class Repeating{
+    ONCE ,MONTHLY, YEARLY
 }
 
 fun Calendar.getCurrentDateString(): String {
