@@ -1,6 +1,7 @@
 package com.celestial.progress.widget
 
 
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -22,6 +23,7 @@ import com.celestial.progress.ui.component.DeviceUtils.getSecondaryColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -41,13 +43,6 @@ class SingleProgressWidget : AppWidgetProvider() {
             appWidgetManager: AppWidgetManager,
             appWidgetIds: IntArray
     ) {
-        Log.d("SingleProgressWidget", "Thread -" + Looper.getMainLooper().isCurrentThread + "counterRepo: ${counterRepository.toString()}")
-
-//        val intent = Intent(context.applicationContext,SingleViewWidgetService::class.java)
-//        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,appWidgetIds)
-//        context.startService(intent)
-
-//        // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             GlobalScope.launch {
                 try {
@@ -70,7 +65,6 @@ class SingleProgressWidget : AppWidgetProvider() {
             }
             val id = loadTitlePref(context, appWidgetId)
             Toast.makeText(context, "Widget Update -" + appWidgetId, Toast.LENGTH_SHORT).show()
-            // appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.layout.single_progress_widget)
             Log.d(TAG, "Widget Update : ${id}")
         }
 
@@ -90,6 +84,7 @@ class SingleProgressWidget : AppWidgetProvider() {
 
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
+        cancelUpdatePendingIntentAlarmManager(context)
     }
 
     companion object {
@@ -134,7 +129,6 @@ class SingleProgressWidget : AppWidgetProvider() {
         }
 
         private fun makeProgressBitmap(context: Context, progress: Int, color1: Int, color2: Int, sizeInDP: Float, stroke: Float, isElapsed: Boolean): Bitmap? {
-
             val TAG = SingleProgressWidget::class.java.name
             val paint = Paint()
             paint.isAntiAlias = true
@@ -156,11 +150,6 @@ class SingleProgressWidget : AppWidgetProvider() {
                 setLocalMatrix(matrix)
             }
             val sweepAngle = progress.toFloat() / 100 * 360f
-
-            Log.d(TAG, "Progress ${progress}")
-
-            Log.d(TAG, "Sweep Angle $sweepAngle Progress: $progress")
-
             canvas.drawArc(rectF, 270f, sweepAngle, false, paint)
             return bitmap
 
@@ -171,8 +160,6 @@ class SingleProgressWidget : AppWidgetProvider() {
             val color2 = color1?.getSecondaryColor()
 
             val p = counter?.getPercent()!!
-
-            Log.d("SimpleProgressWidget", "Counter ID ${counter?.id} CounterName: ${counter?.title}  End Date ${counter?.endDate} Progress: ${p}")
             return makeProgressBitmap(context, p.toInt(), color1!!, color2!!, 50f, 10f, counter.isElapsed())
 
         }
@@ -182,7 +169,49 @@ class SingleProgressWidget : AppWidgetProvider() {
             return SweepGradient(cX, xY, color1, color2)
         }
 
+
+        fun setAlarmToUpdateAtDayChanged(context: Context){
+            val pendingIntent = getRefreshIntent(context)
+
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+
+            calendar.add(Calendar.DAY_OF_YEAR,1)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,pendingIntent)
+        }
+
+        internal fun cancelUpdatePendingIntentAlarmManager(context: Context){
+            val pendingIntent = getRefreshIntent(context)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            pendingIntent.cancel()
+            alarmManager.cancel(pendingIntent)
+        }
+
+
     }
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        super.onReceive(context, intent)
+        val action = intent?.getAction()
+
+        if (action.equals(Intent.ACTION_TIME_CHANGED) ||
+                action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
+            getRefreshIntent(context!!).send()
+            Log.d(TAG,"On Date or Time Changed")
+        }else{
+            Log.d(TAG,"On AppWidgt Intent")
+            setAlarmToUpdateAtDayChanged(context!!)
+        }
+    }
+
+
 
 
 }

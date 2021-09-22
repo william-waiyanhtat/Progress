@@ -23,9 +23,6 @@ import java.util.*
  * Implementation of App Widget functionality.
  */
 class ProgressListWidget : AppWidgetProvider() {
-
-
-
     val TAG = ProgressListWidget::class.java.name
     override fun onUpdate(
             context: Context,

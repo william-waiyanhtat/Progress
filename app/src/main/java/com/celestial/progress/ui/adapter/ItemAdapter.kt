@@ -1,5 +1,7 @@
 package com.celestial.progress.ui.adapter
 
+
+import android.animation.LayoutTransition
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +13,7 @@ import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty1
+
 
 class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                            val itemMenuShow: ((Counter, View) -> Unit?)? = null,
@@ -77,17 +79,33 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
 
             }
             itemView.setOnClickListener {
+
+                val layout = binding.progressItemParent
+                val layoutTransition = layout.layoutTransition
+                layoutTransition.addTransitionListener(object : LayoutTransition.TransitionListener {
+                    override fun startTransition(transition: LayoutTransition?, container: ViewGroup?, view: View?, transitionType: Int) {
+                        Log.d(TAG, "startTransition: ")
+                    }
+
+                    override fun endTransition(transition: LayoutTransition?, container: ViewGroup?, view: View?, transitionType: Int) {
+                        Log.d(TAG, "endTransition: ")
+                        expandCollapse?.invoke(model)
+                    }
+                })
+
                 if (!model.isExpand) {
                     expandGroup.visibility = View.VISIBLE
                     model.isExpand = true
-                    //  notifyItemChanged(-1)
+                      notifyItemChanged(-1)
 
                 } else {
                     expandGroup.visibility = View.GONE
                     model.isExpand = false
-                    // notifyItemChanged(adapterPosition)
+                    notifyItemChanged(-1)
                 }
-                expandCollapse?.invoke(model)
+
+
+
             }
         }
     }

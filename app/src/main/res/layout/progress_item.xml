@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/spacing_normal"
     android:animateLayoutChanges="true"
+    android:id="@+id/progress_item_parent"
     android:background="@drawable/app_barbg"
     android:elevation="4dp"
     android:padding="8dp">
@@ -59,14 +60,13 @@
         android:id="@+id/tv_startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Start Date : "
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_progress_bar_id" />
+        app:layout_constraintTop_toBottomOf="@+id/sw_noti" />
 
     <TextView
         android:id="@+id/textView4"
@@ -106,8 +106,8 @@
         android:id="@+id/expandGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="tv_act_edate,tv_act_sdate,tv_startDate,textView4"
+        android:visibility="visible"
+        app:constraint_referenced_ids="tv_act_edate,tv_act_sdate,tv_startDate,textView4,sw_noti"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp" />
 
@@ -144,6 +144,16 @@
         tools:srcCompat="@drawable/ic_check"
         android:visibility="gone"
         app:tint="@color/gray" />
+
+    <Switch
+        android:id="@+id/sw_noti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Notification"
+        app:layout_constraintStart_toStartOf="@+id/item_progress_bar_id"
+        app:layout_constraintTop_toBottomOf="@+id/item_progress_bar_id"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
