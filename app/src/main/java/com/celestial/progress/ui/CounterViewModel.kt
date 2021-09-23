@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CounterViewModel @Inject constructor(
-private val counterRepository: CounterRepository
-): ViewModel(),ViewModelUseCase {
+        private val counterRepository: CounterRepository
+) : ViewModel(), ViewModelUseCase {
 
     val TAG = CounterViewModel::class.java.name
 
@@ -25,44 +25,52 @@ private val counterRepository: CounterRepository
 
         val result = MutableLiveData<Resource<Long>>()
 
-         viewModelScope.launch {
-             counterRepository.insertCounterItem(counter,object: RepoStatus{
+        viewModelScope.launch {
+            counterRepository.insertCounterItem(counter, object : RepoStatus {
 
-                 override fun success(obj: Any, msg: String?) {
-                     Log.d(TAG,"Success Insert: ${obj as Long}")
-                     result.postValue(Resource.success(obj ,msg))
-                 }
+                override fun success(obj: Any, msg: String?) {
+                    Log.d(TAG, "Success Insert: ${obj as Long}")
+                    result.postValue(Resource.success(obj, msg))
+                }
 
-                 override fun loading(msg: String) {
+                override fun loading(msg: String) {
 
-                 }
+                }
 
-                 override fun failed(obj: Any, errMsg: String) {
-                    result.postValue(Resource.error(errMsg,null))
-                 }
-             })
-         }
+                override fun failed(obj: Any, errMsg: String) {
+                    result.postValue(Resource.error(errMsg, null))
+                }
+            })
+        }
         return result
     }
+
+    override fun insertAll(counters: List<Counter>) {
+        viewModelScope.launch {
+            counterRepository.insertAllCounters(counters)
+        }
+
+    }
+
 
     override fun readCounterDetail(): Counter {
         TODO("Not yet implemented")
     }
 
     override fun readAllCounters(): LiveData<List<Counter>> {
-        Log.d(TAG,"read live data")
-       return counterRepository.observeAllCounterItem()
+        Log.d(TAG, "read live data")
+        return counterRepository.observeAllCounterItem()
     }
 
     override fun updateCounter(counter: Counter) {
-       viewModelScope.launch {
-           counterRepository.updateCounter(counter)
+        viewModelScope.launch {
+            counterRepository.updateCounter(counter)
 
-       }
+        }
     }
 
     override fun readArchiveCounters(): LiveData<List<Counter>> {
-       return counterRepository.observeAllArchiveCounterItem()
+        return counterRepository.observeAllArchiveCounterItem()
     }
 
     override fun deleteCounter(counter: Counter) {

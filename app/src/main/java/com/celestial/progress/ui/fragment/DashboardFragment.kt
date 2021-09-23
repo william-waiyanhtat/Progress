@@ -1,6 +1,7 @@
 package com.celestial.progress.ui.fragment
 
 import android.os.Bundle
+import android.os.Looper
 import android.os.Parcelable
 import android.util.Log
 import android.view.*
@@ -17,11 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
-import com.celestial.progress.ui.adapter.ItemAdapter
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.FragmentDashboardBinding
 import com.celestial.progress.ui.CounterViewModel
+import com.celestial.progress.ui.adapter.ItemAdapter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
 
 
 private val TAG = DashboardFragment::class.java.name
@@ -38,7 +42,7 @@ class DashboardFragment : Fragment() {
 
     var rcyState: Parcelable? = null
 
-    var position = 0
+    var bufferList = ArrayList<Counter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,9 +120,13 @@ class DashboardFragment : Fragment() {
         viewModel?.let {
             it.readAllCounters().observe(viewLifecycleOwner, Observer {
                 Log.d(TAG, "Data get ${it.size}")
-
+//                binding.counterRcy.adapter  = ItemAdapter(expandCollapse, itemMenuShow, ItemAdapter.ItemViewHolder::class)
                 adapter.submitList(it)
-                binding.counterRcy.layoutManager?.onRestoreInstanceState(rcyState)
+
+                Log.d(TAG, "Observed List: **************")
+                for(c in it){
+                    Log.d(TAG, "Observed List: ${c.title} order: ${c.order}")
+                }
             })
 
         }
@@ -171,24 +179,75 @@ class DashboardFragment : Fragment() {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
         ): Boolean {
-            val from = viewHolder.adapterPosition
-            val to = target.adapterPosition
+            val from = viewHolder.layoutPosition
+            val to = target.layoutPosition
+            Collections.swap(bufferList,from,to)
+//            val counterFrom = (recyclerView.adapter as ItemAdapter<*>).currentList[from]
+//            val counterTo = (recyclerView.adapter as ItemAdapter<*>).currentList[to]
+//            counterFrom.order = to
+//            counterTo.order = from
 
-            val counterFrom = (recyclerView.adapter as ItemAdapter<*>).currentList[from]
-            val counterTo = (recyclerView.adapter as ItemAdapter<*>).currentList[to]
-            counterFrom.order = to
-            counterTo.order = from
+//            if (from < to) {
+//                for (i in from until to) {
+//                    Collections.swap(bufferList, i, i + 1)
+//                }
+//            } else {
+//                for (i in from downTo to + 1) {
+//                    Collections.swap(bufferList, i, i - 1)
+//                }
+//            }
+         //   Collections.swap(bufferList,from,to)
 
 
-            lifecycleScope.launch {
-                viewModel.updateCounter(counterFrom)
-                viewModel.updateCounter(counterTo)
-            }
+//            lifecycleScope.launch {
+//                withContext(Dispatchers.IO){
+//                    Log.d(TAG, "Thread in Move: ${Looper.getMainLooper().isCurrentThread}")
+//                    viewModel.updateCounter(counterFrom)
+//                    viewModel.updateCounter(counterTo)
+//
+//                 }
+//                   }
 
 
-            //    recyclerView.adapter?.notifyItemMoved(from,to)
-            return false
+                recyclerView.adapter?.notifyItemMoved(from, to)
+
+            return true
         }
+
+        override fun isLongPressDragEnabled(): Boolean {
+            return true
+        }
+
+        override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+
+
+            when(actionState) {
+                ItemTouchHelper.ACTION_STATE_DRAG -> {
+                    if (adapter != null) {
+                        if(bufferList.isEmpty())
+                            bufferList.addAll(adapter.currentList)
+                    }
+
+                    Log.d("DragTest", "Start to drag: $actionState")
+                }
+                ItemTouchHelper.ACTION_STATE_SWIPE ->
+                    Log.d("DragTest", "Start to swipe: $actionState")
+                ItemTouchHelper.ACTION_STATE_IDLE -> {
+                    Log.d("DragTest","*****************")
+
+                    for(i in 0 until bufferList.size){
+                        bufferList[i].order = i
+                        Log.d("DragTest","CurrentList ${adapter.currentList[i].title} Order:${adapter.currentList[i].order}")
+                        Log.d("DragTest","Counter: ${bufferList[i].title} Order: ${ bufferList[i].order}")
+                    }
+                    Log.d("DragTest","*****************")
+                    Log.d("DragTest", "End action: $actionState")
+                }
+            }
+        }
+
+
+
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             TODO("Not yet implemented")
@@ -198,8 +257,11 @@ class DashboardFragment : Fragment() {
 
     val expandCollapse: (Counter) -> Unit = {
         Log.d(TAG, "EXPAND COLLAPSE CALLED")
-        lifecycleScope.launch {
-            viewModel.updateCounter(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            withContext(Dispatchers.IO){
+                Log.d(TAG, "MainThread: ${Looper.getMainLooper().isCurrentThread}")
+                viewModel.updateCounter(it)
+            }
         }
     }
 
@@ -232,6 +294,16 @@ class DashboardFragment : Fragment() {
             }
             show()
         }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        lifecycleScope.launch {
+            viewModel.insertAll(bufferList)
+
+        }
+
 
     }
 

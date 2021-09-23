@@ -10,6 +10,7 @@ import com.celestial.progress.ui.adapter.ItemAdapter
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ActivityMainBinding
 import com.celestial.progress.others.Status
+import com.celestial.progress.others.Utils
 import com.celestial.progress.others.Utils.showNotification
 import com.celestial.progress.ui.CounterViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -39,7 +40,6 @@ class MainActivity : AppCompatActivity() {
                     Status.SUCCESS ->{
                         func.invoke()
                         binding?.mainLayout?.let { it1 -> Snackbar.make(it1,it.message!!,Snackbar.LENGTH_LONG).show() }
-
                     }
                     Status.ERROR ->{
                         binding?.mainLayout?.let { it1 -> Snackbar.make(it1,it.message!!,Snackbar.LENGTH_LONG).show() }
@@ -70,6 +70,9 @@ class MainActivity : AppCompatActivity() {
 
         showNotification(this,"ABC","DEF")
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        //    Utils.showNotificationOreo(100,"com.celcesital.progress.channel1","Hello there", this@MainActivity)
+        }
 
     }
 

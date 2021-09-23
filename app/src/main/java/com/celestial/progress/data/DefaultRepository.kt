@@ -8,6 +8,8 @@ import com.celestial.progress.others.Resource
 interface DefaultRepository {
     suspend fun insertCounterItem(counterItem: Counter, status: RepoStatus)
 
+    suspend fun insertAllCounters(counters: List<Counter>)
+
     suspend fun deleteCounterItem(counterItem: Counter)
 
     fun observeAllCounterItem(): LiveData<List<Counter>>

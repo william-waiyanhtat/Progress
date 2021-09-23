@@ -2,13 +2,12 @@ package com.celestial.progress.ui.adapter
 
 
 import android.animation.LayoutTransition
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
@@ -19,16 +18,23 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                            val itemMenuShow: ((Counter, View) -> Unit?)? = null,
                            val t: KClass<T>,
                            val selectCounter: ((Counter) -> Unit?)? = null) :
-        ListAdapter<Counter, RecyclerView.ViewHolder>(DIFF_UTIL) {
+        ListAdapter<Counter, RecyclerView.ViewHolder>(DIFF_UTIL){
 
 
     val TAG = ItemAdapter::class.java.name
+
+    private lateinit var recyclerView: RecyclerView
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+    }
 
 
     companion object {
         val DIFF_UTIL = object : DiffUtil.ItemCallback<Counter>() {
             override fun areItemsTheSame(oldItem: Counter, newItem: Counter): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.id == newItem.id && oldItem.order != newItem.order
             }
 
             override fun areContentsTheSame(oldItem: Counter, newItem: Counter): Boolean {
@@ -80,34 +86,61 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             }
             itemView.setOnClickListener {
 
+              //  var model = currentList.get(adapterPosition)
                 val layout = binding.progressItemParent
                 val layoutTransition = layout.layoutTransition
-                layoutTransition.addTransitionListener(object : LayoutTransition.TransitionListener {
-                    override fun startTransition(transition: LayoutTransition?, container: ViewGroup?, view: View?, transitionType: Int) {
-                        Log.d(TAG, "startTransition: ")
-                    }
 
-                    override fun endTransition(transition: LayoutTransition?, container: ViewGroup?, view: View?, transitionType: Int) {
-                        Log.d(TAG, "endTransition: ")
-                        expandCollapse?.invoke(model)
-                    }
-                })
 
                 if (!model.isExpand) {
                     expandGroup.visibility = View.VISIBLE
                     model.isExpand = true
-                      notifyItemChanged(-1)
+                    if(adapterPosition == currentList.size-1){
+                        recyclerView?.scrollToPosition(adapterPosition)
+                        notifyItemChanged(adapterPosition)
+                    }else{
+                        notifyItemChanged(-1)
+                    }
+
 
                 } else {
                     expandGroup.visibility = View.GONE
                     model.isExpand = false
-                    notifyItemChanged(-1)
+                    if(adapterPosition == currentList.size-1){
+
+                        notifyItemChanged(adapterPosition)
+                    }else{
+                        notifyItemChanged(-1)
+                    }
+
+
+                  //  notifyItemChanged(-1)
+                   // notifyItemChanged(-1)
                 }
+              //  notifyItemChanged(adapterPosition)
+           //     expandCollapse?.invoke(model)
+             //   notifyItemChanged(-1)
+//                layoutTransition.addTransitionListener(object : LayoutTransition.TransitionListener {
+//                    override fun startTransition(transition: LayoutTransition?, container: ViewGroup?, view: View?, transitionType: Int) {
+//                        Log.d(TAG, "startTransition: position $adapterPosition ")
+//                        notifyItemChanged(-1)
+//                     //   expandCollapse?.invoke(model)
+//                        //  notifyItemChanged(adapterPosition)
+//
+//                    }
+//
+//                    override fun endTransition(transition: LayoutTransition?, container: ViewGroup?, view: View?, transitionType: Int) {
+//                        Log.d(TAG, "endTransition: ")
+//                       //expandCollapse?.invoke(model)
+//                  //      notifyItemChanged(-1)
+//
+//                    }
+//                })
 
 
 
             }
         }
+
     }
 
     inner class WidgetSelectionViewHolder(binding: ProgressItemBinding) : TopLevelHolder(binding) {
@@ -179,6 +212,5 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             }
         }
     }
-
 
 }

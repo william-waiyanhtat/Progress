@@ -19,6 +19,10 @@ class CounterRepository @Inject constructor(
 
     }
 
+    override suspend fun insertAllCounters(counters: List<Counter>) {
+       counterDao.insertAll(counters)
+    }
+
     override suspend fun deleteCounterItem(counterItem: Counter) {
         counterDao.deleteCounter(counterItem)
     }

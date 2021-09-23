@@ -9,6 +9,9 @@ interface CounterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCounter(counter: Counter): Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(counters: List<Counter>)
+
     @Delete
     suspend fun deleteCounter(counter: Counter)
 

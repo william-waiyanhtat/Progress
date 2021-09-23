@@ -7,10 +7,14 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.celestial.progress.R
 
 object Utils {
+
+    val TAG = Utils::class.java.name
 
      fun showNotification(context: Context, title: String, message: String) {
          val intent = Intent("OPEN_ACTIVITY_1")
@@ -40,5 +44,16 @@ object Utils {
         } catch (e: NullPointerException) {
             e.printStackTrace()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun showNotificationOreo(notiID: Int ,channelId: String, title: String, context: Context){
+            val notiHelper = NotiUtil(context)
+            val notificationBuilder = notiHelper.getNotification(title,"This is text notification body message",channelId)
+            if(notificationBuilder != null){
+                notiHelper.notify(notiID,notificationBuilder)
+                Log.d(TAG," NOti OReo Get Called")
+            }
+
     }
 }

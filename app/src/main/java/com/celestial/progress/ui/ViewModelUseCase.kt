@@ -8,6 +8,8 @@ interface ViewModelUseCase {
 
     fun createCounter(counter: Counter): LiveData<Resource<Long>>
 
+    fun insertAll(counters: List<Counter>)
+
     fun readCounterDetail(): Counter
 
     fun readAllCounters(): LiveData<List<Counter>>

@@ -87,7 +87,7 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
         paint.shader = createGradient()
         //   canvas?.drawRect(0f, 0f, WIDTH / 2.toFloat(), 20f, paint)
-        Log.i("ProgressBar:", "WIDTH:${WIDTH}, WIDTH/2:${WIDTH / 2}")
+       // Log.i("ProgressBar:", "WIDTH:${WIDTH}, WIDTH/2:${WIDTH / 2}")
         paint.strokeWidth = paintStrokeWidth
 
         val r = RectF(paintStrokeWidth / 2, paintStrokeWidth / 2, WIDTH.toFloat() - paintStrokeWidth / 2, HEIGHT.toFloat() - paintStrokeWidth / 2)
@@ -119,14 +119,11 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
         super.onSizeChanged(w, h, oldw, oldh)
         WIDTH = w
         HEIGHT = h
-
         if(valueAnimator.isRunning){
             valueAnimator.cancel()
             valueAnimator = null
         }
-
         if(indeterminate) {
-
             valueAnimator = ValueAnimator.ofFloat(0f, DeviceUtils.convertDpToPixel(WIDTH.toFloat() * 2, context))
             valueAnimator.apply {
                 this.repeatMode = ValueAnimator.RESTART
@@ -136,7 +133,7 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
                 this.start()
             }
         }
-        Log.i(TAG, "Width: $w, Height $h")
+      //  Log.i(TAG, "Width: $w, Height $h")
     }
 
     override fun onAnimationUpdate(animation: ValueAnimator?) {
