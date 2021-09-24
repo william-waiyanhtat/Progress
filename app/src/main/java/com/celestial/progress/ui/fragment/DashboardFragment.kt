@@ -52,6 +52,9 @@ class DashboardFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+
+        if(bufferList.isNotEmpty())
+            bufferList.clear()
         // Inflate the layout for this fragment
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -161,12 +164,17 @@ class DashboardFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "On Pause")
+        lifecycleScope.launch {
+            viewModel.insertAll(bufferList)
+
+        }
         rcyState = binding.counterRcy.layoutManager?.onSaveInstanceState()
     }
 
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "On Resume")
+
         // binding.counterRcy.layoutManager?.onRestoreInstanceState(rcyState)
     }
 
@@ -226,6 +234,9 @@ class DashboardFragment : Fragment() {
                     if (adapter != null) {
                         if(bufferList.isEmpty())
                             bufferList.addAll(adapter.currentList)
+                        else if(adapter.currentList.size>bufferList.size){
+
+                        }
                     }
 
                     Log.d("DragTest", "Start to drag: $actionState")
@@ -299,12 +310,8 @@ class DashboardFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        lifecycleScope.launch {
-            viewModel.insertAll(bufferList)
-
-        }
-
-
     }
+
+
 
 }
