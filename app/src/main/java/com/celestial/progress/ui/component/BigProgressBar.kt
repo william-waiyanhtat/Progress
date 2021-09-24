@@ -34,13 +34,39 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
     var progress = 100
     set(value) {
-        indeterminate = false
+
         field = value
+        invalidate()
     }
 
     var paintStrokeWidth = 5f
 
     var indeterminate = false
+    set(value){
+        field = value
+        if(value) {
+            valueAnimator = null
+            if (valueAnimator == null) {
+                valueAnimator = ValueAnimator.ofFloat(0f, DeviceUtils.convertDpToPixel(WIDTH.toFloat() * 2, context))
+                valueAnimator.apply {
+                    this.repeatMode = ValueAnimator.RESTART
+                    this.repeatCount = ValueAnimator.INFINITE
+                    this.duration = 2000
+                    this.addUpdateListener(this@BigProgressBar)
+                    this.start()
+                }
+            } else if (!valueAnimator.isRunning) {
+                valueAnimator.start()
+            } else {
+                valueAnimator.cancel()
+                valueAnimator.start()
+            }
+        }else{
+            valueAnimator?.cancel()
+            valueAnimator = null
+        }
+    }
+
 
 
     var WIDTH = 0
@@ -71,6 +97,26 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
         paint.strokeCap = Paint.Cap.ROUND
 
 
+    }
+
+    fun starIndeterminateAnimation(){
+        if(valueAnimator == null){
+            valueAnimator = ValueAnimator.ofFloat(0f, DeviceUtils.convertDpToPixel(WIDTH.toFloat() * 2, context))
+            valueAnimator.apply {
+                this.repeatMode = ValueAnimator.RESTART
+                this.repeatCount = ValueAnimator.INFINITE
+                this.duration = 2000
+                this.addUpdateListener(this@BigProgressBar)
+                this.start()
+            }
+        }else if(!valueAnimator.isRunning){
+            valueAnimator.start()
+        }
+
+        else{
+            valueAnimator.cancel()
+            valueAnimator.start()
+        }
     }
 
     override fun getPaddingStart(): Int {
@@ -119,18 +165,20 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
         super.onSizeChanged(w, h, oldw, oldh)
         WIDTH = w
         HEIGHT = h
-        if(valueAnimator.isRunning){
-            valueAnimator.cancel()
-            valueAnimator = null
-        }
-        if(indeterminate) {
-            valueAnimator = ValueAnimator.ofFloat(0f, DeviceUtils.convertDpToPixel(WIDTH.toFloat() * 2, context))
-            valueAnimator.apply {
-                this.repeatMode = ValueAnimator.RESTART
-                this.repeatCount = ValueAnimator.INFINITE
-                this.duration = 2000
-                this.addUpdateListener(this@BigProgressBar)
-                this.start()
+        if(valueAnimator != null) {
+            if (valueAnimator.isRunning) {
+                valueAnimator.cancel()
+                valueAnimator = null
+            }
+            if (indeterminate) {
+                valueAnimator = ValueAnimator.ofFloat(0f, DeviceUtils.convertDpToPixel(WIDTH.toFloat() * 2, context))
+                valueAnimator.apply {
+                    this.repeatMode = ValueAnimator.RESTART
+                    this.repeatCount = ValueAnimator.INFINITE
+                    this.duration = 2000
+                    this.addUpdateListener(this@BigProgressBar)
+                    this.start()
+                }
             }
         }
       //  Log.i(TAG, "Width: $w, Height $h")
@@ -138,7 +186,7 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
     override fun onAnimationUpdate(animation: ValueAnimator?) {
          animatedValue = animation?.animatedValue as Float
-          invalidate()
+         invalidate()
     }
 
     fun getPercent(): Int {
@@ -164,10 +212,22 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
+        Log.i(TAG, "DEtach from windows")
         if(valueAnimator!= null){
             valueAnimator.cancel()
             valueAnimator = null
         }
     }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        Log.i(TAG, "on Attach to windows")
+
+        if(indeterminate){
+            starIndeterminateAnimation()
+        }
+    }
+
+
 
 }

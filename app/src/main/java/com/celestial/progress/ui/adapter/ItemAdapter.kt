@@ -52,16 +52,22 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             binding.itemTitleId.text = model.title
             binding.tvCounting.text = model.getDetail()
 
-            binding.itemProgressBarId.indeterminate = model.isElapsed() && !model.isArchived
+            if(model.isElapsed() && !model.isArchived){
+                binding.itemProgressBarId.indeterminate = true
+                binding.itemProgressBarId.starIndeterminateAnimation()
+            }else{
+                binding.itemProgressBarId.indeterminate = false
+                binding.itemProgressBarId.starIndeterminateAnimation()
+            }
+
             binding.itemProgressBarId.color1 = model.color!!
 
             if(!model.isElapsed()){
                 val percent =  model.getPercent()?.toInt() ?: 100
-
                 binding.itemProgressBarId.progress = percent
-
                 binding.itemPercentId.text = "$percent %"
             }else{
+                binding.itemProgressBarId.progress = 100
                 binding.itemPercentId.visibility = View.GONE
             }
 
