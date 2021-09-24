@@ -145,7 +145,7 @@
         android:visibility="gone"
         app:tint="@color/gray" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/sw_noti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

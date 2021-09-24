@@ -1,16 +1,21 @@
 package com.celestial.progress.ui.adapter
 
 
-import android.animation.LayoutTransition
-import android.transition.TransitionManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.*
+import androidx.appcompat.widget.SwitchCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
+import com.celestial.progress.ui.component.DeviceUtils
 import kotlin.reflect.KClass
 
 
@@ -52,6 +57,9 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             binding.itemTitleId.text = model.title
             binding.tvCounting.text = model.getDetail()
 
+            switchColor(binding.swNoti,model.color!!)
+
+
             if(model.isElapsed() && !model.isArchived){
                 binding.itemProgressBarId.indeterminate = true
                 binding.itemProgressBarId.starIndeterminateAnimation()
@@ -65,6 +73,7 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             if(!model.isElapsed()){
                 val percent =  model.getPercent()?.toInt() ?: 100
                 binding.itemProgressBarId.progress = percent
+                binding.itemProgressBarId.indeterminate = false
                 binding.itemPercentId.text = "$percent %"
             }else{
                 binding.itemProgressBarId.progress = 100
@@ -217,6 +226,22 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                 holder.bind()
             }
         }
+    }
+
+    fun switchColor(switchCompat: SwitchCompat, color: Int){
+        val states = arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked))
+
+        val thumbColors = intArrayOf(
+                Color.LTGRAY,
+                color)
+
+        val trackColors = intArrayOf(
+                Color.GRAY,
+                DeviceUtils.darker(color, 0.6f))
+
+
+        DrawableCompat.setTintList(DrawableCompat.wrap(switchCompat.thumbDrawable), ColorStateList(states, thumbColors))
+        DrawableCompat.setTintList(DrawableCompat.wrap(switchCompat.trackDrawable), ColorStateList(states, trackColors))
     }
 
 }
