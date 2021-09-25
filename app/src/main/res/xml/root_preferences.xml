@@ -1,34 +1,36 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="@string/notification_header">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            app:key="overall_noti_switch"
+            app:summary="@string/notification_summary"
+            app:title="@string/notification_title" />
 
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            app:key="overall_noti_switch"
+            app:summary="@string/defautl_noti_summary"
+            app:title="@string/default_noti_title" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
-
+    <PreferenceCategory app:title="@string/animation_header">
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+            app:key="animation_switch"
+            app:title="@string/animation_title"
+            app:summary="@string/animation_summary" />
+    </PreferenceCategory>
 
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+
+
+    <PreferenceCategory app:title="@string/misc_header">
+        <Preference
+            app:key="privacy_policy"
+            app:title="@string/privacy_policy_title" />
+        <Preference
+            app:key="about"
+            app:title="@string/about_title" />
+
 
     </PreferenceCategory>
 

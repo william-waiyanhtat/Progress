@@ -3,6 +3,8 @@ package com.celestial.progress
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +33,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var appBar: ConstraintLayout
 
+    lateinit var toolbar: Toolbar
+
     lateinit var viewModel: CounterViewModel
 
     var insertCounter: (Counter,()->Unit) -> Unit = { counter ,func ->
@@ -55,6 +59,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding?.root
+        toolbar = binding!!.toolbarMainactivity
+        toolbar.navigationIcon = null
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
         viewModel = ViewModelProvider(this)[CounterViewModel::class.java]
 
@@ -71,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         showNotification(this,"ABC","DEF")
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        //    Utils.showNotificationOreo(100,"com.celcesital.progress.channel1","Hello there", this@MainActivity)
+        Utils.showNotificationOreo(100,"com.celcesital.progress.channel1","Hello there", this@MainActivity)
         }
 
     }
@@ -109,6 +119,16 @@ class MainActivity : AppCompatActivity() {
 //    }
 
 
+    fun showHideToolbar(isShown: Boolean){
+        if(isShown)
+            toolbar.visibility = View.VISIBLE
+        else
+            toolbar.visibility = View.GONE
+    }
+
+    fun setTitle(title: String){
+        toolbar.title = title
+    }
 
 }
 

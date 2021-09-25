@@ -60,6 +60,8 @@ class DashboardFragment : Fragment() {
         val view = binding.root
         val toolbar = binding.toolbarCreate
 
+        (activity as MainActivity).showHideToolbar(false)
+
         setListenerToolbar(toolbar)
 
         toolbar.inflateMenu(R.menu.btm_menu)

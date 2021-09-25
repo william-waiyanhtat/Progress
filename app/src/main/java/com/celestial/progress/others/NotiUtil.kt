@@ -30,7 +30,7 @@ class NotiUtil(context: Context): ContextWrapper(context) {
 
     private fun createNoti(context: Context) {
         val builder: NotificationCompat.Builder = NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.noti_icon) //set icon for notification
+            .setSmallIcon(R.drawable.ic_noti_ic) //set icon for notification
             .setContentTitle("Notifications Example") //set title of notification
             .setContentText("This is a notification message") //this is notification message
             .setAutoCancel(true) // makes auto cancel of notification
@@ -58,11 +58,6 @@ class NotiUtil(context: Context): ContextWrapper(context) {
     }
 
     private fun createNotiOreoAndAbove(context: Context) {
-
-
-
-
-
       //  manager!!.notify(0, builder.build())
     }
 
@@ -83,14 +78,12 @@ class NotiUtil(context: Context): ContextWrapper(context) {
         return Notification.Builder(applicationContext, channelID)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(R.drawable.noti_icon)
+                .setSmallIcon(R.drawable.ic_only_ic)
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setColorized(true)
                 .setProgress(100,40,false)
                 .setColor(Color.CYAN)
-
-
 
     }
 

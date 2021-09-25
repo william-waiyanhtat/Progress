@@ -1,6 +1,8 @@
 package com.celestial.progress.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.celestial.progress.others.Constants
 import com.celestial.progress.data.CounterDao
@@ -43,4 +45,11 @@ object AppModule {
     ) = CounterRepository(dao) as DefaultRepository
 
 
+    @Singleton
+    @Provides
+    fun provideSharedPreference(@ApplicationContext context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
+
+    @Singleton
+    @Provides
+    fun provideSharedPreferenceEditor(sharedPreference: SharedPreferences) = sharedPreference.edit()
 }
