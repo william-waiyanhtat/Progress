@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.celestial.progress.ui.adapter.ItemAdapter
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ActivityMainBinding
+import com.celestial.progress.others.NotificationHelper
 import com.celestial.progress.others.Status
 import com.celestial.progress.others.Utils
 import com.celestial.progress.others.Utils.showNotification
@@ -78,11 +79,11 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG,"Callback method call")
         }
 
-        showNotification(this,"ABC","DEF")
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        Utils.showNotificationOreo(100,"com.celcesital.progress.channel1","Hello there", this@MainActivity)
-        }
+//        showNotification(this,"ABC","DEF")
+//
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//        Utils.showNotificationOreo(100,"com.celcesital.progress.channel1","Hello there", this@MainActivity)
+//        }
 
     }
 
@@ -95,28 +96,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    fun setListener(){
-//        binding?.imgvProfile?.setOnClickListener {
-//            binding.apply {
-//                this?.appBar?.let {
-//                    if(it.visibility == View.VISIBLE){
-//                        this?.appBar?.visibility = View.GONE
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     fun showHideAppBar(isVisible: Boolean){
-//        appBar?.let{
-//            it.visibility = if(isVisible) View.VISIBLE else View.GONE
-//        }
     }
 
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//
-//    }
 
 
     fun showHideToolbar(isShown: Boolean){

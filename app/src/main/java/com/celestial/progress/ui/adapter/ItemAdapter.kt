@@ -1,6 +1,7 @@
 package com.celestial.progress.ui.adapter
 
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
+import com.celestial.progress.others.NotificationHelper
 import com.celestial.progress.ui.component.DeviceUtils
 import kotlin.reflect.KClass
 
@@ -30,9 +32,12 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
 
     private lateinit var recyclerView: RecyclerView
 
+    private lateinit var mContext: Context
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
+        mContext = recyclerView.context
     }
 
 
@@ -100,12 +105,6 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
 
             }
             itemView.setOnClickListener {
-
-              //  var model = currentList.get(adapterPosition)
-                val layout = binding.progressItemParent
-                val layoutTransition = layout.layoutTransition
-
-
                 if (!model.isExpand) {
                     expandGroup.visibility = View.VISIBLE
                     model.isExpand = true
@@ -126,33 +125,15 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                     }else{
                         notifyItemChanged(-1)
                     }
-
-
-                  //  notifyItemChanged(-1)
-                   // notifyItemChanged(-1)
                 }
-              //  notifyItemChanged(adapterPosition)
-           //     expandCollapse?.invoke(model)
-             //   notifyItemChanged(-1)
-//                layoutTransition.addTransitionListener(object : LayoutTransition.TransitionListener {
-//                    override fun startTransition(transition: LayoutTransition?, container: ViewGroup?, view: View?, transitionType: Int) {
-//                        Log.d(TAG, "startTransition: position $adapterPosition ")
-//                        notifyItemChanged(-1)
-//                     //   expandCollapse?.invoke(model)
-//                        //  notifyItemChanged(adapterPosition)
-//
-//                    }
-//
-//                    override fun endTransition(transition: LayoutTransition?, container: ViewGroup?, view: View?, transitionType: Int) {
-//                        Log.d(TAG, "endTransition: ")
-//                       //expandCollapse?.invoke(model)
-//                  //      notifyItemChanged(-1)
-//
-//                    }
-//                })
+            }
 
+            //switch
+            binding.swNoti.setOnCheckedChangeListener { buttonView, isChecked ->
 
-
+                if(isChecked){
+                   createNotification(model)
+                }
             }
         }
 
@@ -243,5 +224,10 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
         DrawableCompat.setTintList(DrawableCompat.wrap(switchCompat.thumbDrawable), ColorStateList(states, thumbColors))
         DrawableCompat.setTintList(DrawableCompat.wrap(switchCompat.trackDrawable), ColorStateList(states, trackColors))
     }
+
+    private fun createNotification(counter: Counter){
+        NotificationHelper.createNotification(mContext,counter)
+    }
+
 
 }
