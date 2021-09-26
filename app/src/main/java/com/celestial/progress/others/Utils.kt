@@ -1,5 +1,6 @@
 package com.celestial.progress.others
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -7,10 +8,12 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.DisplayMetrics
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.celestial.progress.R
+
 
 object Utils {
 
@@ -47,13 +50,15 @@ object Utils {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showNotificationOreo(notiID: Int ,channelId: String, title: String, context: Context){
+    fun showNotificationOreo(notiID: Int, channelId: String, title: String, context: Context){
             val notiHelper = NotiUtil(context)
-            val notificationBuilder = notiHelper.getNotification(title,"This is text notification body message",channelId)
+            val notificationBuilder = notiHelper.getNotification(title, "This is text notification body message", channelId)
             if(notificationBuilder != null){
-                notiHelper.notify(notiID,notificationBuilder)
-                Log.d(TAG," NOti OReo Get Called")
+                notiHelper.notify(notiID, notificationBuilder)
+                Log.d(TAG, " NOti OReo Get Called")
             }
 
     }
+
+
 }

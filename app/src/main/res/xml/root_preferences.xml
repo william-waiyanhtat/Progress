@@ -3,12 +3,12 @@
     <PreferenceCategory app:title="@string/notification_header">
 
         <SwitchPreferenceCompat
-            app:key="overall_noti_switch"
+            app:key="@string/pf_key_overallnoti"
             app:summary="@string/notification_summary"
             app:title="@string/notification_title" />
 
         <SwitchPreferenceCompat
-            app:key="overall_noti_switch"
+            app:key="@string/pf_key_noti_style"
             app:summary="@string/defautl_noti_summary"
             app:title="@string/default_noti_title" />
 
@@ -16,7 +16,7 @@
 
     <PreferenceCategory app:title="@string/animation_header">
         <SwitchPreferenceCompat
-            app:key="animation_switch"
+            app:key="@string/pf_key_pbar_animation"
             app:title="@string/animation_title"
             app:summary="@string/animation_summary" />
     </PreferenceCategory>
@@ -25,10 +25,10 @@
 
     <PreferenceCategory app:title="@string/misc_header">
         <Preference
-            app:key="privacy_policy"
+            app:key="@string/pf_key_privacy"
             app:title="@string/privacy_policy_title" />
         <Preference
-            app:key="about"
+            app:key="@string/pf_key_about"
             app:title="@string/about_title" />
 
 

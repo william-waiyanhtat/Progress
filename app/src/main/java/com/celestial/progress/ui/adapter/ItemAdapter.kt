@@ -98,7 +98,8 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                 binding.completeBadge.visibility = View.GONE
             }
 
-            Log.d(TAG, "${model.title} - " + model.startDate + " : ${model.getDetail()} -")
+            binding.swNoti.isChecked = NotificationHelper.checkNotification(mContext,model)
+
 
             binding.itemMenuBtn.setOnClickListener {
                 itemMenuShow?.invoke(model, binding.itemMenuBtn)
@@ -129,12 +130,20 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             }
 
             //switch
-            binding.swNoti.setOnCheckedChangeListener { buttonView, isChecked ->
-
-                if(isChecked){
-                   createNotification(model)
+            binding.swNoti.setOnClickListener {
+                if(binding.swNoti.isChecked){
+                    createNotification(model)
                 }
+
             }
+
+
+//            binding.swNoti.setOnCheckedChangeListener { buttonView, isChecked ->
+//
+//                if(isChecked){
+//                   createNotification(model)
+//                }
+//            }
         }
 
     }

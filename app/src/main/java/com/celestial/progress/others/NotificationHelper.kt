@@ -5,18 +5,24 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.*
 import android.os.Build
 import android.provider.Settings
 import android.service.notification.StatusBarNotification
+import android.util.Log
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.preference.PreferenceManager
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
+import com.celestial.progress.ui.component.DeviceUtils
+import com.celestial.progress.widget.SingleProgressWidget
 
 
 const val NOTIFICATION_CHANNEL_ID = "com.celestial.progress"
-const val NOTIFICATION_CHANNEL_NAME= "casualChannel"
+const val NOTIFICATION_CHANNEL_NAME = "casualChannel"
 
 object NotificationHelper {
 
@@ -27,8 +33,16 @@ object NotificationHelper {
      * Create and push the notification
      */
     fun createNotification(mContext: Context, counter: Counter) {
+
+        val notifStrKey = mContext.getString(R.string.pf_key_noti_style)
+
+        val isDefaultNotification = getSharedPreferences(mContext).getBoolean(notifStrKey, false)
+
+        Log.d("NOTI", "isDefautlNoti: ${isDefaultNotification}")
+
         var mNotificationManager: NotificationManager? = null
         var mBuilder: NotificationCompat.Builder? = null
+
         /**Creates an explicit intent for an Activity in your app */
         val resultIntent = Intent(mContext, MainActivity::class.java)
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -47,6 +61,13 @@ object NotificationHelper {
                 .setColor(counter.color!!)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentIntent(resultPendingIntent)
+
+        if (!isDefaultNotification) {
+            // mBuilder.setCustomContentView(createAndGetCustomNotification(mContext ,counter))
+            mBuilder.setContent(createAndGetCustomNotification(mContext, counter))
+        }
+
+
         mNotificationManager =
                 mContext!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -65,28 +86,84 @@ object NotificationHelper {
         mNotificationManager!!.notify(counter.id!! /* Request Code */, mBuilder!!.build())
     }
 
-    fun cancelNotification(mContext: Context, counter: Counter){
-       val notificationManager =  mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    fun cancelNotification(mContext: Context, counter: Counter) {
+        val notificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(counter.id!!)
     }
 
-    fun checkNotification(mContext: Context, counter: Counter): Boolean{
+    fun checkNotification(mContext: Context, counter: Counter): Boolean {
         val mNotificationManager: NotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notifications: Array<StatusBarNotification> = mNotificationManager.activeNotifications
 
-        if(notifications.isNotEmpty())
-        {
+        if (notifications.isEmpty()) {
             //you don't have notifications
             return false
-        }
-        else
-        {
-            for(n in notifications){
-                if(n.id == counter.id){
+        } else {
+            for (n in notifications) {
+                if (n.id == counter.id) {
                     return true
                 }
             }
             return false
         }
     }
+
+    private fun getSharedPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
+
+    private fun getSharedPreferencesEditor(context: Context) = PreferenceManager.getDefaultSharedPreferences(context).edit()
+
+    private fun createAndGetCustomNotification(context: Context, counter: Counter): RemoteViews {
+        return RemoteViews(context.packageName, R.layout.custom_notification_layout).apply {
+            setTextViewText(R.id.tv_notification_title, counter.title)
+            setTextViewText(R.id.tv_notification_detail, counter.getDetail())
+            setTextViewText(R.id.tv_notification_note, counter.note)
+            setImageViewBitmap(R.id.imgv_notification_progress, generateProgressBitmap(context,30))
+        }
+    }
+
+    private fun generateProgressBitmap(context: Context, progress: Int): Bitmap {
+
+        val displayMetrics = Resources.getSystem().displayMetrics
+
+        val width = displayMetrics.widthPixels
+
+        val padding = DeviceUtils.convertDpToPixel(8f, context)
+
+        val stroke = 4f
+
+        val viewWidth = width - 2 * padding
+
+        val viewHeight = DeviceUtils.convertDpToPixel(12f, context)
+
+
+        val paint = Paint()
+        paint.isAntiAlias = true
+
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = stroke
+
+        val size = DeviceUtils.convertDpToPixel(10f, context)
+
+        val bitmap = Bitmap.createBitmap(viewWidth.toInt(), viewHeight.toInt(), Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(bitmap)
+
+        val rectF = RectF(0f+stroke, 0f+stroke,viewWidth-stroke , viewHeight-stroke)
+        canvas.drawRoundRect(rectF,20f,20f,paint)
+
+        paint.style  = Paint.Style.FILL
+
+        val r =  (viewWidth - stroke)* (progress.toFloat()/100.toFloat())
+        val progressRectF = RectF(0f+stroke, 0f+stroke,r , viewHeight-stroke)
+        paint.color = Color.GRAY
+
+        canvas.drawRoundRect(progressRectF,20f,20f,paint)
+        // canvas.drawArc(rectF, 270f, 360f, false, paint)
+
+
+        return bitmap
+
+    }
 }
+
+

@@ -44,6 +44,12 @@
     <string name="animation_header">Animation</string>
     <string name="misc_header">Others</string>
 
+    <!--    Preferences Key-->
+    <string name="pf_key_overallnoti">overall_noti_switch</string>
+    <string name="pf_key_noti_style">noti_style_switch</string>
+    <string name="pf_key_pbar_animation">progressbar_animation</string>
+    <string name="pf_key_privacy">privacy_key</string>
+    <string name="pf_key_about">about_key</string>
 
     <!-- Notification Preferences -->
     <string name="notification_title">Notification</string>
