@@ -18,7 +18,6 @@ import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.ui.component.DeviceUtils
-import com.celestial.progress.widget.SingleProgressWidget
 
 
 const val NOTIFICATION_CHANNEL_ID = "com.celestial.progress"
@@ -63,8 +62,8 @@ object NotificationHelper {
                 .setContentIntent(resultPendingIntent)
 
         if (!isDefaultNotification) {
-            // mBuilder.setCustomContentView(createAndGetCustomNotification(mContext ,counter))
-            mBuilder.setContent(createAndGetCustomNotification(mContext, counter))
+             mBuilder.setCustomContentView(createAndGetCustomNotification(mContext ,counter))
+          //  mBuilder.setContent(createAndGetCustomNotification(mContext, counter))
         }
 
 
@@ -115,13 +114,20 @@ object NotificationHelper {
     private fun createAndGetCustomNotification(context: Context, counter: Counter): RemoteViews {
         return RemoteViews(context.packageName, R.layout.custom_notification_layout).apply {
             setTextViewText(R.id.tv_notification_title, counter.title)
+
+            val bitmap = context.getDrawable(R.drawable.ic_only_ic)?.let { Utils.drawableToBitmap(it) }
+
+            val tImage = tintImage(bitmap!!,counter.color!!)
+
+            setImageViewBitmap(R.id.imgv_customnoti_icon,tImage)
+
             setTextViewText(R.id.tv_notification_detail, counter.getDetail())
             setTextViewText(R.id.tv_notification_note, counter.note)
-            setImageViewBitmap(R.id.imgv_notification_progress, generateProgressBitmap(context,30))
+            setImageViewBitmap(R.id.imgv_notification_progress, generateProgressBitmap(context, 30, counter.color!!))
         }
     }
 
-    private fun generateProgressBitmap(context: Context, progress: Int): Bitmap {
+    private fun generateProgressBitmap(context: Context, progress: Int, color: Int): Bitmap {
 
         val displayMetrics = Resources.getSystem().displayMetrics
 
@@ -141,6 +147,7 @@ object NotificationHelper {
 
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = stroke
+        paint.color = color
 
         val size = DeviceUtils.convertDpToPixel(10f, context)
 
@@ -148,21 +155,30 @@ object NotificationHelper {
 
         val canvas = Canvas(bitmap)
 
-        val rectF = RectF(0f+stroke, 0f+stroke,viewWidth-stroke , viewHeight-stroke)
-        canvas.drawRoundRect(rectF,20f,20f,paint)
+        val rectF = RectF(0f + stroke, 0f + stroke, viewWidth - stroke, viewHeight - stroke)
+        canvas.drawRoundRect(rectF, 20f, 20f, paint)
 
         paint.style  = Paint.Style.FILL
 
         val r =  (viewWidth - stroke)* (progress.toFloat()/100.toFloat())
-        val progressRectF = RectF(0f+stroke, 0f+stroke,r , viewHeight-stroke)
-        paint.color = Color.GRAY
+        val progressRectF = RectF(0f + stroke, 0f + stroke, r, viewHeight - stroke)
+        paint.color = color
 
-        canvas.drawRoundRect(progressRectF,20f,20f,paint)
+        canvas.drawRoundRect(progressRectF, 20f, 20f, paint)
         // canvas.drawArc(rectF, 270f, 360f, false, paint)
 
 
         return bitmap
 
+    }
+
+    fun tintImage(bitmap: Bitmap, color: Int): Bitmap? {
+        val paint = Paint()
+        paint.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
+        val bitmapResult = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmapResult)
+        canvas.drawBitmap(bitmap, 0f, 0f, paint)
+        return bitmapResult
     }
 }
 

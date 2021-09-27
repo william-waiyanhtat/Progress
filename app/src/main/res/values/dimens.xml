@@ -10,6 +10,7 @@
     <dimen name="text_small">8sp</dimen>
     <dimen name="text_nsmall">12sp</dimen>
     <dimen name="text_normal">16sp</dimen>
+    <dimen name="text_normal_large">20sp</dimen>
     <dimen name="text_large">24sp</dimen>
     <!--
     Because the window insets on round devices are larger than 15dp, this padding only applies
