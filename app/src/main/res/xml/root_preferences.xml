@@ -31,6 +31,10 @@
             app:key="@string/pf_key_about"
             app:title="@string/about_title" />
 
+        <Preference
+            app:key="@string/pf_key_feedback"
+            app:title="@string/feedback_title" />
+
 
     </PreferenceCategory>
 
