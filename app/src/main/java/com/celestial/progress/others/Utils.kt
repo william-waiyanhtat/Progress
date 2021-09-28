@@ -5,8 +5,11 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
@@ -15,6 +18,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.celestial.progress.R
+import com.celestial.progress.ui.component.DeviceUtils
 
 
 object Utils {
@@ -80,6 +84,49 @@ object Utils {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
         drawable.draw(canvas)
         return bitmap
+    }
+
+     fun generateProgressBitmap(context: Context,width: Int, progress: Int, color: Int): Bitmap {
+
+     //   val displayMetrics = Resources.getSystem().displayMetrics
+
+       // val width = displayMetrics.widthPixels
+
+        val padding = DeviceUtils.convertDpToPixel(8f, context)
+
+        val stroke = 4f
+
+        val viewWidth = width - 2 * padding
+
+        val viewHeight = DeviceUtils.convertDpToPixel(12f, context)
+
+
+        val paint = Paint()
+        paint.isAntiAlias = true
+
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = stroke
+        paint.color = color
+
+        val size = DeviceUtils.convertDpToPixel(10f, context)
+
+        val bitmap = Bitmap.createBitmap(viewWidth.toInt(), viewHeight.toInt(), Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(bitmap)
+
+        val rectF = RectF(0f + stroke, 0f + stroke, viewWidth - stroke, viewHeight - stroke)
+        canvas.drawRoundRect(rectF, 20f, 20f, paint)
+
+        paint.style  = Paint.Style.FILL
+
+        val r =  (viewWidth - stroke)* (progress.toFloat()/100.toFloat())
+        val progressRectF = RectF(0f + stroke, 0f + stroke, r, viewHeight - stroke)
+        paint.color = color
+
+        canvas.drawRoundRect(progressRectF, 50f, 50f, paint)
+        // canvas.drawArc(rectF, 270f, 360f, false, paint)
+        return bitmap
+
     }
 
 }

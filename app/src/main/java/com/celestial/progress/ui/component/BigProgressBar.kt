@@ -99,7 +99,7 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
     }
 
-    fun starIndeterminateAnimation(){
+    fun startIndeterminateAnimation(){
         if(valueAnimator == null){
             valueAnimator = ValueAnimator.ofFloat(0f, DeviceUtils.convertDpToPixel(WIDTH.toFloat() * 2, context))
             valueAnimator.apply {
@@ -118,6 +118,14 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
             valueAnimator.start()
         }
     }
+
+    fun stopAnimation(){
+        if(valueAnimator!=null)
+        if(valueAnimator.isRunning){
+            valueAnimator.cancel()
+        }
+    }
+
 
     override fun getPaddingStart(): Int {
         return super.getPaddingStart()
@@ -224,7 +232,7 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
         Log.i(TAG, "on Attach to windows")
 
         if(indeterminate){
-            starIndeterminateAnimation()
+            startIndeterminateAnimation()
         }
     }
 

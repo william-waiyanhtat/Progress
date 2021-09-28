@@ -98,14 +98,18 @@ class SingleProgressWidget : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.single_progress_widget)
             views.setTextViewText(R.id.appwidget_text, counter?.title)
 
-            views.setTextViewText(R.id.tv_single_widget_detail, counter?.getDetail())
+            views.setTextViewText(R.id.tv_single_widget_detail, counter?.getInitial()+"\n"+counter?.getDetail())
             views.setViewVisibility(R.id.tv_single_widget_detail,View.VISIBLE)
 
             views.setOnClickPendingIntent(R.id.btn_swidget_update, getRefreshIntent(context))
             views.setImageViewBitmap(R.id.imgv_single_widget, getProgressView(context, counter))
             if(counter?.isElapsed()!!) {
-                views.setViewVisibility(R.id.imgv_single_widget, View.GONE)
-
+                views.setViewVisibility(R.id.ly_single_progress_widget_percent, View.GONE)
+               // views.setViewVisibility(R.id.tv_single_widget_percent,View.GONE)
+            }else{
+                views.setViewVisibility(R.id.ly_single_progress_widget_percent, View.VISIBLE)
+                views.setTextViewText(R.id.tv_single_widget_percent,counter.getPercent().toString()+"%")
+             //   views.setViewVisibility(R.id.tv_single_widget_percent,View.VISIBLE)
             }
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)

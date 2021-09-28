@@ -11,6 +11,7 @@ import android.os.Build
 import android.provider.Settings
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
@@ -35,7 +36,7 @@ object NotificationHelper {
 
         val notifStrKey = mContext.getString(R.string.pf_key_noti_style)
 
-        val isDefaultNotification = getSharedPreferences(mContext).getBoolean(notifStrKey, false)
+        val isDefaultNotification = SharePrefHelper.isDefaultNotification(mContext)
 
         Log.d("NOTI", "isDefautlNoti: ${isDefaultNotification}")
 
@@ -107,10 +108,6 @@ object NotificationHelper {
         }
     }
 
-    private fun getSharedPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
-
-    private fun getSharedPreferencesEditor(context: Context) = PreferenceManager.getDefaultSharedPreferences(context).edit()
-
     private fun createAndGetCustomNotification(context: Context, counter: Counter): RemoteViews {
         return RemoteViews(context.packageName, R.layout.custom_notification_layout).apply {
             setTextViewText(R.id.tv_notification_title, counter.title)
@@ -121,9 +118,16 @@ object NotificationHelper {
 
             setImageViewBitmap(R.id.imgv_customnoti_icon,tImage)
 
-            setTextViewText(R.id.tv_notification_detail, counter.getDetail())
+            val initial  = if(counter.isElapsed()) "Elapsed : " else "Remaining : "
+            setTextViewText(R.id.tv_notification_detail, initial+counter.getDetail())
             setTextViewText(R.id.tv_notification_note, counter.note)
-            setImageViewBitmap(R.id.imgv_notification_progress, generateProgressBitmap(context, 30, counter.color!!))
+
+            if(counter.isElapsed()){
+                setViewVisibility(R.id.imgv_notification_progress, View.GONE)
+            }else{
+                setImageViewBitmap(R.id.imgv_notification_progress, generateProgressBitmap(context, 30, counter.color!!))
+            }
+
         }
     }
 
@@ -166,7 +170,6 @@ object NotificationHelper {
 
         canvas.drawRoundRect(progressRectF, 20f, 20f, paint)
         // canvas.drawArc(rectF, 270f, 360f, false, paint)
-
 
         return bitmap
 

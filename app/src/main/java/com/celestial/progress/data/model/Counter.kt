@@ -171,6 +171,13 @@ class Counter(
             return INVALID
 
     }
+
+    fun getInitial(): String{
+        return if(isElapsed())
+            "Elapsed : "
+        else
+            "Remaining : "
+    }
 }
 
 fun Calendar.resetToMidnight(date: Date): Calendar {

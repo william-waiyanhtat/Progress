@@ -17,7 +17,9 @@ import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.ProgressItemBinding
 import com.celestial.progress.others.NotificationHelper
+import com.celestial.progress.others.SharePrefHelper
 import com.celestial.progress.ui.component.DeviceUtils
+import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 
 
@@ -33,6 +35,8 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var mContext: Context
+
+    private var isAnimationOn by Delegates.notNull<Boolean>()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -56,21 +60,25 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
 
     inner class ItemViewHolder(binding: ProgressItemBinding) : TopLevelHolder(binding) {
         override fun bind() {
+
             var model = getItem(adapterPosition)
             val expandGroup = binding.expandGroup
-
+            Log.d(TAG, "OnBind: ${model.title}")
             binding.itemTitleId.text = model.title
             binding.tvCounting.text = model.getDetail()
 
             switchColor(binding.swNoti,model.color!!)
 
 
-            if(model.isElapsed() && !model.isArchived){
+            if(model.isElapsed() && !model.isArchived && isAnimationOn){
                 binding.itemProgressBarId.indeterminate = true
-                binding.itemProgressBarId.starIndeterminateAnimation()
+                binding.itemProgressBarId.startIndeterminateAnimation()
+
+                Log.d(TAG,"OnBind: animationon")
             }else{
                 binding.itemProgressBarId.indeterminate = false
-                binding.itemProgressBarId.starIndeterminateAnimation()
+                binding.itemProgressBarId.stopAnimation()
+                Log.d(TAG,"OnBind: stop animation")
             }
 
             binding.itemProgressBarId.color1 = model.color!!
@@ -121,7 +129,6 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                     expandGroup.visibility = View.GONE
                     model.isExpand = false
                     if(adapterPosition == currentList.size-1){
-
                         notifyItemChanged(adapterPosition)
                     }else{
                         notifyItemChanged(-1)
@@ -136,14 +143,6 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                 }
 
             }
-
-
-//            binding.swNoti.setOnCheckedChangeListener { buttonView, isChecked ->
-//
-//                if(isChecked){
-//                   createNotification(model)
-//                }
-//            }
         }
 
     }
@@ -162,6 +161,18 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                 model?.isCheckedForWidget = true
                 notifyDataSetChanged()
             }
+
+            if(model!!.isElapsed() && !model!!.isArchived && isAnimationOn){
+                binding.itemProgressBarId.indeterminate = true
+                binding.itemProgressBarId.startIndeterminateAnimation()
+
+                Log.d(TAG,"OnBind: animationon")
+            }else{
+                binding.itemProgressBarId.indeterminate = false
+                binding.itemProgressBarId.stopAnimation()
+                Log.d(TAG,"OnBind: stop animation")
+            }
+
 
             if(model?.isCheckedForWidget!!){
                 binding.imgvWidgetChkbox.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_check))
@@ -193,6 +204,7 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ProgressItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        isAnimationOn = SharePrefHelper.isGlimmerAnimationOff(mContext)
         when (t) {
             ItemViewHolder::class -> {
                 Log.d(TAG, "ITEMVIEW HOlder")

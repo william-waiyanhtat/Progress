@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:text="ABC"
             android:layout_weight="1"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_normal"
             tools:text="Anniversary" />
 
         <TextView
@@ -34,13 +34,23 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:progress="0" />
+        android:progress="0"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/progress_widget_list_imgv"
+        android:layout_width="match_parent"
+        android:scaleType="fitXY"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="2dp"
+        android:layout_height="8dp"/>
 
     <TextView
         android:id="@+id/tv_detail_widget_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
+        android:textSize="@dimen/text_nsmall"
         tools:text="3Month(s) 4Day(s) Left" />
 
 </LinearLayout>

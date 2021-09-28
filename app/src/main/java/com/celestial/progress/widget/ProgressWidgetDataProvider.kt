@@ -6,11 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.celestial.progress.R
 import com.celestial.progress.data.CounterRepository
 import com.celestial.progress.data.model.Counter
+import com.celestial.progress.others.Utils
+import com.celestial.progress.ui.component.DeviceUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -42,13 +45,29 @@ class ProgressWidgetDataProvider(val ctx: Context, val intent: Intent, val repos
 
     override fun getViewAt(position: Int): RemoteViews {
         val rv = RemoteViews(ctx.packageName, R.layout.listview_item)
-        rv.setTextViewText(R.id.tv_title_widget_list, counterList[position].title)
-        rv.setTextViewText(R.id.tv_detail_widget_list, counterList[position].getDetail())
-        rv.setProgressBar(R.id.progress_widget_list,0,0,counterList[position].isElapsed())
-        if(!counterList[position].isElapsed()){
-            rv.setProgressBar(R.id.progress_widget_list,100,
-                counterList[position].getPercent()?.toInt()!!,false)
-            rv.setTextViewText(R.id.tv_percent_widget_list,counterList[position].getPercent().toString()+"%")
+        val model = counterList[position]
+
+        rv.setTextViewText(R.id.tv_title_widget_list, model.title)
+        rv.setTextViewText(R.id.tv_detail_widget_list, model.getInitial() +model.getDetail())
+        if (model.isElapsed()) {
+            rv.setViewVisibility(R.id.progress_widget_list, View.GONE)
+            rv.setViewVisibility(R.id.progress_widget_list_imgv, View.GONE)
+            rv.setViewVisibility(R.id.tv_percent_widget_list,View.GONE)
+        } else {
+            rv.setViewVisibility(R.id.tv_percent_widget_list,View.VISIBLE)
+            rv.setTextViewText(R.id.tv_percent_widget_list, model.getPercent().toString() + "%")
+            rv.setViewVisibility(R.id.progress_widget_list_imgv, View.VISIBLE)
+            val pBitmap = Utils.generateProgressBitmap(ctx,DeviceUtils.convertDpToPixel(280f,ctx).toInt(), model.getPercent()!!.toInt(),model.color!!)
+            rv.setImageViewBitmap(R.id.progress_widget_list_imgv, pBitmap)
+        }
+
+
+
+        rv.setProgressBar(R.id.progress_widget_list, 0, 0, model.isElapsed())
+        if (!model.isElapsed()) {
+            rv.setProgressBar(R.id.progress_widget_list, 100,
+                    model.getPercent()?.toInt()!!, false)
+
         }
         return rv
     }

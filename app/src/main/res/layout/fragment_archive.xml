@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="Archive"
         android:elevation="8dp"
+        android:background="@color/white"
         app:navigationIcon="?attr/homeAsUpIndicator"/>
 
     <androidx.recyclerview.widget.RecyclerView
