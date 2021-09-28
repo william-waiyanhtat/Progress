@@ -149,9 +149,9 @@ object NotificationHelper {
         val paint = Paint()
         paint.isAntiAlias = true
 
-        paint.style = Paint.Style.STROKE
+        paint.style = Paint.Style.FILL
         paint.strokeWidth = stroke
-        paint.color = color
+        paint.color = Color.LTGRAY
 
         val size = DeviceUtils.convertDpToPixel(10f, context)
 

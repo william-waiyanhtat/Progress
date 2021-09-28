@@ -6,10 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
@@ -104,9 +101,9 @@ object Utils {
         val paint = Paint()
         paint.isAntiAlias = true
 
-        paint.style = Paint.Style.STROKE
+        paint.style = Paint.Style.FILL
         paint.strokeWidth = stroke
-        paint.color = color
+        paint.color = context.getColor(R.color.pb_gray_color)
 
         val size = DeviceUtils.convertDpToPixel(10f, context)
 

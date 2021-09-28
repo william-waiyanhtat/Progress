@@ -18,5 +18,6 @@
     <color name="light_blue_900">#FF01579B</color>
 
     <color name="transparent_white">#77FFFFFF</color>
+    <color name="pb_gray_color">#8BAEAEAE</color>
 
 </resources>
