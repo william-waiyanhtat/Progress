@@ -5,11 +5,11 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -83,7 +83,7 @@ object Utils {
         return bitmap
     }
 
-     fun generateProgressBitmap(context: Context,width: Int, progress: Int, color: Int): Bitmap {
+     fun generateProgressBitmap(context: Context, width: Int, progress: Int, color: Int): Bitmap {
 
      //   val displayMetrics = Resources.getSystem().displayMetrics
 
@@ -124,6 +124,18 @@ object Utils {
         // canvas.drawArc(rectF, 270f, 360f, false, paint)
         return bitmap
 
+    }
+
+    fun makeEmailIntent(context: Context) {
+        val uriText = "mailto:" + Constants.emailAddress.toString() +
+                "?subject=" + Uri.encode("feedback from Progress user").toString() +
+                "&body=" + Uri.encode("Please write your feedback here")
+        val uri = Uri.parse(uriText)
+        val sendIntent = Intent(Intent.ACTION_SENDTO)
+        sendIntent.data = uri
+        if (sendIntent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(Intent.createChooser(sendIntent, "Send feedback message"))
+        }
     }
 
 }

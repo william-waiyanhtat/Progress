@@ -9,4 +9,6 @@ object Constants {
     const val counterNameCharCountMax = 20
 
     const val counterNameCharMinimum = 3
+
+    const val emailAddress = "aeroitsoultion@gmail.com"
 }

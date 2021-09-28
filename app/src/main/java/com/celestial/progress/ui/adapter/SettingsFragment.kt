@@ -15,6 +15,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.others.NotificationHelper
+import com.celestial.progress.others.Utils
 import com.celestial.progress.ui.CounterViewModel
 import com.celestial.progress.widget.WidgetConfigViewModel
 
@@ -22,6 +23,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     private lateinit var notiOnOff: SwitchPreferenceCompat
     private lateinit var defaultNotiOnOff: SwitchPreferenceCompat
+    private lateinit var feedbackPref: Preference
 
     lateinit var counterViewModel: CounterViewModel
 
@@ -40,6 +42,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         listenNotificationOnOff()
         listenDefaultNotificationOnOff()
+        listenFeedbackPreference()
+    }
+
+    private fun listenFeedbackPreference() {
+        feedbackPref = findPreference<Preference>(getString(R.string.pf_key_feedback))!!
+        feedbackPref.setOnPreferenceClickListener {
+            Utils.makeEmailIntent(requireContext())
+            return@setOnPreferenceClickListener true
+        }
     }
 
     private fun listenDefaultNotificationOnOff() {
