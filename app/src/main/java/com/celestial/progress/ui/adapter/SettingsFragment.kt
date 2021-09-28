@@ -13,5 +13,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
         activity.setTitle("Setting")
         activity.toolbar.navigationIcon = activity.getDrawable(R.drawable.ic_back)
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
+        listenNotificationOnOff()
+        listenDefaultNotificationOnOff()
+    }
+
+    private fun listenDefaultNotificationOnOff() {
+        TODO("Not yet implemented")
+    }
+
+    private fun listenNotificationOnOff() {
+        TODO("Not yet implemented")
     }
 }

@@ -1,6 +1,5 @@
 package com.celestial.progress.widget
 
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
@@ -12,11 +11,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.SingleProgressWidgetConfigureBinding
 import com.celestial.progress.ui.adapter.ItemAdapter
-import com.celestial.progress.widget.SingleProgressWidget.Companion.updateAppWidget
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

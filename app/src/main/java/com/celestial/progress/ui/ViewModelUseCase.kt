@@ -19,4 +19,8 @@ interface ViewModelUseCase {
     fun readArchiveCounters():LiveData<List<Counter>>
 
     fun deleteCounter(counter: Counter)
+
+    fun fetchNotificationOnCounterList(): LiveData<List<Counter>>
+
+    fun updateCounterForNotificationById(id: Int, isNotify: Boolean)
 }

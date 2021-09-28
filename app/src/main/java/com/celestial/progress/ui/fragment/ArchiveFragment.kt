@@ -62,7 +62,7 @@ class ArchiveFragment : Fragment() {
             goBack()
         }
 
-        adapter = ItemAdapter(null, itemMenuShow, ItemAdapter.ItemViewHolder::class)
+        adapter = ItemAdapter(null, itemMenuShow, null,ItemAdapter.ItemViewHolder::class)
         val rcyView = binding.archiveRcy
         rcyView.adapter = adapter
 

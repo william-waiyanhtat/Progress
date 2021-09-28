@@ -25,6 +25,7 @@ import kotlin.reflect.KClass
 
 class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                            val itemMenuShow: ((Counter, View) -> Unit?)? = null,
+                           val notiIssueCb: ((Counter) -> Unit?)? = null,
                            val t: KClass<T>,
                            val selectCounter: ((Counter) -> Unit?)? = null) :
         ListAdapter<Counter, RecyclerView.ViewHolder>(DIFF_UTIL){
@@ -106,7 +107,19 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                 binding.completeBadge.visibility = View.GONE
             }
 
-            binding.swNoti.isChecked = NotificationHelper.checkNotification(mContext,model)
+            if(model.requiredNotification){
+                binding.swNoti.isChecked = true
+                if(!NotificationHelper.checkNotification(mContext,model)){
+                    NotificationHelper.createNotification(mContext,model)
+                }
+            }else{
+                binding.swNoti.isChecked = false
+                if(NotificationHelper.checkNotification(mContext,model)){
+                    NotificationHelper.cancelNotification(mContext,model)
+                }
+            }
+
+        //    binding.swNoti.isChecked = NotificationHelper.checkNotification(mContext,model)
 
 
             binding.itemMenuBtn.setOnClickListener {
@@ -140,6 +153,12 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             binding.swNoti.setOnClickListener {
                 if(binding.swNoti.isChecked){
                     createNotification(model)
+                    model.requiredNotification = true
+                    notiIssueCb?.invoke(model)
+                }else{
+                    NotificationHelper.cancelNotification(mContext,model)
+                    model.requiredNotification = false
+                    notiIssueCb?.invoke(model)
                 }
 
             }

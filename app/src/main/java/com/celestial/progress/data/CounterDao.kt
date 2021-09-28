@@ -26,4 +26,11 @@ interface CounterDao {
 
     @Query("SELECT * FROM counter where isArchived = 0 and id = :id")
     suspend fun getCounterById(id: Int): Counter
+
+    @Query("update counter set requiredNotification = :isNotify where id = :id")
+    suspend fun updateCounterForNotificationById(id: Int, isNotify: Boolean)
+
+    @Query("select * from counter where isArchived = 0 and requiredNotification = 1")
+     fun fetchCounterWhichRequiredNotification(): LiveData<List<Counter>>
+
 }

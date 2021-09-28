@@ -21,4 +21,10 @@ interface DefaultRepository {
     fun readAllValidCounters(): List<Counter>
 
     suspend fun getCounterById(id: Int): Counter
+
+    suspend fun updateCounterNotificationStatus(id: Int, isNoti: Boolean)
+
+    fun fetchCounterListWhichRequiredNotification(): LiveData<List<Counter>>
+
+
 }

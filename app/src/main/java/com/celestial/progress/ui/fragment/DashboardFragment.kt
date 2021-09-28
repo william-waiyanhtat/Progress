@@ -22,9 +22,7 @@ import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.FragmentDashboardBinding
 import com.celestial.progress.ui.CounterViewModel
 import com.celestial.progress.ui.adapter.ItemAdapter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.*
 
 
@@ -44,6 +42,8 @@ class DashboardFragment : Fragment() {
 
     var bufferList = ArrayList<Counter>()
 
+    var notificationIssueList = ArrayList<Counter>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -53,8 +53,12 @@ class DashboardFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-        if(bufferList.isNotEmpty())
+        if (bufferList.isNotEmpty())
             bufferList.clear()
+
+        if (notificationIssueList.isNotEmpty())
+            notificationIssueList.clear()
+
         // Inflate the layout for this fragment
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -67,7 +71,7 @@ class DashboardFragment : Fragment() {
         toolbar.inflateMenu(R.menu.btm_menu)
 
         viewModel = ViewModelProvider(requireActivity())[CounterViewModel::class.java]
-        adapter = ItemAdapter(expandCollapse, itemMenuShow, ItemAdapter.ItemViewHolder::class)
+        adapter = ItemAdapter(expandCollapse, itemMenuShow, notificationCb, ItemAdapter.ItemViewHolder::class)
         binding.counterRcy.adapter = adapter
         binding.counterRcy.layoutManager = LinearLayoutManager(context)
         val itemTouchHelper = ItemTouchHelper(itemTouchSimpleCallback)
@@ -75,6 +79,7 @@ class DashboardFragment : Fragment() {
 
         setListener()
         observeData()
+
         Log.d(TAG, "On Create View")
 
         return view
@@ -129,7 +134,7 @@ class DashboardFragment : Fragment() {
                 adapter.submitList(it)
 
                 Log.d(TAG, "Observed List: **************")
-                for(c in it){
+                for (c in it) {
                     Log.d(TAG, "Observed List: ${c.title} order: ${c.order}")
                 }
             })
@@ -167,7 +172,14 @@ class DashboardFragment : Fragment() {
         super.onPause()
         Log.d(TAG, "On Pause")
         lifecycleScope.launch {
-            viewModel.insertAll(bufferList)
+
+                viewModel.insertAll(bufferList)
+
+                for(i in notificationIssueList){
+                    viewModel.updateCounterForNotificationById(i.id!!,i.requiredNotification)
+                }
+
+
 
         }
         rcyState = binding.counterRcy.layoutManager?.onSaveInstanceState()
@@ -176,8 +188,6 @@ class DashboardFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "On Resume")
-
-        // binding.counterRcy.layoutManager?.onRestoreInstanceState(rcyState)
     }
 
     val itemTouchSimpleCallback = object : ItemTouchHelper.SimpleCallback(
@@ -191,35 +201,8 @@ class DashboardFragment : Fragment() {
         ): Boolean {
             val from = viewHolder.layoutPosition
             val to = target.layoutPosition
-            Collections.swap(bufferList,from,to)
-//            val counterFrom = (recyclerView.adapter as ItemAdapter<*>).currentList[from]
-//            val counterTo = (recyclerView.adapter as ItemAdapter<*>).currentList[to]
-//            counterFrom.order = to
-//            counterTo.order = from
-
-//            if (from < to) {
-//                for (i in from until to) {
-//                    Collections.swap(bufferList, i, i + 1)
-//                }
-//            } else {
-//                for (i in from downTo to + 1) {
-//                    Collections.swap(bufferList, i, i - 1)
-//                }
-//            }
-         //   Collections.swap(bufferList,from,to)
-
-
-//            lifecycleScope.launch {
-//                withContext(Dispatchers.IO){
-//                    Log.d(TAG, "Thread in Move: ${Looper.getMainLooper().isCurrentThread}")
-//                    viewModel.updateCounter(counterFrom)
-//                    viewModel.updateCounter(counterTo)
-//
-//                 }
-//                   }
-
-
-                recyclerView.adapter?.notifyItemMoved(from, to)
+            Collections.swap(bufferList, from, to)
+            recyclerView.adapter?.notifyItemMoved(from, to)
 
             return true
         }
@@ -229,14 +212,12 @@ class DashboardFragment : Fragment() {
         }
 
         override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-
-
-            when(actionState) {
+            when (actionState) {
                 ItemTouchHelper.ACTION_STATE_DRAG -> {
                     if (adapter != null) {
-                        if(bufferList.isEmpty())
+                        if (bufferList.isEmpty())
                             bufferList.addAll(adapter.currentList)
-                        else if(adapter.currentList.size>bufferList.size){
+                        else if (adapter.currentList.size > bufferList.size) {
 
                         }
                     }
@@ -246,20 +227,18 @@ class DashboardFragment : Fragment() {
                 ItemTouchHelper.ACTION_STATE_SWIPE ->
                     Log.d("DragTest", "Start to swipe: $actionState")
                 ItemTouchHelper.ACTION_STATE_IDLE -> {
-                    Log.d("DragTest","*****************")
+                    Log.d("DragTest", "*****************")
 
-                    for(i in 0 until bufferList.size){
+                    for (i in 0 until bufferList.size) {
                         bufferList[i].order = i
-                        Log.d("DragTest","CurrentList ${adapter.currentList[i].title} Order:${adapter.currentList[i].order}")
-                        Log.d("DragTest","Counter: ${bufferList[i].title} Order: ${ bufferList[i].order}")
+                        Log.d("DragTest", "CurrentList ${adapter.currentList[i].title} Order:${adapter.currentList[i].order}")
+                        Log.d("DragTest", "Counter: ${bufferList[i].title} Order: ${bufferList[i].order}")
                     }
-                    Log.d("DragTest","*****************")
+                    Log.d("DragTest", "*****************")
                     Log.d("DragTest", "End action: $actionState")
                 }
             }
         }
-
-
 
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -271,9 +250,11 @@ class DashboardFragment : Fragment() {
     val expandCollapse: (Counter) -> Unit = {
         Log.d(TAG, "EXPAND COLLAPSE CALLED")
         viewLifecycleOwner.lifecycleScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 Log.d(TAG, "MainThread: ${Looper.getMainLooper().isCurrentThread}")
                 viewModel.updateCounter(it)
+
+
             }
         }
     }
@@ -281,6 +262,17 @@ class DashboardFragment : Fragment() {
     val itemMenuShow: (Counter, View) -> Unit = { c, v ->
         Log.d(TAG, "Item Menu : ${c.title}")
         createPopUpMenuAndShow(v, c)
+    }
+
+    val notificationCb: (Counter) -> Unit = {
+        if (!notificationIssueList.contains(it)) {
+            notificationIssueList.add(it)
+        }
+
+        for(n in notificationIssueList){
+            Log.d(TAG, "NotiList: ${n.id} name: ${n.title} isNotify: ${n.requiredNotification}")
+        }
+
     }
 
 

@@ -21,7 +21,7 @@ class Counter(
         val endDate: String?,
         val color: Int?,
         val note: String?,
-        val requiredNotification: Boolean = false,
+        var requiredNotification: Boolean = false,
         val displayFormat: DisplayFormat = DisplayFormat.DAY,
         var order: Int? = null,
         val createdDate: String = Calendar.getInstance().toString(),

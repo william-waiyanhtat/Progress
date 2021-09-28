@@ -79,4 +79,15 @@ class CounterViewModel @Inject constructor(
         }
 
     }
+
+    override fun fetchNotificationOnCounterList(): LiveData<List<Counter>> {
+           return counterRepository.fetchCounterListWhichRequiredNotification()
+    }
+
+    override fun updateCounterForNotificationById(id: Int, isNotify: Boolean) {
+        viewModelScope.launch {
+            counterRepository.updateCounterNotificationStatus(id,isNotify)
+
+        }
+    }
 }

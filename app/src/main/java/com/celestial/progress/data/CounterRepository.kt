@@ -47,6 +47,14 @@ class CounterRepository @Inject constructor(
         return counterDao.getCounterById(id)
     }
 
+    override suspend fun updateCounterNotificationStatus(id: Int, isNoti: Boolean) {
+       counterDao.updateCounterForNotificationById(id,isNoti)
+    }
+
+    override  fun fetchCounterListWhichRequiredNotification(): LiveData<List<Counter>> {
+     return counterDao.fetchCounterWhichRequiredNotification()
+    }
+
     suspend fun insert100Records() {
         for (i in 1..100) {
             val counter = Counter(
