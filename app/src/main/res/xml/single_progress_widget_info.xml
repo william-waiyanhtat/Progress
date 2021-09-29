@@ -3,9 +3,10 @@
     android:configure="com.celestial.progress.widget.SingleProgressWidgetConfigureActivity"
     android:initialKeyguardLayout="@layout/single_progress_widget"
     android:initialLayout="@layout/single_progress_widget"
-    android:minWidth="180dp"
+    android:minWidth="110dp"
     android:minHeight="40dp"
     android:previewImage="@drawable/single_widget_preview"
     android:resizeMode="vertical|horizontal"
     android:updatePeriodMillis="86400000"
-    android:widgetCategory="home_screen"></appwidget-provider>
+    android:widgetCategory="home_screen">
+</appwidget-provider>

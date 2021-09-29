@@ -120,11 +120,17 @@ object NotificationHelper {
 
             val initial  = if(counter.isElapsed()) "Elapsed : " else "Remaining : "
             setTextViewText(R.id.tv_notification_detail, initial+counter.getDetail())
-            setTextViewText(R.id.tv_notification_note, counter.note)
+            if(counter.note!!.isEmpty()){
+                setViewVisibility(R.id.tv_notification_note,View.GONE)
+            }else{
+                setViewVisibility(R.id.tv_notification_note,View.VISIBLE)
+                setTextViewText(R.id.tv_notification_note, counter.note)
+            }
 
             if(counter.isElapsed()){
                 setViewVisibility(R.id.imgv_notification_progress, View.GONE)
             }else{
+                setViewVisibility(R.id.imgv_notification_progress, View.VISIBLE)
                 setImageViewBitmap(R.id.imgv_notification_progress, generateProgressBitmap(context, 30, counter.color!!))
             }
 
