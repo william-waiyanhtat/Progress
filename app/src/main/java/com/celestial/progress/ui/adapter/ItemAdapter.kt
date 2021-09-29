@@ -61,12 +61,12 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
 
     inner class ItemViewHolder(binding: ProgressItemBinding) : TopLevelHolder(binding) {
         override fun bind() {
-
+            super.bind()
             var model = getItem(adapterPosition)
             val expandGroup = binding.expandGroup
             Log.d(TAG, "OnBind: ${model.title}")
             binding.itemTitleId.text = model.title
-            binding.tvCounting.text = model.getDetail()
+         //   binding.tvCounting.text = model.getDetail()
 
             switchColor(binding.swNoti,model.color!!)
 
@@ -83,6 +83,12 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             }
 
             binding.itemProgressBarId.color1 = model.color!!
+
+            binding.tvActSdate.text = model.startDate
+
+            if(model.endDate!!.isNotEmpty()){
+                binding.tvActEdate.text = model.endDate
+            }
 
             if(!model.isElapsed()){
                 val percent =  model.getPercent()?.toInt() ?: 100
@@ -211,7 +217,12 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
         open fun bind() {
             model = getItem(adapterPosition)
             binding.itemTitleId.text = model?.title
-            binding.tvCounting.text = model?.getDetail()
+            if(model!!.isElapsed()){
+                binding.tvCounting.text = model?.getDetail()
+            }else{
+                binding.tvCounting.text = model?.getDetail(true)
+            }
+
 
             binding.itemProgressBarId.indeterminate = model?.isElapsed()!! && !model?.isArchived!!
             binding.itemProgressBarId.color1 = model?.color!!

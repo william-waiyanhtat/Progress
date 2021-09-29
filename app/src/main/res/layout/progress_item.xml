@@ -37,7 +37,7 @@
     <com.celestial.progress.ui.component.BigProgressBar
         android:id="@+id/item_progress_bar_id"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -77,6 +77,14 @@
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/tv_startDate" />
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="1dp"
+        android:layout_height="40dp"
+        android:background="@color/gray"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/sw_noti" />
+
     <TextView
         android:id="@+id/tv_act_sdate"
         android:layout_width="wrap_content"
@@ -107,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="tv_act_edate,tv_act_sdate,tv_startDate,textView4,sw_noti"
+        app:constraint_referenced_ids="tv_act_edate,tv_act_sdate,tv_startDate,textView4,sw_noti,view"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp" />
 

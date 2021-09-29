@@ -60,14 +60,18 @@ class Counter(
     }
 
 
-    fun getDetail(): String {
-        val start = LocalDate.parse(startDate)
+    fun getDetail(isRemainingDate: Boolean = false): String {
+        val start =if(!isRemainingDate) LocalDate.parse(startDate) else{
+            val c = Calendar.getInstance().time
+            val current = Calendar.getInstance().resetToMidnight(c)
+            LocalDate.parse(current.getCurrentDateString())
+        }
+
         val end = if (!endDate?.isEmpty()!!) {
             LocalDate.parse(endDate)
         } else {
             LocalDate.parse(Calendar.getInstance().getCurrentDateString())
         }
-        //  print(Days.daysBetween(start, end).days)
 
         if (displayFormat == DisplayFormat.DAY || displayFormat == DisplayFormat.WEEK_DAY) {
             val days = Days.daysBetween(start, end).days

@@ -161,9 +161,12 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
         val w = WIDTH.toFloat() - paintStrokeWidth - p
 
-        paint2.shader = animated3Gradient()
-        val q = RectF(paintStrokeWidth, paintStrokeWidth, w, HEIGHT.toFloat() - paintStrokeWidth)
-        canvas?.drawRoundRect(q, 25f, 25f, paint2)
+        if(indeterminate){
+            paint2.shader = animated3Gradient()
+            val q = RectF(paintStrokeWidth, paintStrokeWidth, w, HEIGHT.toFloat() - paintStrokeWidth)
+            canvas?.drawRoundRect(q, 25f, 25f, paint2)
+        }
+
         //shaded animated glare rectangle
 
 
