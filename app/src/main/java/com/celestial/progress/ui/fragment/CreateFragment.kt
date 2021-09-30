@@ -25,6 +25,7 @@ import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.data.model.DisplayFormat
+import com.celestial.progress.data.model.DisplayFormatTC
 import com.celestial.progress.databinding.FragmentCreateBinding
 import com.celestial.progress.others.Status
 import com.celestial.progress.others.Validator.verifyCounterName
@@ -49,7 +50,7 @@ class CreateFragment : Fragment() {
 
     private var startDate = ""
     private  var endDate = ""
-    private  var displayFormat = ""
+    private  var displayFormat: DisplayFormat = DisplayFormat.DAY
     private var note = ""
 
     private  var colorValue: Int? = null
@@ -169,7 +170,7 @@ class CreateFragment : Fragment() {
                     id: Long
                 ) {
                     unfocus(binding.textInputLayout)
-                    displayFormat = parent?.getItemAtPosition(position).toString()
+                    displayFormat = DisplayFormatTC().getValue(position)
                     Log.d(TAG, parent?.getItemAtPosition(position).toString())
                 }
 
@@ -232,7 +233,7 @@ class CreateFragment : Fragment() {
             colorValue,
             note,
             binding.requiredNotiChkBox.isChecked,
-            DisplayFormat.DAY
+            displayFormat
         )
 
         (requireActivity() as MainActivity).insertCounter(counter,{goBack()})
@@ -341,8 +342,8 @@ class CreateFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-}
 
+}
 
 
 fun Fragment.unfocus(v: View) {

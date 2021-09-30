@@ -222,8 +222,8 @@ enum class DisplayFormat() {
     DAY,
     WEEK_DAY,
     MONTH_WEEK_DAY,
-    YEAR_MONTH_WEEK_DAY,
-    YEAR_MONTH_DAY;
+    YEAR_MONTH_DAY,
+    YEAR_MONTH_WEEK_DAY;
 }
 
 enum class Repeating{

@@ -17,4 +17,8 @@ class DisplayFormatTC {
         }
         return DisplayFormat.DAY
     }
+
+    fun getValue(index: Int): DisplayFormat {
+        return DisplayFormat.values()[index]
+    }
 }

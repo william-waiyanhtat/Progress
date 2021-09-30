@@ -9,15 +9,13 @@
     android:id="@+id/progress_item_parent"
     android:background="@drawable/app_barbg"
     android:elevation="4dp"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/tv_counting"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:text="23Weeks 21Days"
         android:textSize="@dimen/text_normal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +26,6 @@
         android:id="@+id/item_title_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:text="This Year"
         android:textSize="@dimen/text_large"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,9 +35,8 @@
         android:id="@+id/item_progress_bar_id"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +58,6 @@
         android:id="@+id/tv_startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Start Date : "
