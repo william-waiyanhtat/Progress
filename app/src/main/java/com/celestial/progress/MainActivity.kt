@@ -89,9 +89,6 @@ class MainActivity : AppCompatActivity() {
        // appBar = binding?.appBar!!
 
         setContentView(view)
- //       setListener()
-
-        throw RuntimeException("Test Crash")
 
         callback = {
             makeVisible()

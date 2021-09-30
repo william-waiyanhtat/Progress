@@ -21,6 +21,9 @@ class CounterViewModel @Inject constructor(
 
     val TAG = CounterViewModel::class.java.name
 
+    var editCounter: Counter? = null
+
+
     override fun createCounter(counter: Counter): LiveData<Resource<Long>> {
 
         val result = MutableLiveData<Resource<Long>>()

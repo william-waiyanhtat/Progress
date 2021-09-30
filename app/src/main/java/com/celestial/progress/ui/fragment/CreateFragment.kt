@@ -49,14 +49,14 @@ class CreateFragment : Fragment() {
 
 
     private var startDate = ""
-    private  var endDate = ""
-    private  var displayFormat: DisplayFormat = DisplayFormat.DAY
+    private var endDate = ""
+    private var displayFormat: DisplayFormat = DisplayFormat.DAY
     private var note = ""
 
-    private  var colorValue: Int? = null
+    private var colorValue: Int? = null
 
 
-    private   val TAG = CreateFragment::class.simpleName
+    private val TAG = CreateFragment::class.simpleName
 
 
     fun goBack() {
@@ -67,10 +67,10 @@ class CreateFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            isCreate = it.getBoolean("isCreate",true)
+            isCreate = it.getBoolean("isCreate", true)
         }
 
-        Log.d(TAG,"isCreate : $isCreate")
+        Log.d(TAG, "isCreate : $isCreate")
 
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -90,16 +90,69 @@ class CreateFragment : Fragment() {
 
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
         val view = binding.root
-
+        setUpViewModel()
         toolbar = binding.toolbarCreate
+
+        toolbar.inflateMenu(R.menu.create_menu)
+
+        if(isCreate){
+            toolbar.menu.getItem(1).isVisible = false
+        }else{
+            toolbar.menu.getItem(0).isVisible = false
+        }
+
+        toolbar.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.toolbar_menu_create -> createButtonClickEvent()
+            }
+            return@setOnMenuItemClickListener true
+        }
+
+        setUpListener()
+        if (!isCreate) {
+            toolbar.title = "Edit Counter"
+            populateCounterData(binding)
+        }
 
         sharedElementEnterTransition = ChangeBounds()
 
-        setUpListener()
 
-        setUpViewModel()
+
+
 
         return view
+    }
+
+    private fun populateCounterData(binding: FragmentCreateBinding) {
+        viewModel.editCounter?.let {
+            binding.inputName.setText(it.title)
+            binding.startDateInput.text = "Start Date: ${it.startDate}"
+            startDate = it.startDate
+            if (it.endDate!!.isNotEmpty()) {
+                binding.countdownChkBox.isChecked = true
+                binding.endDateInput.visibility = View.VISIBLE
+                binding.endDateInput.text = "End Date: ${it.endDate}"
+                endDate = it.endDate
+            }
+
+            binding.spinnerDisplayformat.setSelection(
+                DisplayFormatTC().getIndex(it.displayFormat),
+                true
+            )
+            displayFormat = it.displayFormat
+
+            setCounterColorForEdit(it)
+
+            binding.requiredNotiChkBox.isChecked = it.requiredNotification
+
+            it.note?.let { it ->
+                binding.noteInput.setText(it)
+                note = it
+            }
+
+
+        }
+
     }
 
 
@@ -123,9 +176,9 @@ class CreateFragment : Fragment() {
         }
 
         binding.countdownChkBox.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 binding.endDateInput.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.endDateInput.visibility = View.GONE
             }
         }
@@ -202,15 +255,20 @@ class CreateFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if (!validateDateInput()){
-                binding.parentLayout.requestChildFocus(binding.startDateInput,binding.startDateInput)
+            if (!validateDateInput()) {
+                binding.parentLayout.requestChildFocus(
+                    binding.startDateInput,
+                    binding.startDateInput
+                )
                 return@setOnClickListener
             }
 
-            if(!validateColorChoice()){
+            if (!validateColorChoice()) {
                 binding.tvColorError.text = getString(R.string.color_error_label)
                 return@setOnClickListener
             }
+            note = binding.noteInput.text.toString()
+
             resetColorErrorText()
             createCounter()
 
@@ -218,11 +276,10 @@ class CreateFragment : Fragment() {
         chooseColorCompoundListener()
 
 
-
     }
 
     private fun resetColorErrorText() {
-      binding.tvColorError.text = ""
+        binding.tvColorError.text = ""
     }
 
     private fun createCounter() {
@@ -236,7 +293,7 @@ class CreateFragment : Fragment() {
             displayFormat
         )
 
-        (requireActivity() as MainActivity).insertCounter(counter,{goBack()})
+        (requireActivity() as MainActivity).insertCounter(counter, { goBack() })
     }
 
     private fun validateDateInput(): Boolean {
@@ -263,7 +320,7 @@ class CreateFragment : Fragment() {
         }
     }
 
-    private fun validateColorChoice(): Boolean{
+    private fun validateColorChoice(): Boolean {
         return colorValue != null
     }
 
@@ -284,12 +341,10 @@ class CreateFragment : Fragment() {
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                 val mONTH = month + 1
 
-                if (v.id == R.id.startDateInput){
+                if (v.id == R.id.startDateInput) {
                     startDate = "$year-$mONTH-$dayOfMonth"
                     v.text = "Start Date: $year-$mONTH-$dayOfMonth"
-                }
-
-                else{
+                } else {
                     endDate = "$year-$mONTH-$dayOfMonth"
                     v.text = "End Date: $year-$mONTH-$dayOfMonth"
                 }
@@ -328,11 +383,11 @@ class CreateFragment : Fragment() {
         clearColorPickUI()
         clearColorPickUI()
         colorValue = (it.background as ColorDrawable).color
-        Log.d(TAG,"Color : ${colorValue}")
+        Log.d(TAG, "Color : ${colorValue}")
         it.foreground = requireActivity().getDrawable(R.drawable.ic_check)
     }
 
-    private fun clearColorPickUI(){
+    private fun clearColorPickUI() {
         for (a in arrayColorPicker) {
             a.foreground = null
         }
@@ -341,6 +396,45 @@ class CreateFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setCounterColorForEdit(model: Counter) {
+        colorValue = model.color
+
+        for (i in arrayColorPicker) {
+            val colVal = (i.background as ColorDrawable).color
+
+            if (colVal == model.color) {
+                i.foreground = requireActivity().getDrawable(R.drawable.ic_check)
+                return
+            }
+        }
+
+        binding.btnCustomColor.setBackgroundColor(model.color!!)
+    }
+
+    private fun createButtonClickEvent(){
+        if (!validateCounterNameInput()) {
+            binding.textInputLayout.requestFocus()
+            return
+        }
+
+        if (!validateDateInput()) {
+            binding.parentLayout.requestChildFocus(
+                binding.startDateInput,
+                binding.startDateInput
+            )
+            return
+        }
+
+        if (!validateColorChoice()) {
+            binding.tvColorError.text = getString(R.string.color_error_label)
+            return
+        }
+        note = binding.noteInput.text.toString()
+
+        resetColorErrorText()
+        createCounter()
     }
 
 }

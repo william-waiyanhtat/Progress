@@ -144,7 +144,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="16dp"
                 android:padding="@dimen/spacing_small"
-               android:background="@color/teal_200"
+                android:background="@color/teal_200"
                 app:layout_constraintEnd_toStartOf="@+id/preset_color2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -216,6 +216,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/btn_create"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
@@ -224,8 +225,10 @@
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/btn_CustomColor"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/requiredNotiChkBox"
-                app:layout_constraintTop_toBottomOf="@+id/requiredNotiChkBox" />
+                app:layout_constraintTop_toBottomOf="@+id/requiredNotiChkBox"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/tv_date_error"
@@ -262,6 +265,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_color_error">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/note_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>

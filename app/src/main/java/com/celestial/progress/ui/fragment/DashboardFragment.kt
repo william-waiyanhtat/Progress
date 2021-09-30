@@ -165,8 +165,9 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
+
     }
 
     companion object {
@@ -290,7 +291,11 @@ class DashboardFragment : Fragment() {
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.item_edit -> {
-                        TODO("To implement edit counter feature")
+                        if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
+                            val bundle = bundleOf("isCreate" to false)
+                            viewModel.editCounter = c
+                            findNavController().navigate(R.id.navigateToCreateFragment,bundle)
+                        }
                     }
                     R.id.item_archive -> {
                         lifecycleScope.launch {
