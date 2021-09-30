@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.*
 import android.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,7 @@ import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.FragmentDashboardBinding
+import com.celestial.progress.others.NotificationHelper
 import com.celestial.progress.ui.CounterViewModel
 import com.celestial.progress.ui.adapter.ItemAdapter
 import kotlinx.coroutines.*
@@ -95,6 +97,8 @@ class DashboardFragment : Fragment() {
                                         binding.toolbarCreate, "fabBtn"
                                 ).build()
 
+                     // val bundle = bundleOf("isCreate" to false)
+
                         findNavController().navigate(R.id.navigateToCreateFragment, null, null, extras)
                     }
                 }
@@ -132,6 +136,9 @@ class DashboardFragment : Fragment() {
                 Log.d(TAG, "Data get ${it.size}")
 //                binding.counterRcy.adapter  = ItemAdapter(expandCollapse, itemMenuShow, ItemAdapter.ItemViewHolder::class)
                 adapter.submitList(it)
+                for(i in it){
+                    checkCreateAndCancelNotification(i)
+                }
 
                 Log.d(TAG, "Observed List: **************")
                 for (c in it) {
@@ -304,6 +311,20 @@ class DashboardFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+    }
+
+    private fun checkCreateAndCancelNotification(model: Counter){
+        if(model.requiredNotification){
+            //binding.swNoti.isChecked = true
+            if(!NotificationHelper.checkNotification(requireContext(),model)){
+                NotificationHelper.createNotification(requireContext(),model)
+            }
+        }else{
+           // binding.swNoti.isChecked = false
+            if(NotificationHelper.checkNotification(requireContext(),model)){
+                NotificationHelper.cancelNotification(requireContext(),model)
+            }
+        }
     }
 
 

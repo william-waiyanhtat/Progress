@@ -38,21 +38,24 @@ import java.util.*
 class CreateFragment : Fragment() {
 
     private var _binding: FragmentCreateBinding? = null
-    lateinit var toolbar: Toolbar
-    lateinit var viewModel: CounterViewModel
-    lateinit var arrayColorPicker: Array<View>
+    private lateinit var toolbar: Toolbar
+    private lateinit var viewModel: CounterViewModel
+    private lateinit var arrayColorPicker: Array<View>
 
     private val binding get() = _binding!!
 
-    var startDate = ""
-    var endDate = ""
-    var displayFormat = ""
-    var note = ""
-
-    var colorValue: Int? = null
+    private var isCreate: Boolean = false
 
 
-    val TAG = CreateFragment::class.simpleName
+    private var startDate = ""
+    private  var endDate = ""
+    private  var displayFormat = ""
+    private var note = ""
+
+    private  var colorValue: Int? = null
+
+
+    private   val TAG = CreateFragment::class.simpleName
 
 
     fun goBack() {
@@ -62,6 +65,12 @@ class CreateFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            isCreate = it.getBoolean("isCreate",true)
+        }
+
+        Log.d(TAG,"isCreate : $isCreate")
+
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 //   findNavController(this@CreateFragment).popBackStack()
@@ -110,7 +119,14 @@ class CreateFragment : Fragment() {
 
         binding.inputName.setOnClickListener {
 
+        }
 
+        binding.countdownChkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){
+                binding.endDateInput.visibility = View.VISIBLE
+            }else{
+                binding.endDateInput.visibility = View.GONE
+            }
         }
 
         arrayColorPicker = arrayOf(
@@ -220,19 +236,6 @@ class CreateFragment : Fragment() {
         )
 
         (requireActivity() as MainActivity).insertCounter(counter,{goBack()})
-
-//        lifecycleScope.launch {
-//            viewModel.createCounter(counter).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-//                when(it.status){
-//                   Status.SUCCESS ->{
-//                       Snackbar.make(requireActivity().view,"Success",Snackbar.LENGTH_SHORT)
-//                       goBack()
-//                   }
-//                    Status.ERROR ->{}
-//                }
-//
-//            })
-//        }
     }
 
     private fun validateDateInput(): Boolean {

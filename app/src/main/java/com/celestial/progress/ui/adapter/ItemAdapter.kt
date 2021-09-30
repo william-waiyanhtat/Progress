@@ -65,9 +65,6 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             var model = getItem(adapterPosition)
             val expandGroup = binding.expandGroup
             Log.d(TAG, "OnBind: ${model.title}")
-            binding.itemTitleId.text = model.title
-         //   binding.tvCounting.text = model.getDetail()
-
             switchColor(binding.swNoti,model.color!!)
 
 
@@ -90,15 +87,7 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                 binding.tvActEdate.text = model.endDate
             }
 
-            if(!model.isElapsed()){
-                val percent =  model.getPercent()?.toInt() ?: 100
-                binding.itemProgressBarId.progress = percent
-                binding.itemProgressBarId.indeterminate = false
-                binding.itemPercentId.text = "$percent %"
-            }else{
-                binding.itemProgressBarId.progress = 100
-                binding.itemPercentId.visibility = View.GONE
-            }
+            bindProgressBar(model, binding)
 
             if (model.isExpand) {
                 expandGroup.visibility = View.VISIBLE
@@ -109,6 +98,7 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             //complete check
             if (model.isComplete()) {
                 binding.completeBadge.visibility = View.VISIBLE
+
             } else {
                 binding.completeBadge.visibility = View.GONE
             }
@@ -124,10 +114,6 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                     NotificationHelper.cancelNotification(mContext,model)
                 }
             }
-
-        //    binding.swNoti.isChecked = NotificationHelper.checkNotification(mContext,model)
-
-
             binding.itemMenuBtn.setOnClickListener {
                 itemMenuShow?.invoke(model, binding.itemMenuBtn)
 
@@ -260,7 +246,20 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
         }
     }
 
-    fun switchColor(switchCompat: SwitchCompat, color: Int){
+    private fun bindProgressBar(model: Counter, binding: ProgressItemBinding){
+        if(!model.isElapsed() && !model.isComplete()){
+            val percent =  model.getPercent()?.toInt() ?: 100
+            binding.itemProgressBarId.progress = percent
+            binding.itemProgressBarId.indeterminate = false
+            binding.itemPercentId.text = "$percent %"
+        }else{
+            binding.itemProgressBarId.progress = 100
+            binding.itemPercentId.visibility = View.GONE
+            binding.itemPercentId.text = ""
+        }
+    }
+
+    private fun switchColor(switchCompat: SwitchCompat, color: Int){
         val states = arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked))
 
         val thumbColors = intArrayOf(
