@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
@@ -24,6 +25,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var notiOnOff: SwitchPreferenceCompat
     private lateinit var defaultNotiOnOff: SwitchPreferenceCompat
     private lateinit var feedbackPref: Preference
+    private lateinit var privacy: Preference
+    private lateinit var about: Preference
 
     lateinit var counterViewModel: CounterViewModel
 
@@ -43,6 +46,24 @@ class SettingsFragment : PreferenceFragmentCompat() {
         listenNotificationOnOff()
         listenDefaultNotificationOnOff()
         listenFeedbackPreference()
+        listenPrivacyPreference()
+        listenAboutPreference()
+    }
+
+    private fun listenAboutPreference() {
+        about = findPreference<Preference>(getString(R.string.pf_key_about))!!
+        about.setOnPreferenceClickListener {
+            goToAbout()
+            return@setOnPreferenceClickListener true
+        }
+    }
+
+    private fun listenPrivacyPreference() {
+        privacy = findPreference<Preference>(getString(R.string.pf_key_privacy))!!
+        privacy.setOnPreferenceClickListener {
+            Utils.goToPrivacyPolicy(requireContext())
+            return@setOnPreferenceClickListener true
+        }
     }
 
     private fun listenFeedbackPreference() {
@@ -97,4 +118,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
         })
     }
 
+    private fun goToAbout(){
+        if (findNavController().currentDestination?.id == R.id.settingsFragment) {
+            findNavController().navigate(R.id.action_settingsFragment_to_aboutFragment)
+        }
+    }
 }

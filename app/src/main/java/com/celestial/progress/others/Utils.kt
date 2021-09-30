@@ -138,4 +138,10 @@ object Utils {
         }
     }
 
+     fun goToPrivacyPolicy(context: Context) {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse("https://progress-3.flycricket.io/privacy.html")
+        context.startActivity(i)
+    }
+
 }
