@@ -54,7 +54,7 @@ object NotificationHelper {
         mBuilder = NotificationCompat.Builder(mContext!!)
                 .setSmallIcon(R.drawable.ic_only_ic)
         mBuilder!!.setContentTitle(counter.title)
-                .setContentText(counter.getDetail())
+                .setContentText(counter.getInitial()+ counter.getDetail())
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setColorized(true)
@@ -64,10 +64,7 @@ object NotificationHelper {
 
         if (!isDefaultNotification) {
              mBuilder.setCustomContentView(createAndGetCustomNotification(mContext ,counter))
-          //  mBuilder.setContent(createAndGetCustomNotification(mContext, counter))
         }
-
-
         mNotificationManager =
                 mContext!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
