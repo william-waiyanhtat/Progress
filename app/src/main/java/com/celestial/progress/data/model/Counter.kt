@@ -1,6 +1,6 @@
 package com.celestial.progress.data.model
 
-import android.util.Log
+
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -61,9 +61,16 @@ class Counter(
 
 
     fun getDetail(isRemainingDate: Boolean = false): String {
-        val start =if(!isRemainingDate) LocalDate.parse(startDate) else{
-            val c = Calendar.getInstance().time
-            val current = Calendar.getInstance().resetToMidnight(c)
+        var suffix = ""
+        //add start date is in the future
+        val c = Calendar.getInstance().time
+        val current = Calendar.getInstance().resetToMidnight(c)
+
+        val start =if(!isRemainingDate) LocalDate.parse(startDate)
+        else if(isRemainingDate && startDate.getDate()>current.time){
+            suffix = " from today"
+            LocalDate.parse(current.getCurrentDateString())
+        }else{
             LocalDate.parse(current.getCurrentDateString())
         }
 
@@ -82,7 +89,7 @@ class Counter(
                     val day = days % 7
                     "$wk Week(s), $day Day(s)"
                 }
-            }
+            }+suffix
 
         } else {
             var field = when (displayFormat) {
@@ -124,7 +131,7 @@ class Counter(
                 DisplayFormat.MONTH_WEEK_DAY -> "${period.months} Month(s), ${period.weeks} Week(s), ${period.days} Day(s)"
                 DisplayFormat.WEEK_DAY -> "${period.weeks} Week(s), ${period.days} Day(s)"
                 else -> "${period.days} Day(s)"
-            }
+            }+suffix
         }
     }
 
@@ -141,7 +148,24 @@ class Counter(
         return false
     }
 
+    fun isStarted():Boolean{
+        if(startDate.getDate()> Calendar.getInstance().time){
+            return false
+        }
+        return true
+    }
+
+    fun getRemainingDayForStart(){
+
+    }
+
+
     fun getPercent(): Long? {
+
+        if(startDate.getDate()> Calendar.getInstance().time){
+            return 0L
+        }
+
         if(endDate!!.isEmpty()){
             return INVALID
         }
