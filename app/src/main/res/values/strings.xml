@@ -74,5 +74,7 @@
     <string name="progress_label">Progress</string>
     <string name="configure">Configure</string>
 
+<!--    SplashActivity-->
+    <string name="splash_message">Loading your progress...</string>
 
 </resources>

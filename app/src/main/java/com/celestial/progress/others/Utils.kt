@@ -144,4 +144,8 @@ object Utils {
         context.startActivity(i)
     }
 
+    fun getApplicationName(context: Context): String? {
+        return context.applicationInfo.loadLabel(context.packageManager).toString()
+    }
+
 }
