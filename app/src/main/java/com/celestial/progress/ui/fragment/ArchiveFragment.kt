@@ -1,11 +1,14 @@
 package com.celestial.progress.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +30,12 @@ class ArchiveFragment : Fragment() {
     lateinit var adapter: ItemAdapter<ItemAdapter<*>.ItemViewHolder>
 
     lateinit var viewModel: CounterViewModel
+
+    lateinit var archiveImgv: ImageView
+
+    lateinit var archiveTv: TextView
+
+    private val TAG = ArchiveFragment::class.java.name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,17 +61,35 @@ class ArchiveFragment : Fragment() {
     private fun observeData() {
         viewModel.readArchiveCounters().observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+            backgroundImageTrigger(it)
+            Log.d(TAG,"Archive List Size:${it.size}")
         })
     }
 
+    private fun backgroundImageTrigger(list: List<Counter>) {
+
+        Log.d(TAG,"Adapter List Size ${adapter.currentList.size}")
+
+        if (list.isEmpty()) {
+            archiveImgv.visibility = View.VISIBLE
+            archiveTv.visibility = View.VISIBLE
+        } else {
+            archiveImgv.visibility = View.GONE
+            archiveTv.visibility = View.GONE
+        }
+    }
+
     private fun initUI() {
+
+        archiveImgv = binding.imgvArchiveIcon
+        archiveTv = binding.tvArchiveText
 
         val toolbar = binding.toolbar2
         toolbar.setNavigationOnClickListener {
             goBack()
         }
 
-        adapter = ItemAdapter(null, itemMenuShow, null,ItemAdapter.ItemViewHolder::class)
+        adapter = ItemAdapter(null, itemMenuShow, null, ItemAdapter.ItemViewHolder::class)
         val rcyView = binding.archiveRcy
         rcyView.adapter = adapter
 
@@ -87,22 +114,21 @@ class ArchiveFragment : Fragment() {
                 ArchiveFragment()
     }
 
-    val itemMenuShow: (Counter, View) -> Unit ={ c, v ->
-        createPopUpMenuAndShow(v,c)
+    val itemMenuShow: (Counter, View) -> Unit = { c, v ->
+        createPopUpMenuAndShow(v, c)
     }
 
-    fun createPopUpMenuAndShow(v: View, c: Counter){
+    fun createPopUpMenuAndShow(v: View, c: Counter) {
         val popupMenu = PopupMenu(requireActivity(), v)
         popupMenu.apply {
             menuInflater.inflate(R.menu.archive_menu, popupMenu.menu)
             setOnMenuItemClickListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.item_unarchive -> {
                         lifecycleScope.launch {
                             var counter = c
                             counter.isArchived = false
                             viewModel.updateCounter(counter)
-
                         }
                     }
                     R.id.item_delete -> {

@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.ArchiveFragment">
 
+
+    <ImageView
+
+        android:id="@+id/imgv_archive_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="-1dp"
+        android:src="@drawable/ic_archive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/archive_rcy"
+        app:layout_constraintStart_toStartOf="@+id/archive_rcy"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+
+
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
@@ -27,5 +42,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+
+    <TextView
+        android:id="@+id/tv_archive_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Archive is Empty"
+        app:layout_constraintEnd_toEndOf="@+id/imgv_archive_icon"
+        app:layout_constraintStart_toStartOf="@+id/imgv_archive_icon"
+        app:layout_constraintTop_toBottomOf="@+id/imgv_archive_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

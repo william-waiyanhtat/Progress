@@ -204,9 +204,9 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             model = getItem(adapterPosition)
             binding.itemTitleId.text = model?.title
             if(model!!.isElapsed()){
-                binding.tvCounting.text = model?.getDetail()
+                binding.tvCounting.text = model?.getInitial()+ model?.getDetail()
             }else{
-                binding.tvCounting.text = model?.getDetail(true)
+                binding.tvCounting.text =  model?.getInitial()+model?.getDetail(true)
             }
 
 
