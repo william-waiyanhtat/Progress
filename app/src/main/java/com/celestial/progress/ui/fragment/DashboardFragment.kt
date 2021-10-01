@@ -1,12 +1,15 @@
 package com.celestial.progress.ui.fragment
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.os.Looper
 import android.os.Parcelable
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -97,7 +100,7 @@ class DashboardFragment : Fragment() {
                                         binding.toolbarCreate, "fabBtn"
                                 ).build()
 
-                     // val bundle = bundleOf("isCreate" to false)
+                        // val bundle = bundleOf("isCreate" to false)
 
                         findNavController().navigate(R.id.navigateToCreateFragment, null, null, extras)
                     }
@@ -136,7 +139,7 @@ class DashboardFragment : Fragment() {
                 Log.d(TAG, "Data get ${it.size}")
 //                binding.counterRcy.adapter  = ItemAdapter(expandCollapse, itemMenuShow, ItemAdapter.ItemViewHolder::class)
                 adapter.submitList(it)
-                for(i in it){
+                for (i in it) {
                     checkCreateAndCancelNotification(i)
                 }
 
@@ -184,7 +187,7 @@ class DashboardFragment : Fragment() {
                 viewModel.insertAll(bufferList)
 
                 for(i in notificationIssueList){
-                    viewModel.updateCounterForNotificationById(i.id!!,i.requiredNotification)
+                    viewModel.updateCounterForNotificationById(i.id!!, i.requiredNotification)
                 }
 
 
@@ -294,7 +297,13 @@ class DashboardFragment : Fragment() {
                         if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
                             val bundle = bundleOf("isCreate" to false)
                             viewModel.editCounter = c
-                            findNavController().navigate(R.id.navigateToCreateFragment,bundle)
+
+                            val extras = FragmentNavigator.Extras.Builder()
+                                    .addSharedElement(
+                                            binding.toolbarCreate, "fabBtn"
+                                    ).build()
+
+                            findNavController().navigate(R.id.navigateToCreateFragment, bundle,null,extras)
                         }
                     }
                     R.id.item_archive -> {
@@ -321,13 +330,13 @@ class DashboardFragment : Fragment() {
     private fun checkCreateAndCancelNotification(model: Counter){
         if(model.requiredNotification){
             //binding.swNoti.isChecked = true
-            if(!NotificationHelper.checkNotification(requireContext(),model)){
-                NotificationHelper.createNotification(requireContext(),model)
+            if(!NotificationHelper.checkNotification(requireContext(), model)){
+                NotificationHelper.createNotification(requireContext(), model)
             }
         }else{
            // binding.swNoti.isChecked = false
-            if(NotificationHelper.checkNotification(requireContext(),model)){
-                NotificationHelper.cancelNotification(requireContext(),model)
+            if(NotificationHelper.checkNotification(requireContext(), model)){
+                NotificationHelper.cancelNotification(requireContext(), model)
             }
         }
     }

@@ -2,6 +2,7 @@ package com.celestial.progress.ui.fragment
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -163,7 +165,7 @@ class CreateFragment : Fragment() {
     private fun setUpListener() {
 
         binding.parentLayout.setOnClickListener {
-            unfocus(binding.textInputLayout)
+            unfocus(binding.textInputLayout,binding.root)
         }
 
         //backbutton
@@ -176,6 +178,7 @@ class CreateFragment : Fragment() {
         }
 
         binding.countdownChkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            hideInputMethod()
             if (isChecked) {
                 binding.endDateInput.visibility = View.VISIBLE
             } else {
@@ -195,10 +198,14 @@ class CreateFragment : Fragment() {
         }
 
         binding.startDateInput.setOnClickListener {
+            unfocus(binding.textInputLayout,binding.root)
+            hideInputMethod()
             showDatePickerDialog(it as TextView)
         }
 
         binding.endDateInput.setOnClickListener {
+            unfocus(binding.textInputLayout,binding.root)
+            hideInputMethod()
             showDatePickerDialog(it as TextView)
         }
 
@@ -215,28 +222,32 @@ class CreateFragment : Fragment() {
 
         binding.spinnerDisplayformat.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
-
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
                     position: Int,
                     id: Long
                 ) {
-                    unfocus(binding.textInputLayout)
+
+                    hideInputMethod()
+                    unfocus(binding.textInputLayout,binding.root)
                     displayFormat = DisplayFormatTC().getValue(position)
                     Log.d(TAG, parent?.getItemAtPosition(position).toString())
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    unfocus(binding.textInputLayout)
+                    hideInputMethod()
+                    unfocus(binding.textInputLayout,binding.root)
                 }
             }
 
         binding.btnCustomColor.setOnClickListener {
             val colorPicker = ColorPicker(activity)
             colorPicker.show()
+            unfocus(binding.textInputLayout,binding.root)
             colorPicker.setOnChooseColorListener(object : OnChooseColorListener {
                 override fun onChooseColor(position: Int, color: Int) {
+                    hideInputMethod()
                     binding.btnCustomColor.setBackgroundColor(color)
                     colorValue = color
                     clearColorPickUI()
@@ -244,6 +255,7 @@ class CreateFragment : Fragment() {
                 }
 
                 override fun onCancel() {
+                    hideInputMethod()
                     // put code
                 }
             })
@@ -414,6 +426,8 @@ class CreateFragment : Fragment() {
     }
 
     private fun createButtonClickEvent(){
+
+        hideInputMethod()
         if (!validateCounterNameInput()) {
             binding.textInputLayout.requestFocus()
             return
@@ -437,9 +451,25 @@ class CreateFragment : Fragment() {
         createCounter()
     }
 
-}
+
+    private fun hideInputMethod(){
+        try {
+            val imm: InputMethodManager? = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm?.hideSoftInputFromWindow(binding.root.windowToken, 0)
+        } catch (e: Exception) {
+
+        }
+    }
 
 
-fun Fragment.unfocus(v: View) {
-    v.clearFocus()
+    fun Fragment.unfocus(v: View, mainVew: View) {
+
+        Log.d("CreateFragment","Unfocus Called")
+        v.clearFocus()
+        binding.noteInput.clearFocus()
+        mainVew.requestFocus()
+    }
+
+
 }
+
