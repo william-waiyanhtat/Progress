@@ -63,7 +63,7 @@ class CreateFragment : Fragment() {
 
     fun goBack() {
         NavHostFragment.findNavController(this@CreateFragment)
-            .popBackStack(R.id.dashboardFragment, false)
+                .popBackStack(R.id.dashboardFragment, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,8 +85,8 @@ class CreateFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
 
@@ -97,14 +97,14 @@ class CreateFragment : Fragment() {
 
         toolbar.inflateMenu(R.menu.create_menu)
 
-        if(isCreate){
+        if (isCreate) {
             toolbar.menu.getItem(1).isVisible = false
-        }else{
+        } else {
             toolbar.menu.getItem(0).isVisible = false
         }
 
         toolbar.setOnMenuItemClickListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.toolbar_menu_create -> createButtonClickEvent()
             }
             return@setOnMenuItemClickListener true
@@ -138,8 +138,8 @@ class CreateFragment : Fragment() {
             }
 
             binding.spinnerDisplayformat.setSelection(
-                DisplayFormatTC().getIndex(it.displayFormat),
-                true
+                    DisplayFormatTC().getIndex(it.displayFormat),
+                    true
             )
             displayFormat = it.displayFormat
 
@@ -165,7 +165,7 @@ class CreateFragment : Fragment() {
     private fun setUpListener() {
 
         binding.parentLayout.setOnClickListener {
-            unfocus(binding.textInputLayout,binding.root)
+            unfocus(binding.textInputLayout, binding.root)
         }
 
         //backbutton
@@ -181,16 +181,19 @@ class CreateFragment : Fragment() {
             hideInputMethod()
             if (isChecked) {
                 binding.endDateInput.visibility = View.VISIBLE
+                binding.tvEnddateErr.visibility = View.VISIBLE
             } else {
+                endDate = ""
                 binding.endDateInput.visibility = View.GONE
+                binding.tvEnddateErr.visibility = View.GONE
             }
         }
 
         arrayColorPicker = arrayOf(
-            binding.presetColor1,
-            binding.presetColor2,
-            binding.presetColor3,
-            binding.presetColor4
+                binding.presetColor1,
+                binding.presetColor2,
+                binding.presetColor3,
+                binding.presetColor4
         )
 
         binding.inputName.doOnTextChanged { text, start, before, count ->
@@ -198,13 +201,13 @@ class CreateFragment : Fragment() {
         }
 
         binding.startDateInput.setOnClickListener {
-            unfocus(binding.textInputLayout,binding.root)
+            unfocus(binding.textInputLayout, binding.root)
             hideInputMethod()
             showDatePickerDialog(it as TextView)
         }
 
         binding.endDateInput.setOnClickListener {
-            unfocus(binding.textInputLayout,binding.root)
+            unfocus(binding.textInputLayout, binding.root)
             hideInputMethod()
             showDatePickerDialog(it as TextView)
         }
@@ -212,8 +215,8 @@ class CreateFragment : Fragment() {
 
         //setSpinnerAdapter
         val adapter: ArrayAdapter<*> = ArrayAdapter.createFromResource(
-            requireActivity(),
-            R.array.show_mode, android.R.layout.simple_spinner_item
+                requireActivity(),
+                R.array.show_mode, android.R.layout.simple_spinner_item
         )
 
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
@@ -221,30 +224,30 @@ class CreateFragment : Fragment() {
 
 
         binding.spinnerDisplayformat.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                    ) {
 
-                    hideInputMethod()
-                    unfocus(binding.textInputLayout,binding.root)
-                    displayFormat = DisplayFormatTC().getValue(position)
-                    Log.d(TAG, parent?.getItemAtPosition(position).toString())
-                }
+                        hideInputMethod()
+                        unfocus(binding.textInputLayout, binding.root)
+                        displayFormat = DisplayFormatTC().getValue(position)
+                        Log.d(TAG, parent?.getItemAtPosition(position).toString())
+                    }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    hideInputMethod()
-                    unfocus(binding.textInputLayout,binding.root)
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        hideInputMethod()
+                        unfocus(binding.textInputLayout, binding.root)
+                    }
                 }
-            }
 
         binding.btnCustomColor.setOnClickListener {
             val colorPicker = ColorPicker(activity)
             colorPicker.show()
-            unfocus(binding.textInputLayout,binding.root)
+            unfocus(binding.textInputLayout, binding.root)
             colorPicker.setOnChooseColorListener(object : OnChooseColorListener {
                 override fun onChooseColor(position: Int, color: Int) {
                     hideInputMethod()
@@ -261,30 +264,37 @@ class CreateFragment : Fragment() {
             })
         }
 
-        binding.btnCreate.setOnClickListener {
-            if (!validateCounterNameInput()) {
-                binding.textInputLayout.requestFocus()
-                return@setOnClickListener
-            }
-
-            if (!validateDateInput()) {
-                binding.parentLayout.requestChildFocus(
-                    binding.startDateInput,
-                    binding.startDateInput
-                )
-                return@setOnClickListener
-            }
-
-            if (!validateColorChoice()) {
-                binding.tvColorError.text = getString(R.string.color_error_label)
-                return@setOnClickListener
-            }
-            note = binding.noteInput.text.toString()
-
-            resetColorErrorText()
-            createCounter()
-
-        }
+//        binding.btnCreate.setOnClickListener {
+//
+//
+//
+//
+//            if (!validateCounterNameInput()) {
+//                binding.textInputLayout.requestFocus()
+//                return@setOnClickListener
+//            }
+//
+//            if (!validateDateInput()) {
+//                binding.parentLayout.requestChildFocus(
+//                        binding.startDateInput,
+//                        binding.startDateInput
+//                )
+//                return@setOnClickListener
+//            }
+//
+//            if (!validateColorChoice()) {
+//                binding.tvColorError.text = getString(R.string.color_error_label)
+//                return@setOnClickListener
+//            } else if (validateColorChoice()) {
+//                binding.tvColorError.text = ""
+//                return@setOnClickListener
+//            }
+//            note = binding.noteInput.text.toString()
+//
+//            resetColorErrorText()
+//            createCounter()
+//
+//        }
         chooseColorCompoundListener()
 
 
@@ -296,27 +306,36 @@ class CreateFragment : Fragment() {
 
     private fun createCounter() {
         val counter = Counter(
-            binding.inputName.text.toString(),
-            startDate,
-            endDate,
-            colorValue,
-            note,
-            binding.requiredNotiChkBox.isChecked,
-            displayFormat
+                binding.inputName.text.toString(),
+                startDate,
+                endDate,
+                colorValue,
+                note,
+                binding.requiredNotiChkBox.isChecked,
+                displayFormat
         )
 
         (requireActivity() as MainActivity).insertCounter(counter, { goBack() })
     }
 
     private fun validateDateInput(): Boolean {
+
+        binding.tvDateError.text = ""
+        binding.tvEnddateErr.text = ""
         val res = verifyInputDateString(
-            startDate,
-            endDate
+                startDate,
+                endDate, binding.countdownChkBox.isChecked
         )
-        return if (res.status == Status.ERROR) {
+        return if (res.status == Status.ERROR && res.data == 0) {
             binding.tvDateError.text = res.message
             false
-        } else {
+        }else if(res.status == Status.ERROR && res.data == -1){
+            binding.tvEnddateErr.text = res.message
+            false
+        }
+
+        else {
+            binding.tvDateError.text = ""
             true
         }
 
@@ -349,36 +368,36 @@ class CreateFragment : Fragment() {
         val calendar = Calendar.getInstance()
 
         val datePickerDialog: DatePickerDialog = DatePickerDialog(
-            requireActivity(),
-            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val mONTH = month + 1
+                requireActivity(),
+                DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                    val mONTH = month + 1
 
-                if (v.id == R.id.startDateInput) {
-                    startDate = "$year-$mONTH-$dayOfMonth"
-                    v.text = "Start Date: $year-$mONTH-$dayOfMonth"
-                } else {
-                    endDate = "$year-$mONTH-$dayOfMonth"
-                    v.text = "End Date: $year-$mONTH-$dayOfMonth"
-                }
-
-                v.isSelected = false
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ).apply {
-            setButton(
-                Dialog.BUTTON_NEGATIVE,
-                getString(R.string.cancel_label),
-                DialogInterface.OnClickListener { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_NEGATIVE -> {
-                            Log.d(TAG, "Cancel Press")
-                            v.isSelected = false
-                        }
+                    if (v.id == R.id.startDateInput) {
+                        startDate = "$year-$mONTH-$dayOfMonth"
+                        v.text = "Start Date: $year-$mONTH-$dayOfMonth"
+                    } else {
+                        endDate = "$year-$mONTH-$dayOfMonth"
+                        v.text = "End Date: $year-$mONTH-$dayOfMonth"
                     }
 
-                })
+                    v.isSelected = false
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            setButton(
+                    Dialog.BUTTON_NEGATIVE,
+                    getString(R.string.cancel_label),
+                    DialogInterface.OnClickListener { dialog, which ->
+                        when (which) {
+                            DialogInterface.BUTTON_NEGATIVE -> {
+                                Log.d(TAG, "Cancel Press")
+                                v.isSelected = false
+                            }
+                        }
+
+                    })
         }
 
         datePickerDialog.show()
@@ -425,8 +444,8 @@ class CreateFragment : Fragment() {
         binding.btnCustomColor.setBackgroundColor(model.color!!)
     }
 
-    private fun createButtonClickEvent(){
-
+    private fun createButtonClickEvent() {
+        binding.tvColorError.text = ""
         hideInputMethod()
         if (!validateCounterNameInput()) {
             binding.textInputLayout.requestFocus()
@@ -435,8 +454,8 @@ class CreateFragment : Fragment() {
 
         if (!validateDateInput()) {
             binding.parentLayout.requestChildFocus(
-                binding.startDateInput,
-                binding.startDateInput
+                    binding.startDateInput,
+                    binding.startDateInput
             )
             return
         }
@@ -452,7 +471,7 @@ class CreateFragment : Fragment() {
     }
 
 
-    private fun hideInputMethod(){
+    private fun hideInputMethod() {
         try {
             val imm: InputMethodManager? = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
             imm?.hideSoftInputFromWindow(binding.root.windowToken, 0)
@@ -464,7 +483,7 @@ class CreateFragment : Fragment() {
 
     fun Fragment.unfocus(v: View, mainVew: View) {
 
-        Log.d("CreateFragment","Unfocus Called")
+        Log.d("CreateFragment", "Unfocus Called")
         v.clearFocus()
         binding.noteInput.clearFocus()
         mainVew.requestFocus()

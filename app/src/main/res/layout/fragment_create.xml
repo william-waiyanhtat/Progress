@@ -135,10 +135,10 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/counter_display_label"
                 app:layout_constraintStart_toStartOf="@+id/startDateInput"
-                app:layout_constraintTop_toBottomOf="@+id/endDateInput" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_enddate_err" />
 
             <View
                 android:id="@+id/preset_color1"
@@ -237,12 +237,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spacing_large"
-                android:layout_marginTop="8dp"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="@dimen/text_nsmall"
                 app:layout_constraintStart_toStartOf="@+id/startDateInput"
                 app:layout_constraintTop_toBottomOf="@+id/startDateInput"
                 tools:text="Start Date can't be empty" />
+
+
+
 
             <TextView
                 android:id="@+id/tv_example_format"
@@ -302,6 +304,17 @@
                 app:layout_constraintStart_toStartOf="@+id/preset_color1"
                 app:layout_constraintTop_toBottomOf="@+id/preset_color1"
                 tools:text="Choose Color" />
+
+            <TextView
+                android:id="@+id/tv_enddate_err"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:visibility="gone"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="@dimen/text_nsmall"
+                app:layout_constraintStart_toStartOf="@+id/endDateInput"
+                app:layout_constraintTop_toBottomOf="@+id/endDateInput" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

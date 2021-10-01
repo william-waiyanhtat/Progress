@@ -22,6 +22,8 @@ object Validator {
 
     val startDateEqualError = "Start date can't be same as End date"
 
+    val endDateMustBeAdd = "End date can't be empty for Countdown Progress"
+
     /*
     input empty
     input more than counter character count exceed certain limit
@@ -43,26 +45,37 @@ object Validator {
         return Resource.success(true,null)
     }
 
-    fun verifyInputDateString(startDate: String, endDate: String?): Resource<Boolean> {
+    fun verifyInputDateString(startDate: String, endDate: String?, isCountDown: Boolean): Resource<Int> {
         val date1 = startDate.getDate()
         val date2 = endDate?.getDate()
 
+
+        if(startDate.isNotEmpty() && endDate?.isEmpty()!! && isCountDown){
+            return Resource.error(endDateMustBeAdd,-1)
+        }
+
+
+        if(startDate.isNotEmpty() && endDate?.isEmpty()!!){
+            return Resource.success(1,null)
+        }
+
+
         if (startDate.isEmpty()) {
-            return Resource.error(emptyStartDateError, false)
+            return Resource.error(emptyStartDateError, 0)
         }
 
         date2?.let {
             if(it<date1){
-                return Resource.error(startDateEarlierError,false)
+                return Resource.error(startDateEarlierError,0)
             }
 
             if(it==date1){
-                return Resource.error(startDateEqualError,false)
+                return Resource.error(startDateEqualError,0)
             }
 
         }
 
-        return Resource.success(true,null)
+        return Resource.success(1,null)
     }
 
 
