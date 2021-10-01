@@ -17,7 +17,9 @@ import com.celestial.progress.R
 import com.celestial.progress.ui.adapter.ItemAdapter
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.FragmentArchiveBinding
+import com.celestial.progress.others.Utils.createDialogWithYesNo
 import com.celestial.progress.ui.CounterViewModel
+import com.google.firebase.installations.Utils
 import kotlinx.coroutines.launch
 
 
@@ -132,9 +134,13 @@ class ArchiveFragment : Fragment() {
                         }
                     }
                     R.id.item_delete -> {
-                        lifecycleScope.launch {
-                            viewModel.deleteCounter(c)
-                        }
+                       createDialogWithYesNo(requireContext(),"Attention!","Do you want to delete this progress?") {
+                           lifecycleScope.launch {
+                               viewModel.deleteCounter(c)
+                           }
+                       }
+
+
                     }
                 }
                 true

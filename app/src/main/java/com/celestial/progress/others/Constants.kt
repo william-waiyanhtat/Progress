@@ -11,4 +11,6 @@ object Constants {
     const val counterNameCharMinimum = 3
 
     const val emailAddress = "aeroitsoultion@gmail.com"
+
+    const val privacyLink = "https://aeroitsoultion.wixsite.com/progress"
 }

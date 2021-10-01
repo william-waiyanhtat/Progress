@@ -1,9 +1,11 @@
 package com.celestial.progress.others
 
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -22,22 +24,21 @@ object Utils {
 
     val TAG = Utils::class.java.name
 
-     fun showNotification(context: Context, title: String, message: String) {
-         val intent = Intent("OPEN_ACTIVITY_1")
-         val notify_no = 1
+    fun showNotification(context: Context, title: String, message: String) {
+        val intent = Intent("OPEN_ACTIVITY_1")
+        val notify_no = 1
 
         val pendingIntent =
-            PendingIntent.getActivity(context, notify_no, intent, PendingIntent.FLAG_ONE_SHOT)
+                PendingIntent.getActivity(context, notify_no, intent, PendingIntent.FLAG_ONE_SHOT)
         val channel_id = "fcm_default_channel"
         val default_sound_uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notifBuilder: NotificationCompat.Builder = NotificationCompat.Builder(context, channel_id)
-            .setSmallIcon(R.drawable.ic_app1)
-            .setContentTitle(title)
-            .setContentText(message).setAutoCancel(true)
-            .setSound(default_sound_uri)
-            .setContentIntent(pendingIntent)
-        val notificationManager =context.
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                .setSmallIcon(R.drawable.ic_app1)
+                .setContentTitle(title)
+                .setContentText(message).setAutoCancel(true)
+                .setSound(default_sound_uri)
+                .setContentIntent(pendingIntent)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
@@ -53,13 +54,13 @@ object Utils {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showNotificationOreo(notiID: Int, channelId: String, title: String, context: Context){
-            val notiHelper = NotiUtil(context)
-            val notificationBuilder = notiHelper.getNotification(title, "This is text notification body message", channelId)
-            if(notificationBuilder != null){
-                notiHelper.notify(notiID, notificationBuilder)
-                Log.d(TAG, " NOti OReo Get Called")
-            }
+    fun showNotificationOreo(notiID: Int, channelId: String, title: String, context: Context) {
+        val notiHelper = NotiUtil(context)
+        val notificationBuilder = notiHelper.getNotification(title, "This is text notification body message", channelId)
+        if (notificationBuilder != null) {
+            notiHelper.notify(notiID, notificationBuilder)
+            Log.d(TAG, " NOti OReo Get Called")
+        }
 
     }
 
@@ -83,11 +84,11 @@ object Utils {
         return bitmap
     }
 
-     fun generateProgressBitmap(context: Context, width: Int, progress: Int, color: Int): Bitmap {
+    fun generateProgressBitmap(context: Context, width: Int, progress: Int, color: Int): Bitmap {
 
-     //   val displayMetrics = Resources.getSystem().displayMetrics
+        //   val displayMetrics = Resources.getSystem().displayMetrics
 
-       // val width = displayMetrics.widthPixels
+        // val width = displayMetrics.widthPixels
 
         val padding = DeviceUtils.convertDpToPixel(8f, context)
 
@@ -114,9 +115,9 @@ object Utils {
         val rectF = RectF(0f + stroke, 0f + stroke, viewWidth - stroke, viewHeight - stroke)
         canvas.drawRoundRect(rectF, 20f, 20f, paint)
 
-        paint.style  = Paint.Style.FILL
+        paint.style = Paint.Style.FILL
 
-        val r =  (viewWidth - stroke)* (progress.toFloat()/100.toFloat())
+        val r = (viewWidth - stroke) * (progress.toFloat() / 100.toFloat())
         val progressRectF = RectF(0f + stroke, 0f + stroke, r, viewHeight - stroke)
         paint.color = color
 
@@ -138,9 +139,9 @@ object Utils {
         }
     }
 
-     fun goToPrivacyPolicy(context: Context) {
+    fun goToPrivacyPolicy(context: Context) {
         val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse("https://progress-3.flycricket.io/privacy.html")
+        i.data = Uri.parse(Constants.privacyLink)
         context.startActivity(i)
     }
 
@@ -148,4 +149,24 @@ object Utils {
         return context.applicationInfo.loadLabel(context.packageManager).toString()
     }
 
+    fun createDialogWithYesNo(context: Context, title: String, msg: String, callback:()->Unit) {
+        val builder = AlertDialog.Builder(context).apply {
+            setMessage(msg)
+            setTitle(title)
+            setCancelable(false)
+            setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                callback.invoke()
+                dialog.cancel()
+            })
+            setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> //  Action for 'NO' Button
+                dialog.cancel()
+
+            })
+
+        }
+        val alertDialog = builder.create()
+        alertDialog.setTitle(title)
+        alertDialog.show()
+    }
 }
+
