@@ -77,4 +77,7 @@
 <!--    SplashActivity-->
     <string name="splash_message">Loading your progress...</string>
 
+<!--    Dashboard-->
+    <string name="dashboard_empty">Dashboard is empty. <br/> Tap the + button to create new progress.</string>
+
 </resources>

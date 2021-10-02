@@ -139,6 +139,7 @@ class DashboardFragment : Fragment() {
             it.readAllCounters().observe(viewLifecycleOwner, Observer {
                 Log.d(TAG, "Data get ${it.size}")
 //                binding.counterRcy.adapter  = ItemAdapter(expandCollapse, itemMenuShow, ItemAdapter.ItemViewHolder::class)
+                showHideBackgroundImage(it.isEmpty())
                 adapter.submitList(it)
                 checkAndCancelInvalidProgress(it)
                 for (i in it) {
@@ -361,6 +362,14 @@ class DashboardFragment : Fragment() {
             if (NotificationHelper.checkNotification(requireContext(), model)) {
                 NotificationHelper.cancelNotification(requireContext(), model)
             }
+        }
+    }
+
+    private fun showHideBackgroundImage(isVisible: Boolean){
+        if(isVisible){
+            binding.bgGroup.visibility = View.VISIBLE
+        }else{
+            binding.bgGroup.visibility = View.GONE
         }
     }
 
