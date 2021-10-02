@@ -25,6 +25,7 @@ import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.FragmentDashboardBinding
 import com.celestial.progress.others.NotificationHelper
+import com.celestial.progress.others.Utils
 import com.celestial.progress.ui.CounterViewModel
 import com.celestial.progress.ui.adapter.ItemAdapter
 import kotlinx.coroutines.*
@@ -145,8 +146,6 @@ class DashboardFragment : Fragment() {
                 }
 
 
-
-
             })
 
         }
@@ -155,12 +154,12 @@ class DashboardFragment : Fragment() {
     private fun checkAndCancelInvalidProgress(it: List<Counter>?) {
         val notificationArray = NotificationHelper.getNotificationList(requireContext())
         if (it != null) {
-            for(c in it){
-                for(i in notificationArray){
-                    if(i.id == c.id)
+            for (c in it) {
+                for (i in notificationArray) {
+                    if (i.id == c.id)
                         break
                 }
-                NotificationHelper.cancelNotification(requireContext(),c)
+                NotificationHelper.cancelNotification(requireContext(), c)
             }
         }
 
@@ -198,12 +197,11 @@ class DashboardFragment : Fragment() {
         Log.d(TAG, "On Pause")
         lifecycleScope.launch {
 
-                viewModel.insertAll(bufferList)
+            viewModel.insertAll(bufferList)
 
-                for(i in notificationIssueList){
-                    viewModel.updateCounterForNotificationById(i.id!!, i.requiredNotification)
-                }
-
+            for (i in notificationIssueList) {
+                viewModel.updateCounterForNotificationById(i.id!!, i.requiredNotification)
+            }
 
 
         }
@@ -294,7 +292,7 @@ class DashboardFragment : Fragment() {
             notificationIssueList.add(it)
         }
 
-        for(n in notificationIssueList){
+        for (n in notificationIssueList) {
             Log.d(TAG, "NotiList: ${n.id} name: ${n.title} isNotify: ${n.requiredNotification}")
         }
 
@@ -317,22 +315,25 @@ class DashboardFragment : Fragment() {
                                             binding.toolbarCreate, "fabBtn"
                                     ).build()
 
-                            findNavController().navigate(R.id.navigateToCreateFragment, bundle,null,extras)
+                            findNavController().navigate(R.id.navigateToCreateFragment, bundle, null, extras)
                         }
                     }
                     R.id.item_archive -> {
-                        lifecycleScope.launch {
-                            var counter = c
-                            counter.isArchived = true
-                            if(counter.requiredNotification){
-                                NotificationHelper.cancelNotification(requireContext(),counter)
-                                counter.requiredNotification = false
+                        Utils.createDialogWithYesNo(requireContext(), "", "Archiving progress will turn-of notification and widget," +
+                                " if this progress has related notification and widget. Are you sure?") {
+
+                            lifecycleScope.launch {
+                                var counter = c
+                                counter.isArchived = true
+                                if (counter.requiredNotification) {
+                                    NotificationHelper.cancelNotification(requireContext(), counter)
+                                    counter.requiredNotification = false
+                                }
+                                viewModel.updateCounter(counter)
+
                             }
-                            viewModel.updateCounter(counter)
-
-
-
                         }
+
                     }
                 }
                 true
@@ -347,23 +348,21 @@ class DashboardFragment : Fragment() {
         super.onStop()
     }
 
-    private fun checkCreateAndCancelNotification(model: Counter){
+    private fun checkCreateAndCancelNotification(model: Counter) {
 
 
-
-        if(model.requiredNotification){
+        if (model.requiredNotification) {
             //binding.swNoti.isChecked = true
-         //   if(!NotificationHelper.checkNotification(requireContext(), model)){
-                NotificationHelper.createNotification(requireContext(), model)
-        //    }
-        }else{
-           // binding.swNoti.isChecked = false
-            if(NotificationHelper.checkNotification(requireContext(), model)){
+            //   if(!NotificationHelper.checkNotification(requireContext(), model)){
+            NotificationHelper.createNotification(requireContext(), model)
+            //    }
+        } else {
+            // binding.swNoti.isChecked = false
+            if (NotificationHelper.checkNotification(requireContext(), model)) {
                 NotificationHelper.cancelNotification(requireContext(), model)
             }
         }
     }
-
 
 
 }
