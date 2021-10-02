@@ -108,6 +108,13 @@ object NotificationHelper {
         }
     }
 
+    fun getNotificationList(mContext: Context): Array<StatusBarNotification> {
+        val mNotificationManager: NotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notifications: Array<StatusBarNotification> = mNotificationManager.activeNotifications
+        return notifications
+    }
+
+
     private fun createAndGetCustomNotification(context: Context, counter: Counter): RemoteViews {
         return RemoteViews(context.packageName, R.layout.custom_notification_layout).apply {
             setTextViewText(R.id.tv_notification_title, counter.title)

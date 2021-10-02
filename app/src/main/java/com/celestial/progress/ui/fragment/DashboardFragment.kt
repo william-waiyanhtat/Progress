@@ -139,17 +139,31 @@ class DashboardFragment : Fragment() {
                 Log.d(TAG, "Data get ${it.size}")
 //                binding.counterRcy.adapter  = ItemAdapter(expandCollapse, itemMenuShow, ItemAdapter.ItemViewHolder::class)
                 adapter.submitList(it)
+                checkAndCancelInvalidProgress(it)
                 for (i in it) {
                     checkCreateAndCancelNotification(i)
                 }
 
-                Log.d(TAG, "Observed List: **************")
-                for (c in it) {
-                    Log.d(TAG, "Observed List: ${c.title} order: ${c.order}")
-                }
+
+
+
             })
 
         }
+    }
+
+    private fun checkAndCancelInvalidProgress(it: List<Counter>?) {
+        val notificationArray = NotificationHelper.getNotificationList(requireContext())
+        if (it != null) {
+            for(c in it){
+                for(i in notificationArray){
+                    if(i.id == c.id)
+                        break
+                }
+                NotificationHelper.cancelNotification(requireContext(),c)
+            }
+        }
+
     }
 
     fun setListener() {
@@ -310,7 +324,13 @@ class DashboardFragment : Fragment() {
                         lifecycleScope.launch {
                             var counter = c
                             counter.isArchived = true
+                            if(counter.requiredNotification){
+                                NotificationHelper.cancelNotification(requireContext(),counter)
+                                counter.requiredNotification = false
+                            }
                             viewModel.updateCounter(counter)
+
+
 
                         }
                     }
@@ -328,6 +348,9 @@ class DashboardFragment : Fragment() {
     }
 
     private fun checkCreateAndCancelNotification(model: Counter){
+
+
+
         if(model.requiredNotification){
             //binding.swNoti.isChecked = true
          //   if(!NotificationHelper.checkNotification(requireContext(), model)){
