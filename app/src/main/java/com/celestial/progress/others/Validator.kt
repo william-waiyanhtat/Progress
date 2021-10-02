@@ -14,7 +14,7 @@ object Validator {
 
     val errorSpecailChar = "Counter name can't contain special character"
 
-    val p = Pattern.compile("[^a-z0-9]", Pattern.CASE_INSENSITIVE)
+    val p = Pattern.compile("[^a-z0-9\\s_]", Pattern.CASE_INSENSITIVE)
 
     val emptyStartDateError = "Start date can't be empty!"
 

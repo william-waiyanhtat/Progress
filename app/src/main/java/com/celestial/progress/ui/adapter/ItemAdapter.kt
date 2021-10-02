@@ -176,9 +176,6 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
 
             binding.imgvWidgetChkbox.visibility = View.VISIBLE
 
-
-
-
             itemView.setOnClickListener {
                     for(c in currentList){
                         if(c.isCheckedForWidget){
@@ -210,6 +207,8 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
 
             if(model?.isStarted()!!){
                 binding.itemProgressBarId.progress = model?.getPercent()!!.toInt()
+            }else{
+                binding.itemProgressBarId.progress = 0
             }
 
 
