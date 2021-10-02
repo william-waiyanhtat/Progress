@@ -48,6 +48,29 @@ class CounterViewModel @Inject constructor(
         return result
     }
 
+    override fun updateCounter(counter: Counter): LiveData<Resource<Int>> {
+        val result = MutableLiveData<Resource<Int>>()
+
+        viewModelScope.launch {
+            counterRepository.updateCounter(counter,object:  RepoStatus{
+                override fun success(obj: Any, msg: String?) {
+                    result.postValue(Resource.success(obj as Int, msg))
+                }
+
+                override fun loading(msg: String) {
+
+                }
+
+                override fun failed(obj: Any, errMsg: String) {
+                    result.postValue(Resource.error(errMsg, null))
+                }
+
+            })
+
+        }
+        return result
+    }
+
     override fun insertAll(counters: List<Counter>) {
         viewModelScope.launch {
             counterRepository.insertAllCounters(counters)
@@ -65,12 +88,7 @@ class CounterViewModel @Inject constructor(
         return counterRepository.observeAllCounterItem()
     }
 
-    override fun updateCounter(counter: Counter) {
-        viewModelScope.launch {
-            counterRepository.updateCounter(counter)
 
-        }
-    }
 
     override fun readArchiveCounters(): LiveData<List<Counter>> {
         return counterRepository.observeAllArchiveCounterItem()

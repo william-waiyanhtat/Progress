@@ -1,6 +1,6 @@
 package com.celestial.progress.others
 
-import com.celestial.progress.data.model.Counter
+
 
 interface RepoStatus {
     fun success(obj: Any,msg: String?)

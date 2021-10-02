@@ -330,9 +330,9 @@ class DashboardFragment : Fragment() {
     private fun checkCreateAndCancelNotification(model: Counter){
         if(model.requiredNotification){
             //binding.swNoti.isChecked = true
-            if(!NotificationHelper.checkNotification(requireContext(), model)){
+         //   if(!NotificationHelper.checkNotification(requireContext(), model)){
                 NotificationHelper.createNotification(requireContext(), model)
-            }
+        //    }
         }else{
            // binding.swNoti.isChecked = false
             if(NotificationHelper.checkNotification(requireContext(), model)){

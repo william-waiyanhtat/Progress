@@ -30,7 +30,7 @@ class Counter(
         val repeating: Repeating = Repeating.ONCE,
 
         @PrimaryKey
-        val id: Int? = null
+        var id: Int? = null
 ) {
     @Ignore
     var isCheckedForWidget: Boolean = false

@@ -13,7 +13,7 @@ class CounterRepository @Inject constructor(
         val result = counterDao.insertCounter(counterItem)
 
         if (result >= 0)
-            status.success(result, "New Counter Added Successfully!")
+            status.success(result, "New Progress Added Successfully!")
         else
             status.equals("Error inserting new counter!")
 
@@ -31,9 +31,16 @@ class CounterRepository @Inject constructor(
         return counterDao.observeAllValidCounters()
     }
 
-    override suspend fun updateCounter(counter: Counter) {
-        counterDao.updateCounter(counter)
+    override suspend fun updateCounter(counter: Counter, status: RepoStatus) {
+        val result = counterDao.updateCounter(counter)
+        if(result >= 0){
+            status.success(result, "Progress Updated Successfully!")
+        }else{
+            status.equals("Error updating new progress!")
+        }
     }
+
+
 
     override fun observeAllArchiveCounterItem(): LiveData<List<Counter>> {
         return counterDao.observeAllValidCounters(isArchived = true)

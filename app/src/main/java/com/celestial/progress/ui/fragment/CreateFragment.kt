@@ -106,6 +106,7 @@ class CreateFragment : Fragment() {
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.toolbar_menu_create -> createButtonClickEvent()
+                R.id.toolbar_menu_update -> updateCounterClickEvent()
             }
             return@setOnMenuItemClickListener true
         }
@@ -117,10 +118,6 @@ class CreateFragment : Fragment() {
         }
 
         sharedElementEnterTransition = ChangeBounds()
-
-
-
-
 
         return view
     }
@@ -305,7 +302,7 @@ class CreateFragment : Fragment() {
     }
 
     private fun createCounter() {
-        val counter = Counter(
+        var counter = Counter(
                 binding.inputName.text.toString(),
                 startDate,
                 endDate,
@@ -314,8 +311,15 @@ class CreateFragment : Fragment() {
                 binding.requiredNotiChkBox.isChecked,
                 displayFormat
         )
+        if (isCreate) {
+            (requireActivity() as MainActivity).insertCounter(counter, { goBack() })
+        } else {
 
-        (requireActivity() as MainActivity).insertCounter(counter, { goBack() })
+            var updateCounter = counter
+            updateCounter.id = viewModel.editCounter?.id
+
+            (requireActivity() as MainActivity).updateCounter(updateCounter, { goBack() })
+        }
     }
 
     private fun validateDateInput(): Boolean {
@@ -329,12 +333,10 @@ class CreateFragment : Fragment() {
         return if (res.status == Status.ERROR && res.data == 0) {
             binding.tvDateError.text = res.message
             false
-        }else if(res.status == Status.ERROR && res.data == -1){
+        } else if (res.status == Status.ERROR && res.data == -1) {
             binding.tvEnddateErr.text = res.message
             false
-        }
-
-        else {
+        } else {
             binding.tvDateError.text = ""
             true
         }
@@ -482,11 +484,14 @@ class CreateFragment : Fragment() {
 
 
     fun Fragment.unfocus(v: View, mainVew: View) {
-
         Log.d("CreateFragment", "Unfocus Called")
         v.clearFocus()
         binding.noteInput.clearFocus()
         mainVew.requestFocus()
+    }
+
+    fun updateCounterClickEvent() {
+        createButtonClickEvent()
     }
 
 

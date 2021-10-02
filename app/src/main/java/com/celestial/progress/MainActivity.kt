@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.celestial.progress.data.model.Counter
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     private var binding: ActivityMainBinding? = null
 
-    lateinit var callback: ()-> Unit
+    lateinit var callback: () -> Unit
 
     lateinit var appBar: ConstraintLayout
 
@@ -41,33 +42,63 @@ class MainActivity : AppCompatActivity() {
     var insertCounter: (Counter, () -> Unit) -> Unit = { counter, func ->
         lifecycleScope.launch {
             viewModel.createCounter(counter).observe(
-                this@MainActivity,
-                androidx.lifecycle.Observer {
-                    when (it.status) {
-                        Status.SUCCESS -> {
-                            func.invoke()
-                            binding?.mainLayout?.let { it1 ->
-                                Snackbar.make(
-                                    it1,
-                                    it.message!!,
-                                    Snackbar.LENGTH_LONG
-                                ).show()
+                    this@MainActivity,
+                    androidx.lifecycle.Observer {
+                        when (it.status) {
+                            Status.SUCCESS -> {
+                                func.invoke()
+                                binding?.mainLayout?.let { it1 ->
+                                    Snackbar.make(
+                                            it1,
+                                            it.message!!,
+                                            Snackbar.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                            Status.ERROR -> {
+                                binding?.mainLayout?.let { it1 ->
+                                    Snackbar.make(
+                                            it1,
+                                            it.message!!,
+                                            Snackbar.LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         }
-                        Status.ERROR -> {
-                            binding?.mainLayout?.let { it1 ->
-                                Snackbar.make(
-                                    it1,
-                                    it.message!!,
-                                    Snackbar.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    }
 
-                })
+                    })
         }
 
+    }
+
+    var updateCounter: (Counter, () -> Unit) -> Unit = { counter, func ->
+        lifecycleScope.launch {
+            viewModel.updateCounter(counter).observe(this@MainActivity,
+                    Observer {
+                        when (it.status) {
+                            Status.SUCCESS -> {
+                                func.invoke()
+                                binding?.mainLayout?.let { it1 ->
+                                    Snackbar.make(
+                                            it1,
+                                            it.message!!,
+                                            Snackbar.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                            Status.ERROR -> {
+                                binding?.mainLayout?.let { it1 ->
+                                    Snackbar.make(
+                                            it1,
+                                            it.message!!,
+                                            Snackbar.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                        }
+
+                    })
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[CounterViewModel::class.java]
 
-       // appBar = binding?.appBar!!
+        // appBar = binding?.appBar!!
 
         setContentView(view)
 
@@ -103,29 +134,28 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun makeVisible(){
+    fun makeVisible() {
         binding.apply {
             Log.d(TAG, "MAKE VISIBLE")
-        //    this?.appBar?.visibility = View.VISIBLE
+            //    this?.appBar?.visibility = View.VISIBLE
 //            this?.mainBtmNav?.visibility = View.VISIBLE
         }
 
     }
 
 
-    fun showHideAppBar(isVisible: Boolean){
+    fun showHideAppBar(isVisible: Boolean) {
     }
 
 
-
-    fun showHideToolbar(isShown: Boolean){
-        if(isShown)
+    fun showHideToolbar(isShown: Boolean) {
+        if (isShown)
             toolbar.visibility = View.VISIBLE
         else
             toolbar.visibility = View.GONE
     }
 
-    fun setTitle(title: String){
+    fun setTitle(title: String) {
         toolbar.title = title
     }
 

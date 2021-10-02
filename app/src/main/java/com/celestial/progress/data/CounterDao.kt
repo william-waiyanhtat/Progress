@@ -19,7 +19,7 @@ interface CounterDao {
     fun observeAllValidCounters(isArchived: Boolean = false): LiveData<List<Counter>>
 
     @Update
-    suspend fun updateCounter(counter: Counter)
+    suspend fun updateCounter(counter: Counter): Int
 
     @Query("SELECT * FROM counter where isArchived = :isArchived ORDER BY `order` ASC")
     fun readAllValidCounters(isArchived: Boolean = false): List<Counter>
@@ -31,6 +31,6 @@ interface CounterDao {
     suspend fun updateCounterForNotificationById(id: Int, isNotify: Boolean)
 
     @Query("select * from counter where isArchived = 0 and requiredNotification = 1")
-     fun fetchCounterWhichRequiredNotification(): LiveData<List<Counter>>
+    fun fetchCounterWhichRequiredNotification(): LiveData<List<Counter>>
 
 }
