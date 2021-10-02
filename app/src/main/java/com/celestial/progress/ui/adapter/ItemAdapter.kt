@@ -23,11 +23,12 @@ import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 
 
-class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
+class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) -> Unit)? = null,
                            val itemMenuShow: ((Counter, View) -> Unit?)? = null,
                            val notiIssueCb: ((Counter) -> Unit?)? = null,
                            val t: KClass<T>,
-                           val selectCounter: ((Counter) -> Unit?)? = null) :
+                           val selectCounter: ((Counter) -> Unit?)? = null,
+                            val isArchiveFragment: Boolean = false) :
         ListAdapter<Counter, RecyclerView.ViewHolder>(DIFF_UTIL){
 
 
@@ -66,6 +67,7 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             val expandGroup = binding.expandGroup
             Log.d(TAG, "OnBind: ${model.title}")
             switchColor(binding.swNoti,model.color!!)
+
 
 
             if(model.isElapsed() && !model.isArchived && isAnimationOn){
@@ -142,6 +144,7 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
             }
 
             //switch
+
             binding.swNoti.setOnClickListener {
                 if(binding.swNoti.isChecked){
                     createNotification(model)
@@ -152,6 +155,14 @@ class ItemAdapter<T : Any>(val expandCollapse: ((Counter) -> Unit)? = null,
                     model.requiredNotification = false
                     notiIssueCb?.invoke(model)
                 }
+
+            }
+
+            if(isArchiveFragment){
+                binding.swNoti.setOnClickListener(null)
+                itemView.setOnClickListener(null)
+                model.isExpand = false
+                expandGroup.visibility = View.GONE
 
             }
         }

@@ -166,8 +166,11 @@ class MainActivity : AppCompatActivity() {
     private fun loadAd(binding: ActivityMainBinding){
       //  binding.adView.adSize = AdSize.BANNER
      //   binding.adView.adUnitId = "ca-app-pub-3940256099942544/6300978111"
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
+        lifecycleScope.launch {
+            val adRequest = AdRequest.Builder().build()
+            binding.adView.loadAd(adRequest)
+        }
+
     }
 
 }

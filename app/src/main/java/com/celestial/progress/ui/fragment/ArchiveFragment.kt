@@ -91,7 +91,7 @@ class ArchiveFragment : Fragment() {
             goBack()
         }
 
-        adapter = ItemAdapter(null, itemMenuShow, null, ItemAdapter.ItemViewHolder::class)
+        adapter = ItemAdapter(null, itemMenuShow, null, ItemAdapter.ItemViewHolder::class,isArchiveFragment = true)
         val rcyView = binding.archiveRcy
         rcyView.adapter = adapter
 
@@ -102,7 +102,7 @@ class ArchiveFragment : Fragment() {
     }
 
     private fun setUpListener() {
-//        TODO("Not yet implemented")
+
     }
 
     fun goBack() {
