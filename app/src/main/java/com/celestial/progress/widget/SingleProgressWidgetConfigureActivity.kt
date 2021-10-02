@@ -11,8 +11,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
-import com.celestial.progress.databinding.SingleProgressWidgetConfigureBinding
+import com.celestial.progress.databinding.ActivitySingleProgressWidgetConfigureBinding
 import com.celestial.progress.ui.adapter.ItemAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,8 +23,6 @@ class SingleProgressWidgetConfigureActivity : AppCompatActivity() {
 
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
-    private lateinit var appWidgetText: EditText
-
     private val widgetConfigViewModel: WidgetConfigViewModel by viewModels()
 
     private lateinit var rcyView: RecyclerView
@@ -32,12 +31,11 @@ class SingleProgressWidgetConfigureActivity : AppCompatActivity() {
 
     private var selectCounter : Counter? = null
 
+    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
+
     private var onClickListener = View.OnClickListener {
 
         val context = this@SingleProgressWidgetConfigureActivity
-
-        // When the button is clicked, store the string locally
-     //   val widgetText = appWidgetText.text.toString()
 
         val widgetText = selectCounter?.id
         saveTitlePref(context, appWidgetId, widgetText!!)
@@ -59,8 +57,30 @@ class SingleProgressWidgetConfigureActivity : AppCompatActivity() {
     }
 
 
+    private fun createWidget(){
+        val context = this@SingleProgressWidgetConfigureActivity
 
-    private lateinit var binding: SingleProgressWidgetConfigureBinding
+        val widgetText = selectCounter?.id
+        saveTitlePref(context, appWidgetId, widgetText!!)
+
+        // It is the responsibility of the configuration activity to update the app widget
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        // updateAppWidget(context, appWidgetManager, appWidgetId, null)
+
+        // Make sure we pass back the original appWidgetId
+        val resultValue = Intent()
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        setResult(RESULT_OK, resultValue)
+
+        finish()
+
+        val pendIntent = SingleProgressWidget.getRefreshIntent(applicationContext)
+
+        pendIntent.send()
+    }
+
+
+    private lateinit var binding: ActivitySingleProgressWidgetConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -69,15 +89,28 @@ class SingleProgressWidgetConfigureActivity : AppCompatActivity() {
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
 
-        binding = SingleProgressWidgetConfigureBinding.inflate(layoutInflater)
+        binding = ActivitySingleProgressWidgetConfigureBinding.inflate(layoutInflater)
         val view = binding?.root
+
+        toolbar = binding.toolbarWidgetConfig
+
+        toolbar.inflateMenu(R.menu.widget_config_menu)
+
+        toolbar.setOnMenuItemClickListener {
+            if(it.itemId == R.id.add_widget_menu){
+              createWidget()
+            }
+
+            return@setOnMenuItemClickListener true
+
+        }
 
         setContentView(view)
 
         initUI()
         observeData()
 
-        appWidgetText = binding.appwidgetText
+
         binding.addButton.setOnClickListener(onClickListener)
 
         // Find the widget id from the intent.
@@ -96,12 +129,6 @@ class SingleProgressWidgetConfigureActivity : AppCompatActivity() {
             return
         }
 
-        appWidgetText.setText(
-                loadTitlePref(
-                        this@SingleProgressWidgetConfigureActivity,
-                        appWidgetId
-                ).toString()
-        )
 
     }
 

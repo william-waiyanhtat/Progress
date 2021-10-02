@@ -172,7 +172,12 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
     inner class WidgetSelectionViewHolder(binding: ProgressItemBinding) : TopLevelHolder(binding) {
         override fun bind() {
             super.bind()
+
+
             binding.imgvWidgetChkbox.visibility = View.VISIBLE
+
+
+
 
             itemView.setOnClickListener {
                     for(c in currentList){
@@ -188,11 +193,23 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
                 binding.itemProgressBarId.indeterminate = true
                 binding.itemProgressBarId.startIndeterminateAnimation()
 
+
                 Log.d(TAG,"OnBind: animationon")
             }else{
                 binding.itemProgressBarId.indeterminate = false
                 binding.itemProgressBarId.stopAnimation()
+
                 Log.d(TAG,"OnBind: stop animation")
+            }
+
+            if(model?.isElapsed()!!){
+                binding.itemPercentId.text = ""
+            }else{
+                binding.itemPercentId.text = model?.getPercent().toString()+"%"
+            }
+
+            if(model?.isStarted()!!){
+                binding.itemProgressBarId.progress = model?.getPercent()!!.toInt()
             }
 
 
@@ -202,6 +219,8 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
             }else{
                 binding.imgvWidgetChkbox.setImageDrawable(null)
             }
+
+            binding.expandGroup.visibility = View.GONE
 
         }
 

@@ -3,7 +3,7 @@
     android:configure="com.celestial.progress.widget.SingleProgressWidgetConfigureActivity"
     android:initialKeyguardLayout="@layout/single_progress_widget"
     android:initialLayout="@layout/single_progress_widget"
-    android:minWidth="110dp"
+    android:minWidth="120dp"
     android:minHeight="40dp"
     android:previewImage="@drawable/single_widget_preview"
     android:resizeMode="vertical|horizontal"

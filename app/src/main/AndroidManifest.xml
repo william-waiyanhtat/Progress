@@ -8,7 +8,7 @@
     <application
         android:name=".ProgressApp"
         android:allowBackup="true"
-        android:icon="@drawable/ic_only_ic"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_only_ic"
         android:supportsRtl="true"
