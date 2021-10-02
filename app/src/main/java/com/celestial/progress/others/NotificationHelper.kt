@@ -26,6 +26,9 @@ const val NOTIFICATION_CHANNEL_NAME = "casualChannel"
 
 object NotificationHelper {
 
+
+     val TAG = NotificationHelper::class.java.name
+
 //    private var mContext: Context? = null
 //    private var mNotificationManager: NotificationManager? = null
 //    private var mBuilder: NotificationCompat.Builder? = null
@@ -116,7 +119,10 @@ object NotificationHelper {
             setImageViewBitmap(R.id.imgv_customnoti_icon,tImage)
 
             val initial  = if(counter.isElapsed()) "Elapsed : " else "Remaining : "
-            setTextViewText(R.id.tv_notification_detail, initial+counter.getDetail())
+
+
+
+            setTextViewText(R.id.tv_notification_detail, initial+counter.getDetail(!counter.isElapsed()))
             if(counter.note!!.isEmpty()){
                 setViewVisibility(R.id.tv_notification_note,View.GONE)
             }else{
@@ -128,7 +134,11 @@ object NotificationHelper {
                 setViewVisibility(R.id.imgv_notification_progress, View.GONE)
             }else{
                 setViewVisibility(R.id.imgv_notification_progress, View.VISIBLE)
-                setImageViewBitmap(R.id.imgv_notification_progress, generateProgressBitmap(context, 30, counter.color!!))
+                Log.d(TAG, "createAndGetCustomNotification: ${counter.getPercent()?.toInt()!!}")
+
+                val percent = counter.getPercent()?.toInt()!!
+
+                setImageViewBitmap(R.id.imgv_notification_progress, generateProgressBitmap(context, percent, counter.color!!))
             }
 
         }
@@ -168,12 +178,15 @@ object NotificationHelper {
         paint.style  = Paint.Style.FILL
 
         val r =  (viewWidth - stroke)* (progress.toFloat()/100.toFloat())
-        val progressRectF = RectF(0f + stroke, 0f + stroke, r, viewHeight - stroke)
-        paint.color = color
 
-        canvas.drawRoundRect(progressRectF, 20f, 20f, paint)
-        // canvas.drawArc(rectF, 270f, 360f, false, paint)
+        if(progress>0) {
 
+            val progressRectF = RectF(0f + stroke, 0f + stroke, r, viewHeight - stroke)
+            paint.color = color
+
+            canvas.drawRoundRect(progressRectF, 20f, 20f, paint)
+            // canvas.drawArc(rectF, 270f, 360f, false, paint)
+        }
         return bitmap
 
     }
