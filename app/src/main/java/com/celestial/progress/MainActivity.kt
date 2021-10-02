@@ -14,6 +14,8 @@ import com.celestial.progress.databinding.ActivityMainBinding
 import com.celestial.progress.others.Status
 import com.celestial.progress.ui.CounterViewModel
 import com.celestial.progress.ui.adapter.ItemAdapter
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
@@ -120,6 +122,7 @@ class MainActivity : AppCompatActivity() {
         // appBar = binding?.appBar!!
 
         setContentView(view)
+        loadAd(binding!!)
 
         callback = {
             makeVisible()
@@ -157,6 +160,14 @@ class MainActivity : AppCompatActivity() {
 
     fun setTitle(title: String) {
         toolbar.title = title
+    }
+
+
+    private fun loadAd(binding: ActivityMainBinding){
+      //  binding.adView.adSize = AdSize.BANNER
+     //   binding.adView.adUnitId = "ca-app-pub-3940256099942544/6300978111"
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
     }
 
 }
