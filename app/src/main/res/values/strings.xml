@@ -80,4 +80,6 @@
 <!--    Dashboard-->
     <string name="dashboard_empty">Dashboard is empty. <br/> Tap the + button to create new progress.</string>
 
+<!--    About-->
+    <string name="about_love">Made with ❤ by Aero IT</string>
 </resources>
