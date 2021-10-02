@@ -168,5 +168,13 @@ object Utils {
         alertDialog.setTitle(title)
         alertDialog.show()
     }
+
+    fun isOverallNotificationOn(context: Context,cb:()->Unit){
+        val result = SharePrefHelper.isAllNotificationOff(context)
+        if(!result){
+            createDialogWithYesNo(context,"",context.getString(R.string.notifcation_off_alert_msg),cb)
+        }
+
+    }
 }
 

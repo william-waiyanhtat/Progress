@@ -25,6 +25,7 @@ import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
 import com.celestial.progress.databinding.FragmentDashboardBinding
 import com.celestial.progress.others.NotificationHelper
+import com.celestial.progress.others.SharePrefHelper
 import com.celestial.progress.others.Utils
 import com.celestial.progress.ui.CounterViewModel
 import com.celestial.progress.ui.adapter.ItemAdapter
@@ -288,15 +289,15 @@ class DashboardFragment : Fragment() {
         createPopUpMenuAndShow(v, c)
     }
 
-    val notificationCb: (Counter) -> Unit = {
+    val notificationCb: (Counter,Boolean) -> Unit = {it,isChecked->
+        if(isChecked) {
+            Utils.isOverallNotificationOn(requireContext()) {
+                goToSetting()
+            }
+        }
         if (!notificationIssueList.contains(it)) {
             notificationIssueList.add(it)
         }
-
-        for (n in notificationIssueList) {
-            Log.d(TAG, "NotiList: ${n.id} name: ${n.title} isNotify: ${n.requiredNotification}")
-        }
-
     }
 
 
@@ -320,8 +321,7 @@ class DashboardFragment : Fragment() {
                         }
                     }
                     R.id.item_archive -> {
-                        Utils.createDialogWithYesNo(requireContext(), "", "Archiving progress will turn-of notification and widget," +
-                                " if this progress has related notification and widget. Are you sure?") {
+                        Utils.createDialogWithYesNo(requireContext(), "", getString(R.string.archive_prompt_msg)) {
 
                             lifecycleScope.launch {
                                 var counter = c
@@ -350,9 +350,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun checkCreateAndCancelNotification(model: Counter) {
-
-
-        if (model.requiredNotification) {
+        if (model.requiredNotification && SharePrefHelper.isAllNotificationOff(requireContext())) {
             //binding.swNoti.isChecked = true
             //   if(!NotificationHelper.checkNotification(requireContext(), model)){
             NotificationHelper.createNotification(requireContext(), model)
@@ -373,5 +371,10 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    private fun goToSetting(){
+        if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
+            findNavController().navigate(R.id.dashToSetting)
+        }
+    }
 
 }

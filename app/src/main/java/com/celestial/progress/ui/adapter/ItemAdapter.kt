@@ -23,13 +23,15 @@ import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 
 
-class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) -> Unit)? = null,
-                           val itemMenuShow: ((Counter, View) -> Unit?)? = null,
-                           val notiIssueCb: ((Counter) -> Unit?)? = null,
-                           val t: KClass<T>,
-                           val selectCounter: ((Counter) -> Unit?)? = null,
-                            val isArchiveFragment: Boolean = false) :
-        ListAdapter<Counter, RecyclerView.ViewHolder>(DIFF_UTIL){
+class ItemAdapter<T : RecyclerView.ViewHolder>(
+    val expandCollapse: ((Counter) -> Unit)? = null,
+    val itemMenuShow: ((Counter, View) -> Unit?)? = null,
+    val notiIssueCb: ((Counter, Boolean) -> Unit?)? = null,
+    val t: KClass<T>,
+    val selectCounter: ((Counter) -> Unit?)? = null,
+    val isArchiveFragment: Boolean = false
+) :
+    ListAdapter<Counter, RecyclerView.ViewHolder>(DIFF_UTIL) {
 
 
     val TAG = ItemAdapter::class.java.name
@@ -66,26 +68,26 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
             var model = getItem(adapterPosition)
             val expandGroup = binding.expandGroup
             Log.d(TAG, "OnBind: ${model.title}")
-            switchColor(binding.swNoti,model.color!!)
+            switchColor(binding.swNoti, model.color!!)
 
 
 
-            if(model.isElapsed() && !model.isArchived && isAnimationOn){
+            if (model.isElapsed() && !model.isArchived && isAnimationOn) {
                 binding.itemProgressBarId.indeterminate = true
                 binding.itemProgressBarId.startIndeterminateAnimation()
 
-                Log.d(TAG,"OnBind: animationon")
-            }else{
+                Log.d(TAG, "OnBind: animationon")
+            } else {
                 binding.itemProgressBarId.indeterminate = false
                 binding.itemProgressBarId.stopAnimation()
-                Log.d(TAG,"OnBind: stop animation")
+                Log.d(TAG, "OnBind: stop animation")
             }
 
             binding.itemProgressBarId.color1 = model.color!!
 
             binding.tvActSdate.text = model.startDate
 
-            if(model.endDate!!.isNotEmpty()){
+            if (model.endDate!!.isNotEmpty()) {
                 binding.tvActEdate.text = model.endDate
             }
 
@@ -105,15 +107,15 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
                 binding.completeBadge.visibility = View.GONE
             }
 
-            if(model.requiredNotification){
+            if (model.requiredNotification) {
                 binding.swNoti.isChecked = true
-                if(!NotificationHelper.checkNotification(mContext,model)){
-                    NotificationHelper.createNotification(mContext,model)
+                if (!NotificationHelper.checkNotification(mContext, model) && SharePrefHelper.isAllNotificationOff(mContext)) {
+                    NotificationHelper.createNotification(mContext, model)
                 }
-            }else{
+            } else {
                 binding.swNoti.isChecked = false
-                if(NotificationHelper.checkNotification(mContext,model)){
-                    NotificationHelper.cancelNotification(mContext,model)
+                if (NotificationHelper.checkNotification(mContext, model)) {
+                    NotificationHelper.cancelNotification(mContext, model)
                 }
             }
             binding.itemMenuBtn.setOnClickListener {
@@ -124,10 +126,10 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
                 if (!model.isExpand) {
                     expandGroup.visibility = View.VISIBLE
                     model.isExpand = true
-                    if(adapterPosition == currentList.size-1){
+                    if (adapterPosition == currentList.size - 1) {
                         recyclerView?.scrollToPosition(adapterPosition)
                         notifyItemChanged(adapterPosition)
-                    }else{
+                    } else {
                         notifyItemChanged(-1)
                     }
 
@@ -135,9 +137,9 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
                 } else {
                     expandGroup.visibility = View.GONE
                     model.isExpand = false
-                    if(adapterPosition == currentList.size-1){
+                    if (adapterPosition == currentList.size - 1) {
                         notifyItemChanged(adapterPosition)
-                    }else{
+                    } else {
                         notifyItemChanged(-1)
                     }
                 }
@@ -146,19 +148,19 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
             //switch
 
             binding.swNoti.setOnClickListener {
-                if(binding.swNoti.isChecked){
+                if (binding.swNoti.isChecked) {
                     createNotification(model)
                     model.requiredNotification = true
-                    notiIssueCb?.invoke(model)
-                }else{
-                    NotificationHelper.cancelNotification(mContext,model)
+                    notiIssueCb?.invoke(model,true)
+                } else {
+                    NotificationHelper.cancelNotification(mContext, model)
                     model.requiredNotification = false
-                    notiIssueCb?.invoke(model)
+                    notiIssueCb?.invoke(model,false)
                 }
 
             }
 
-            if(isArchiveFragment){
+            if (isArchiveFragment) {
                 binding.swNoti.setOnClickListener(null)
                 itemView.setOnClickListener(null)
                 model.isExpand = false
@@ -177,46 +179,46 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
             binding.imgvWidgetChkbox.visibility = View.VISIBLE
 
             itemView.setOnClickListener {
-                    for(c in currentList){
-                        if(c.isCheckedForWidget){
-                            c.isCheckedForWidget = false
-                        }
+                for (c in currentList) {
+                    if (c.isCheckedForWidget) {
+                        c.isCheckedForWidget = false
                     }
+                }
                 model?.isCheckedForWidget = true
                 notifyDataSetChanged()
             }
 
 
-            if(model?.isStarted()!! && !model?.isElapsed()!!){
+            if (model?.isStarted()!! && !model?.isElapsed()!!) {
                 binding.itemProgressBarId.progress = model?.getPercent()!!.toInt()
-            } else{
+            } else {
                 binding.itemProgressBarId.progress = 0
             }
 
-            if(model!!.isElapsed()){
-                if(isAnimationOn){
+            if (model!!.isElapsed()) {
+                if (isAnimationOn) {
                     binding.itemProgressBarId.indeterminate = true
                     binding.itemProgressBarId.startIndeterminateAnimation()
-                }else{
+                } else {
                     binding.itemProgressBarId.indeterminate = false
                     binding.itemProgressBarId.stopAnimation()
                 }
                 binding.itemProgressBarId.progress = 100
                 binding.itemPercentId.text = ""
 
-                Log.d(TAG,"OnBind: animationon")
-            }else{
+                Log.d(TAG, "OnBind: animationon")
+            } else {
                 binding.itemProgressBarId.indeterminate = false
                 binding.itemProgressBarId.stopAnimation()
-                binding.itemPercentId.text = model?.getPercent().toString()+"%"
-                Log.d(TAG,"OnBind: stop animation")
+                binding.itemPercentId.text = model?.getPercent().toString() + "%"
+                Log.d(TAG, "OnBind: stop animation")
             }
 
 
-            if(model?.isCheckedForWidget!!){
+            if (model?.isCheckedForWidget!!) {
                 binding.imgvWidgetChkbox.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_check))
                 selectCounter?.invoke(model!!)
-            }else{
+            } else {
                 binding.imgvWidgetChkbox.setImageDrawable(null)
             }
 
@@ -225,18 +227,18 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
         }
 
 
-
     }
 
-    abstract inner class TopLevelHolder(val binding: ProgressItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    abstract inner class TopLevelHolder(val binding: ProgressItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         var model: Counter? = null
         open fun bind() {
             model = getItem(adapterPosition)
             binding.itemTitleId.text = model?.title
-            if(model!!.isElapsed()){
-                binding.tvCounting.text = model?.getInitial()+ model?.getDetail()
-            }else{
-                binding.tvCounting.text =  model?.getInitial()+model?.getDetail(true)
+            if (model!!.isElapsed()) {
+                binding.tvCounting.text = model?.getInitial() + model?.getDetail()
+            } else {
+                binding.tvCounting.text = model?.getInitial() + model?.getDetail(true)
             }
 
 
@@ -249,7 +251,8 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val binding = ProgressItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ProgressItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         isAnimationOn = SharePrefHelper.isGlimmerAnimationOff(mContext)
         when (t) {
             ItemViewHolder::class -> {
@@ -276,37 +279,48 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
         }
     }
 
-    private fun bindProgressBar(model: Counter, binding: ProgressItemBinding){
-        if(!model.isElapsed() && !model.isComplete()){
-            val percent =  model.getPercent()?.toInt() ?: 100
+    private fun bindProgressBar(model: Counter, binding: ProgressItemBinding) {
+        if (!model.isElapsed() && !model.isComplete()) {
+            val percent = model.getPercent()?.toInt() ?: 100
             binding.itemProgressBarId.progress = percent
             binding.itemProgressBarId.indeterminate = false
             binding.itemPercentId.text = "$percent %"
-        }else{
+        } else {
             binding.itemProgressBarId.progress = 100
             binding.itemPercentId.visibility = View.GONE
             binding.itemPercentId.text = ""
         }
     }
 
-    private fun switchColor(switchCompat: SwitchCompat, color: Int){
-        val states = arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked))
+    private fun switchColor(switchCompat: SwitchCompat, color: Int) {
+        val states = arrayOf(
+            intArrayOf(-android.R.attr.state_checked),
+            intArrayOf(android.R.attr.state_checked)
+        )
 
         val thumbColors = intArrayOf(
-                Color.LTGRAY,
-                color)
+            Color.LTGRAY,
+            color
+        )
 
         val trackColors = intArrayOf(
-                Color.GRAY,
-                DeviceUtils.darker(color, 0.6f))
+            Color.GRAY,
+            DeviceUtils.darker(color, 0.6f)
+        )
 
 
-        DrawableCompat.setTintList(DrawableCompat.wrap(switchCompat.thumbDrawable), ColorStateList(states, thumbColors))
-        DrawableCompat.setTintList(DrawableCompat.wrap(switchCompat.trackDrawable), ColorStateList(states, trackColors))
+        DrawableCompat.setTintList(
+            DrawableCompat.wrap(switchCompat.thumbDrawable),
+            ColorStateList(states, thumbColors)
+        )
+        DrawableCompat.setTintList(
+            DrawableCompat.wrap(switchCompat.trackDrawable),
+            ColorStateList(states, trackColors)
+        )
     }
 
-    private fun createNotification(counter: Counter){
-        NotificationHelper.createNotification(mContext,counter)
+    private fun createNotification(counter: Counter) {
+       NotificationHelper.createNotification(mContext, counter)
     }
 
 

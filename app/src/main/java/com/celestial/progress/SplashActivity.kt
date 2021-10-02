@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.celestial.progress.databinding.ActivitySplashBinding
+import com.celestial.progress.onboard.ProgressOnBoard
 import com.celestial.progress.others.Utils
 import com.celestial.progress.ui.component.BigProgressBar
 

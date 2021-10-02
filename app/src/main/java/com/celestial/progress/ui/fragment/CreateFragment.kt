@@ -252,6 +252,7 @@ class CreateFragment : Fragment() {
                     colorValue = color
                     clearColorPickUI()
                     resetColorErrorText()
+                    Log.d(TAG,"Color: $color")
                 }
 
                 override fun onCancel() {
@@ -354,7 +355,7 @@ class CreateFragment : Fragment() {
     }
 
     private fun validateColorChoice(): Boolean {
-        return colorValue != null
+        return colorValue != null && colorValue != 0
     }
 
     companion object {

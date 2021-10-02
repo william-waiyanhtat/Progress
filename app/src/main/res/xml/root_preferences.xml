@@ -5,7 +5,8 @@
         <SwitchPreferenceCompat
             app:key="@string/pf_key_overallnoti"
             app:summary="@string/notification_summary"
-            app:title="@string/notification_title" />
+            app:title="@string/notification_title"
+            app:defaultValue="true"/>
 
         <SwitchPreferenceCompat
             app:key="@string/pf_key_noti_style"

@@ -74,12 +74,16 @@
     <string name="progress_label">Progress</string>
     <string name="configure">Configure</string>
 
-<!--    SplashActivity-->
+    <!--    SplashActivity-->
     <string name="splash_message">Loading your progress...</string>
 
-<!--    Dashboard-->
-    <string name="dashboard_empty">Dashboard is empty. <br/> Tap the + button to create new progress.</string>
+    <!--    Dashboard-->
+    <string name="dashboard_empty">Dashboard is empty. <br /> Tap the + button to create new progress.</string>
+    <string name="archive_prompt_msg">"Archiving progress will disable related notification and widget," +
+                                "Are you sure?"</string>
 
-<!--    About-->
+    <string name="notifcation_off_alert_msg">App overall notification is off, would you like to go app setting and turn on?</string>
+
+    <!--    About-->
     <string name="about_love">Made with ❤ by Aero IT</string>
 </resources>

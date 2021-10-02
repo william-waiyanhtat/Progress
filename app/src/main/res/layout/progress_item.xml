@@ -9,7 +9,7 @@
     android:id="@+id/progress_item_parent"
     android:background="@drawable/app_barbg"
     android:elevation="4dp"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/tv_counting"
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This Year"
-        android:textSize="@dimen/text_large"
+        android:textSize="@dimen/text_nlarge"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,7 +87,7 @@
         android:id="@+id/tv_act_sdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="8dp"
         android:text="..."
         app:layout_constraintStart_toEndOf="@+id/tv_startDate"
         app:layout_constraintTop_toTopOf="@+id/tv_startDate" />
@@ -96,7 +96,7 @@
         android:id="@+id/tv_act_edate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="8dp"
         android:text="..."
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toTopOf="@+id/textView4" />
