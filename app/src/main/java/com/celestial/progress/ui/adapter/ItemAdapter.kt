@@ -186,29 +186,30 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(val expandCollapse: ((Counter) ->
                 notifyDataSetChanged()
             }
 
-            if(model!!.isElapsed() && !model!!.isArchived && isAnimationOn){
-                binding.itemProgressBarId.indeterminate = true
-                binding.itemProgressBarId.startIndeterminateAnimation()
 
+            if(model?.isStarted()!! && !model?.isElapsed()!!){
+                binding.itemProgressBarId.progress = model?.getPercent()!!.toInt()
+            } else{
+                binding.itemProgressBarId.progress = 0
+            }
+
+            if(model!!.isElapsed()){
+                if(isAnimationOn){
+                    binding.itemProgressBarId.indeterminate = true
+                    binding.itemProgressBarId.startIndeterminateAnimation()
+                }else{
+                    binding.itemProgressBarId.indeterminate = false
+                    binding.itemProgressBarId.stopAnimation()
+                }
+                binding.itemProgressBarId.progress = 100
+                binding.itemPercentId.text = ""
 
                 Log.d(TAG,"OnBind: animationon")
             }else{
                 binding.itemProgressBarId.indeterminate = false
                 binding.itemProgressBarId.stopAnimation()
-
-                Log.d(TAG,"OnBind: stop animation")
-            }
-
-            if(model?.isElapsed()!!){
-                binding.itemPercentId.text = ""
-            }else{
                 binding.itemPercentId.text = model?.getPercent().toString()+"%"
-            }
-
-            if(model?.isStarted()!!){
-                binding.itemProgressBarId.progress = model?.getPercent()!!.toInt()
-            }else{
-                binding.itemProgressBarId.progress = 0
+                Log.d(TAG,"OnBind: stop animation")
             }
 
 
