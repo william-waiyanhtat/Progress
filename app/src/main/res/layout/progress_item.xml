@@ -58,11 +58,11 @@
         android:id="@+id/tv_startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Start Date : "
+        android:text="Start Date"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sw_noti" />
 
@@ -71,7 +71,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="End Date : "
+        android:text="End Date"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/tv_startDate" />
 
@@ -87,10 +88,10 @@
         android:id="@+id/tv_act_sdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:text="..."
-        app:layout_constraintStart_toEndOf="@+id/tv_startDate"
-        app:layout_constraintTop_toTopOf="@+id/tv_startDate" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_startDate"
+        app:layout_constraintStart_toStartOf="@+id/tv_startDate"
+        app:layout_constraintTop_toBottomOf="@+id/tv_startDate" />
 
     <TextView
         android:id="@+id/tv_act_edate"
@@ -98,8 +99,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="..."
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
