@@ -72,7 +72,7 @@ class ProgressListWidget : AppWidgetProvider() {
             return PendingIntent.getActivity(context, value, intent, 0)
         }
 
-         private fun getRefreshIntent(context: Context): PendingIntent{
+        fun getRefreshIntent(context: Context): PendingIntent{
             val intent = Intent(context.applicationContext, ProgressListWidget::class.java)
             intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,

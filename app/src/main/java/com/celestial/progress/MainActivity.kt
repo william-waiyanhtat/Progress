@@ -14,6 +14,8 @@ import com.celestial.progress.databinding.ActivityMainBinding
 import com.celestial.progress.others.Status
 import com.celestial.progress.ui.CounterViewModel
 import com.celestial.progress.ui.adapter.ItemAdapter
+import com.celestial.progress.widget.ProgressListWidget
+import com.celestial.progress.widget.SingleProgressWidget
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.material.snackbar.Snackbar
@@ -86,6 +88,10 @@ class MainActivity : AppCompatActivity() {
                                             it.message!!,
                                             Snackbar.LENGTH_LONG
                                     ).show()
+                                    val pIntent = ProgressListWidget.getRefreshIntent(this@MainActivity)
+                                    pIntent.send()
+                                    val pIntentSingle = SingleProgressWidget.getRefreshIntent(this@MainActivity)
+                                    pIntentSingle.send()
                                 }
                             }
                             Status.ERROR -> {

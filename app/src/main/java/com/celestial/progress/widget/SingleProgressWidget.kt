@@ -15,6 +15,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.CounterRepository
 import com.celestial.progress.data.model.Counter
@@ -96,6 +97,7 @@ class SingleProgressWidget : AppWidgetProvider() {
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.single_progress_widget)
             views.setTextViewText(R.id.appwidget_text, counter?.title)
+            views.setOnClickPendingIntent(R.id.parent_single_widget, getPendingIntent(context,1))
 
             views.setViewVisibility(R.id.tv_single_widget_detail,View.VISIBLE)
             views.setTextViewText(R.id.tv_single_widget_detail, counter?.getInitial()+"\n"+counter?.getDetail(!counter?.isElapsed()))
@@ -111,6 +113,13 @@ class SingleProgressWidget : AppWidgetProvider() {
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
+
+        private fun getPendingIntent(context: Context, value: Int): PendingIntent {
+            //1
+            val intent = Intent(context, MainActivity::class.java)
+            return PendingIntent.getActivity(context, value, intent, 0)
+        }
+
 
 
         fun getRefreshIntent(context: Context): PendingIntent {

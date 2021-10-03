@@ -3,6 +3,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/single_widget_background"
+    android:id="@+id/parent_single_widget"
     android:padding="@dimen/widget_margin"
     android:theme="@style/ThemeOverlay.Progress.AppWidgetContainer">
 
