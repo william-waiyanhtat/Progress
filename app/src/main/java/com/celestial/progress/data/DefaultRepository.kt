@@ -26,5 +26,7 @@ interface DefaultRepository {
 
     fun fetchCounterListWhichRequiredNotification(): LiveData<List<Counter>>
 
+    fun fetchAllCountersWhichRequiredNotification(): List<Counter>
+
 
 }

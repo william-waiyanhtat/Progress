@@ -62,6 +62,10 @@ class CounterRepository @Inject constructor(
      return counterDao.fetchCounterWhichRequiredNotification()
     }
 
+    override fun fetchAllCountersWhichRequiredNotification(): List<Counter> {
+       return counterDao.fetchCounterWhichRequiredNotificationList()
+    }
+
     suspend fun insert100Records() {
         for (i in 1..100) {
             val counter = Counter(

@@ -33,4 +33,7 @@ interface CounterDao {
     @Query("select * from counter where isArchived = 0 and requiredNotification = 1")
     fun fetchCounterWhichRequiredNotification(): LiveData<List<Counter>>
 
+    @Query("select * from counter where isArchived = 0 and requiredNotification = 1")
+    fun fetchCounterWhichRequiredNotificationList(): List<Counter>
+
 }

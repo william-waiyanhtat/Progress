@@ -206,6 +206,7 @@ object NotificationHelper {
         canvas.drawBitmap(bitmap, 0f, 0f, paint)
         return bitmapResult
     }
+
 }
 
 

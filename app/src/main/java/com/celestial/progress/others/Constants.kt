@@ -13,4 +13,6 @@ object Constants {
     const val emailAddress = "aeroitsoultion@gmail.com"
 
     const val privacyLink = "https://aeroitsoultion.wixsite.com/progress"
+
+    const val notificationUpdateAction = "com.celestial.notification"
 }
