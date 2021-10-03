@@ -66,6 +66,10 @@ class Counter(
         val c = Calendar.getInstance().time
         val current = Calendar.getInstance().resetToMidnight(c)
 
+        if(isComplete()){
+            return "0 Day(s)"
+        }
+
         val start =if(!isRemainingDate) LocalDate.parse(startDate)
         else if(isRemainingDate && startDate.getDate()>current.time){
             suffix = " from today"
