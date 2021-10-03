@@ -122,8 +122,6 @@ object Utils {
         if(progress>0) {
             val progressRectF = RectF(0f + stroke, 0f + stroke, r, viewHeight - stroke)
             paint.color = color
-
-
             canvas.drawRoundRect(progressRectF, 50f, 50f, paint)
         }
         // canvas.drawArc(rectF, 270f, 360f, false, paint)

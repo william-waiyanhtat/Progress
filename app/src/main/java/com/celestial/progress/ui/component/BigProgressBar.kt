@@ -145,26 +145,31 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
         paint.strokeWidth = paintStrokeWidth
 
         val r = RectF(paintStrokeWidth / 2, paintStrokeWidth / 2, WIDTH.toFloat() - paintStrokeWidth / 2, HEIGHT.toFloat() - paintStrokeWidth / 2)
-        val p = WIDTH - (WIDTH * progress / MAX!!)
+
         paint.style = Paint.Style.STROKE
         canvas?.drawRoundRect(r, 30f, 30f, paint)
-
         paint.shader = createGradient()
 
         paint.style = Paint.Style.FILL
+        val clipPath = Path()
+        clipPath.addRoundRect(r,30f,30f,Path.Direction.CW)
+        canvas?.clipPath(clipPath)
 
-        if (WIDTH.toFloat() - paintStrokeWidth - p >= 30f / 2) {
-            val q = RectF(paintStrokeWidth, paintStrokeWidth, WIDTH.toFloat() - paintStrokeWidth - p, HEIGHT.toFloat() - paintStrokeWidth)
-            canvas?.drawRoundRect(q, 25f, 25f, paint)
+        val p = (WIDTH-paintStrokeWidth) * (progress.toFloat() / MAX!!).toFloat()
+            if(p>0){
+                val q = RectF(paintStrokeWidth, paintStrokeWidth, p, HEIGHT.toFloat() - paintStrokeWidth)
+                canvas?.drawRoundRect(q, 30f, 30f, paint)
 
-        }
+            }
 
-        val w = WIDTH.toFloat() - paintStrokeWidth - p
+        val w = WIDTH.toFloat() - paintStrokeWidth
 
         if(indeterminate){
             paint2.shader = animated3Gradient()
             val q = RectF(paintStrokeWidth, paintStrokeWidth, w, HEIGHT.toFloat() - paintStrokeWidth)
-            canvas?.drawRoundRect(q, 25f, 25f, paint2)
+            canvas?.drawRoundRect(q, 30f, 30f, paint2)
+
+
         }
 
         //shaded animated glare rectangle
