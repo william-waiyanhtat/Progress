@@ -64,8 +64,7 @@ class SingleProgressWidget : AppWidgetProvider() {
 
             }
             val id = loadTitlePref(context, appWidgetId)
-            Toast.makeText(context, "Widget Update -" + appWidgetId, Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "Widget Update : ${id}")
+
         }
 
     }

@@ -57,7 +57,7 @@ object NotificationHelper {
         mBuilder = NotificationCompat.Builder(mContext!!)
                 .setSmallIcon(R.drawable.ic_only_ic)
         mBuilder!!.setContentTitle(counter.title)
-                .setContentText(counter.getInitial()+ counter.getDetail())
+                .setContentText(counter.getInitial()+ counter.getDetail(!counter.isElapsed()))
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setColorized(true)

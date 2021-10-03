@@ -104,7 +104,7 @@ object Utils {
 
         paint.style = Paint.Style.FILL
         paint.strokeWidth = stroke
-        paint.color = context.getColor(R.color.pb_gray_color)
+        paint.color = context.getColor(R.color.gray)
 
         val size = DeviceUtils.convertDpToPixel(10f, context)
 
@@ -118,10 +118,14 @@ object Utils {
         paint.style = Paint.Style.FILL
 
         val r = (viewWidth - stroke) * (progress.toFloat() / 100.toFloat())
-        val progressRectF = RectF(0f + stroke, 0f + stroke, r, viewHeight - stroke)
-        paint.color = color
 
-        canvas.drawRoundRect(progressRectF, 50f, 50f, paint)
+        if(progress>0) {
+            val progressRectF = RectF(0f + stroke, 0f + stroke, r, viewHeight - stroke)
+            paint.color = color
+
+
+            canvas.drawRoundRect(progressRectF, 50f, 50f, paint)
+        }
         // canvas.drawArc(rectF, 270f, 360f, false, paint)
         return bitmap
 

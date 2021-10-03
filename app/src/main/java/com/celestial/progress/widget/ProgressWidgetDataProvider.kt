@@ -48,7 +48,7 @@ class ProgressWidgetDataProvider(val ctx: Context, val intent: Intent, val repos
         val model = counterList[position]
 
         rv.setTextViewText(R.id.tv_title_widget_list, model.title)
-        rv.setTextViewText(R.id.tv_detail_widget_list, model.getInitial() +model.getDetail())
+        rv.setTextViewText(R.id.tv_detail_widget_list, model.getInitial() +model.getDetail(!model?.isElapsed()))
         if (model.isElapsed()) {
             rv.setViewVisibility(R.id.progress_widget_list, View.GONE)
             rv.setViewVisibility(R.id.progress_widget_list_imgv, View.GONE)
