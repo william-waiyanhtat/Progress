@@ -27,7 +27,9 @@ class SplashActivity : AppCompatActivity() {
 
         progressBar = binding?.pbActivitysplash!!
         progressBar.progress = 0
+        progressBar.duration = 1000
         progressBar.color1 = getColor(R.color.teal_200)
+        progressBar.indeterminate = true
 
 
         binding?.tvAppNameSplash?.text = Utils.getApplicationName(this)
@@ -35,21 +37,27 @@ class SplashActivity : AppCompatActivity() {
         val view = binding?.root
         setContentView(view)
 
-        valueAnimator = ValueAnimator.ofInt(0, 100)
-        valueAnimator.apply {
-            this?.duration = 1000L
-            this?.addUpdateListener {
-                progressBar.progress = it.animatedValue as Int
-            }
-            this?.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+        Handler(Looper.myLooper()!!).postDelayed({
+            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                     finish()
-                }
-            })
 
-            this?.start()
-        }
+        },1000)
+
+//        valueAnimator = ValueAnimator.ofInt(0, 100)
+//        valueAnimator.apply {
+//            this?.duration = 1000L
+//            this?.addUpdateListener {
+//                progressBar.progress = it.animatedValue as Int
+//            }
+//            this?.addListener(object : AnimatorListenerAdapter() {
+//                override fun onAnimationEnd(animation: Animator?) {
+//                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+//                    finish()
+//                }
+//            })
+//
+//            this?.start()
+//        }
     }
 
     override fun onDestroy() {

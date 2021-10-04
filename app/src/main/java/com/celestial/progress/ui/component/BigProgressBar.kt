@@ -6,6 +6,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import com.celestial.progress.R
 
 
 const val TAG = "BigProgressBar"
@@ -32,9 +33,10 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
     var paint2 = Paint()
 
+    var duration = 2000
+
     var progress = 100
     set(value) {
-
         field = value
         invalidate()
     }
@@ -51,7 +53,7 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
                 valueAnimator.apply {
                     this.repeatMode = ValueAnimator.RESTART
                     this.repeatCount = ValueAnimator.INFINITE
-                    this.duration = 2000
+                    this.duration = duration
                     this.addUpdateListener(this@BigProgressBar)
                     this.start()
                 }
@@ -136,17 +138,12 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
     }
 
     override fun onDraw(canvas: Canvas?) {
-        paint.color = color1
-        //   canvas?.drawRect(0f, 0f, WIDTH.toFloat(), 20f, paint)
-
-        paint.shader = createGradient()
-        //   canvas?.drawRect(0f, 0f, WIDTH / 2.toFloat(), 20f, paint)
-       // Log.i("ProgressBar:", "WIDTH:${WIDTH}, WIDTH/2:${WIDTH / 2}")
         paint.strokeWidth = paintStrokeWidth
 
         val r = RectF(paintStrokeWidth / 2, paintStrokeWidth / 2, WIDTH.toFloat() - paintStrokeWidth / 2, HEIGHT.toFloat() - paintStrokeWidth / 2)
 
-        paint.style = Paint.Style.STROKE
+        paint.style = Paint.Style.FILL
+        paint.color = context.getColor(R.color.pb_gray_color)
         canvas?.drawRoundRect(r, 30f, 30f, paint)
         paint.shader = createGradient()
 
@@ -171,10 +168,6 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
 
         }
-
-        //shaded animated glare rectangle
-
-
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

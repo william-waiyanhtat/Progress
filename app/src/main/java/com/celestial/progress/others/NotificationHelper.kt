@@ -62,16 +62,14 @@ object NotificationHelper {
             .setColorized(true)
             .setColor(counter.color!!)
             .setSilent(true)
-//                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
             .setContentIntent(resultPendingIntent)
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
 
-        if (!counter.isElapsed()) {
-
-
-            mBuilder.setProgress(100, counter.getPercent()!!.toInt(), false)
-
+        if(isDefaultNotification){
+            if (!counter.isElapsed()) {
+                mBuilder.setProgress(100, counter.getPercent()!!.toInt(), false)
+            }
         }
+
 
 
         if (!isDefaultNotification) {
@@ -137,7 +135,7 @@ object NotificationHelper {
             val tImage = tintImage(bitmap!!, counter.color!!)
 
             setImageViewBitmap(R.id.imgv_customnoti_icon, tImage)
-            setViewVisibility(R.id.imgv_customnoti_icon, View.INVISIBLE)
+            setViewVisibility(R.id.imgv_customnoti_icon, View.VISIBLE)
 
             val initial = if (counter.isElapsed()) "Elapsed : " else "Remaining : "
 

@@ -104,7 +104,7 @@ object Utils {
 
         paint.style = Paint.Style.FILL
         paint.strokeWidth = stroke
-        paint.color = context.getColor(R.color.gray)
+        paint.color = context.getColor(R.color.pb_gray_color)
 
         val size = DeviceUtils.convertDpToPixel(10f, context)
 
