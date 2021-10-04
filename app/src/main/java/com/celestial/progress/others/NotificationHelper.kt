@@ -26,7 +26,7 @@ const val NOTIFICATION_CHANNEL_NAME = "casualChannel"
 object NotificationHelper {
 
 
-     val TAG = NotificationHelper::class.java.name
+    val TAG = NotificationHelper::class.java.name
 
 //    private var mContext: Context? = null
 //    private var mNotificationManager: NotificationManager? = null
@@ -54,32 +54,33 @@ object NotificationHelper {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
         mBuilder = NotificationCompat.Builder(mContext!!)
-                .setSmallIcon(R.drawable.ic_only_ic)
+            .setSmallIcon(R.drawable.ic_only_ic)
         mBuilder!!.setContentTitle(counter.title)
-                .setContentText(counter.getInitial() + counter.getDetail(!counter.isElapsed()))
-                .setAutoCancel(false)
-                .setOngoing(true)
-                .setColorized(true)
-                .setColor(counter.color!!)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setContentIntent(resultPendingIntent)
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setContentText(counter.getInitial() + counter.getDetail(!counter.isElapsed()))
+            .setAutoCancel(false)
+            .setOngoing(true)
+            .setColorized(true)
+            .setColor(counter.color!!)
+            .setSilent(true)
+//                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+            .setContentIntent(resultPendingIntent)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
 
-        if(!counter.isElapsed()){
+        if (!counter.isElapsed()) {
 
 
-            mBuilder.setProgress(100,counter.getPercent()!!.toInt(),false)
+            mBuilder.setProgress(100, counter.getPercent()!!.toInt(), false)
 
         }
 
 
         if (!isDefaultNotification) {
-             mBuilder.setCustomContentView(createAndGetCustomNotification(mContext, counter))
+            mBuilder.setCustomContentView(createAndGetCustomNotification(mContext, counter))
         }
         mNotificationManager =
-                mContext!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mContext!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_LOW
             val notificationChannel = NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
                 NOTIFICATION_CHANNEL_NAME,
@@ -95,12 +96,14 @@ object NotificationHelper {
     }
 
     fun cancelNotification(mContext: Context, counter: Counter) {
-        val notificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(counter.id!!)
     }
 
     fun checkNotification(mContext: Context, counter: Counter): Boolean {
-        val mNotificationManager: NotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val mNotificationManager: NotificationManager =
+            mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notifications: Array<StatusBarNotification> = mNotificationManager.activeNotifications
 
         if (notifications.isEmpty()) {
@@ -117,7 +120,8 @@ object NotificationHelper {
     }
 
     fun getNotificationList(mContext: Context): Array<StatusBarNotification> {
-        val mNotificationManager: NotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val mNotificationManager: NotificationManager =
+            mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notifications: Array<StatusBarNotification> = mNotificationManager.activeNotifications
         return notifications
     }
@@ -127,14 +131,15 @@ object NotificationHelper {
         return RemoteViews(context.packageName, R.layout.custom_notification_layout).apply {
             setTextViewText(R.id.tv_notification_title, counter.title)
 
-            val bitmap = context.getDrawable(R.drawable.ic_only_ic)?.let { Utils.drawableToBitmap(it) }
+            val bitmap =
+                context.getDrawable(R.drawable.ic_only_ic)?.let { Utils.drawableToBitmap(it) }
 
             val tImage = tintImage(bitmap!!, counter.color!!)
 
             setImageViewBitmap(R.id.imgv_customnoti_icon, tImage)
-            setViewVisibility(R.id.imgv_customnoti_icon,View.INVISIBLE)
+            setViewVisibility(R.id.imgv_customnoti_icon, View.INVISIBLE)
 
-            val initial  = if(counter.isElapsed()) "Elapsed : " else "Remaining : "
+            val initial = if (counter.isElapsed()) "Elapsed : " else "Remaining : "
 
 
 
@@ -142,16 +147,16 @@ object NotificationHelper {
                 R.id.tv_notification_detail,
                 initial + counter.getDetail(!counter.isElapsed())
             )
-            if(counter.note!!.isEmpty()){
+            if (counter.note!!.isEmpty()) {
                 setViewVisibility(R.id.tv_notification_note, View.GONE)
-            }else{
+            } else {
                 setViewVisibility(R.id.tv_notification_note, View.VISIBLE)
                 setTextViewText(R.id.tv_notification_note, counter.note)
             }
 
-            if(counter.isElapsed()){
+            if (counter.isElapsed()) {
                 setViewVisibility(R.id.imgv_notification_progress, View.GONE)
-            }else{
+            } else {
                 setViewVisibility(R.id.imgv_notification_progress, View.VISIBLE)
                 Log.d(TAG, "createAndGetCustomNotification: ${counter.getPercent()?.toInt()!!}")
 
@@ -204,11 +209,11 @@ object NotificationHelper {
         val rectF = RectF(0f + stroke, 0f + stroke, viewWidth - stroke, viewHeight - stroke)
         canvas.drawRoundRect(rectF, 20f, 20f, paint)
 
-        paint.style  = Paint.Style.FILL
+        paint.style = Paint.Style.FILL
 
-        val r =  (viewWidth - stroke)* (progress.toFloat()/100.toFloat())
+        val r = (viewWidth - stroke) * (progress.toFloat() / 100.toFloat())
 
-        if(progress>0) {
+        if (progress > 0) {
 
             val progressRectF = RectF(0f + stroke, 0f + stroke, r, viewHeight - stroke)
             paint.color = color

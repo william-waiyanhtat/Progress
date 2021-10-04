@@ -215,7 +215,7 @@
                 android:layout_height="wrap_content"
                 android:text="Create Notification"
                 app:layout_constraintStart_toStartOf="@+id/preset_color1"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_color_error" />
 
             <Button
                 android:visibility="gone"
@@ -259,14 +259,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:hint="@string/note_label"
                 app:layout_constraintEnd_toEndOf="@+id/btn_CustomColor"
                 app:layout_constraintStart_toStartOf="@+id/preset_color1"
-                app:layout_constraintTop_toBottomOf="@+id/tv_color_error">
+                app:layout_constraintTop_toBottomOf="@+id/requiredNotiChkBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/note_input"
