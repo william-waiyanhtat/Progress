@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import androidx.preference.PreferenceManager
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
@@ -50,32 +49,41 @@ object NotificationHelper {
         val resultIntent = Intent(mContext, MainActivity::class.java)
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val resultPendingIntent = PendingIntent.getActivity(
-                mContext,
-                0 /* Request code */, resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+            mContext,
+            0 /* Request code */, resultIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
         mBuilder = NotificationCompat.Builder(mContext!!)
                 .setSmallIcon(R.drawable.ic_only_ic)
         mBuilder!!.setContentTitle(counter.title)
-                .setContentText(counter.getInitial()+ counter.getDetail(!counter.isElapsed()))
+                .setContentText(counter.getInitial() + counter.getDetail(!counter.isElapsed()))
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setColorized(true)
                 .setColor(counter.color!!)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentIntent(resultPendingIntent)
+                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+
+        if(!counter.isElapsed()){
+
+
+            mBuilder.setProgress(100,counter.getPercent()!!.toInt(),false)
+
+        }
+
 
         if (!isDefaultNotification) {
-             mBuilder.setCustomContentView(createAndGetCustomNotification(mContext ,counter))
+             mBuilder.setCustomContentView(createAndGetCustomNotification(mContext, counter))
         }
         mNotificationManager =
                 mContext!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val notificationChannel = NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID,
-                    NOTIFICATION_CHANNEL_NAME,
-                    importance
+                NOTIFICATION_CHANNEL_ID,
+                NOTIFICATION_CHANNEL_NAME,
+                importance
             )
             notificationChannel.enableLights(false)
             assert(mNotificationManager != null)
@@ -121,19 +129,23 @@ object NotificationHelper {
 
             val bitmap = context.getDrawable(R.drawable.ic_only_ic)?.let { Utils.drawableToBitmap(it) }
 
-            val tImage = tintImage(bitmap!!,counter.color!!)
+            val tImage = tintImage(bitmap!!, counter.color!!)
 
-            setImageViewBitmap(R.id.imgv_customnoti_icon,tImage)
+            setImageViewBitmap(R.id.imgv_customnoti_icon, tImage)
+            setViewVisibility(R.id.imgv_customnoti_icon,View.INVISIBLE)
 
             val initial  = if(counter.isElapsed()) "Elapsed : " else "Remaining : "
 
 
 
-            setTextViewText(R.id.tv_notification_detail, initial+counter.getDetail(!counter.isElapsed()))
+            setTextViewText(
+                R.id.tv_notification_detail,
+                initial + counter.getDetail(!counter.isElapsed())
+            )
             if(counter.note!!.isEmpty()){
-                setViewVisibility(R.id.tv_notification_note,View.GONE)
+                setViewVisibility(R.id.tv_notification_note, View.GONE)
             }else{
-                setViewVisibility(R.id.tv_notification_note,View.VISIBLE)
+                setViewVisibility(R.id.tv_notification_note, View.VISIBLE)
                 setTextViewText(R.id.tv_notification_note, counter.note)
             }
 
@@ -145,7 +157,13 @@ object NotificationHelper {
 
                 val percent = counter.getPercent()?.toInt()!!
 
-                setImageViewBitmap(R.id.imgv_notification_progress, generateProgressBitmap(context, percent, counter.color!!))
+                setImageViewBitmap(
+                    R.id.imgv_notification_progress, generateProgressBitmap(
+                        context,
+                        percent,
+                        counter.color!!
+                    )
+                )
             }
 
         }
@@ -175,7 +193,11 @@ object NotificationHelper {
 
         val size = DeviceUtils.convertDpToPixel(10f, context)
 
-        val bitmap = Bitmap.createBitmap(viewWidth.toInt(), viewHeight.toInt(), Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(
+            viewWidth.toInt(),
+            viewHeight.toInt(),
+            Bitmap.Config.ARGB_8888
+        )
 
         val canvas = Canvas(bitmap)
 

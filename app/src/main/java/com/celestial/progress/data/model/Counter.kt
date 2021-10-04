@@ -166,12 +166,16 @@ class Counter(
 
     fun getPercent(): Long? {
 
+        if(isComplete()){
+            return 100L
+        }
+
         if(startDate.getDate()> Calendar.getInstance().time){
             return 0L
         }
 
         if(endDate!!.isEmpty()){
-            return INVALID
+            return 0L
         }
             endDate?.let {
                 val currentDate = Calendar.getInstance().apply {
@@ -179,11 +183,11 @@ class Counter(
                 }
 
                 if(currentDate.time > endDate.getDate()){
-                    return OVER
+                    return 100L
                 }
 
                 if(currentDate.time == endDate.getDate()){
-                    return COMPLETE
+                    return 100L
                 }
 
                 val dayReach = dayDifferenceBetweenTwoDates(startDate, currentDate.getCurrentDateString())
@@ -199,9 +203,7 @@ class Counter(
 
                 return percent?.times(100)?.toLong()
             }
-
-            return INVALID
-
+            return 0L
     }
 
     fun getInitial(): String{
