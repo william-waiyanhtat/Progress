@@ -86,4 +86,21 @@
 
     <!--    About-->
     <string name="about_love">Made with ❤ by Aero IT</string>
+
+    <!--    Onboarding-->
+    <string name="slide1_title">Welcome to Progress</string>
+    <string name="slide1_description">The App that can track and remind the time for your important dates and events.</string>
+
+    <string name="slide2_title">Homescreen Widget</string>
+    <string name="slide2_description">Create and place any progress as widget on your homescreen not to miss your special dates.</string>
+
+    <string name="slide3_title">Persistent Notifications</string>
+    <string name="slide3_description">Create notification for your progress in default notification or app notification style.</string>
+
+    <string name="slide4_title">Overall control for notification</string>
+    <string name="slide4_description">One switch to enable or disable for all progress notifications</string>
+
+    <string name="slide5_title">Support two kind of progress</string>
+    <string name="slide5_description">For fixed period tracking and indeterminate time tracking</string>
+
 </resources>

@@ -33,9 +33,9 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
     var paint2 = Paint()
 
-    var duration = 2000
+    var durationTime = 2000L
 
-    var progress = 100
+    var progress = 0
     set(value) {
         field = value
         invalidate()
@@ -53,7 +53,7 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
                 valueAnimator.apply {
                     this.repeatMode = ValueAnimator.RESTART
                     this.repeatCount = ValueAnimator.INFINITE
-                    this.duration = duration
+                    this.duration = durationTime
                     this.addUpdateListener(this@BigProgressBar)
                     this.start()
                 }
@@ -144,15 +144,16 @@ class BigProgressBar : View, ValueAnimator.AnimatorUpdateListener {
 
         paint.style = Paint.Style.FILL
         paint.color = context.getColor(R.color.pb_gray_color)
+        paint.shader = null
         canvas?.drawRoundRect(r, 30f, 30f, paint)
         paint.shader = createGradient()
 
-        paint.style = Paint.Style.FILL
+
         val clipPath = Path()
         clipPath.addRoundRect(r,30f,30f,Path.Direction.CW)
         canvas?.clipPath(clipPath)
 
-        val p = (WIDTH-paintStrokeWidth) * (progress.toFloat() / MAX!!).toFloat()
+        val p = (WIDTH-paintStrokeWidth) * (progress.toFloat() / MAX!!)
             if(p>0){
                 val q = RectF(paintStrokeWidth, paintStrokeWidth, p, HEIGHT.toFloat() - paintStrokeWidth)
                 canvas?.drawRoundRect(q, 30f, 30f, paint)

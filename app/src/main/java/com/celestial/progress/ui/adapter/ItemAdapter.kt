@@ -175,9 +175,7 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(
         override fun bind() {
             super.bind()
 
-
             binding.imgvWidgetChkbox.visibility = View.VISIBLE
-
             itemView.setOnClickListener {
                 for (c in currentList) {
                     if (c.isCheckedForWidget) {

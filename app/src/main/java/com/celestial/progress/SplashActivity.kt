@@ -27,7 +27,6 @@ class SplashActivity : AppCompatActivity() {
 
         progressBar = binding?.pbActivitysplash!!
         progressBar.progress = 0
-        progressBar.duration = 1000
         progressBar.color1 = getColor(R.color.teal_200)
         progressBar.indeterminate = true
 
@@ -38,7 +37,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(view)
 
         Handler(Looper.myLooper()!!).postDelayed({
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            startActivity(Intent(this@SplashActivity, ProgressOnBoard::class.java))
                     finish()
 
         },1000)
