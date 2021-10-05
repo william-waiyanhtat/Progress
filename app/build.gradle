@@ -129,6 +129,9 @@ dependencies {
     //app intro
     implementation 'com.github.akshaaatt:Onboarding:1.0.1'
 
+    //in-app tutorial
+    implementation 'com.github.iammert:MaterialIntroView:1.6.0'
+
 
     testImplementation 'junit:junit:4.+'
     testImplementation "com.google.truth:truth:1.1.3"

@@ -79,7 +79,7 @@
 
     <!--    Dashboard-->
     <string name="dashboard_empty">Dashboard is empty. <br /> Tap the + button to create new progress.</string>
-    <string name="archive_prompt_msg">"Archiving progress will disable related notification and widget," +
+    <string name="archive_prompt_msg">"Archiving progress will disable related notification and widget,"
                                 "Are you sure?"</string>
 
     <string name="notifcation_off_alert_msg">App overall notification is off, would you like to go app setting and turn on?</string>
