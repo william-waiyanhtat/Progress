@@ -24,7 +24,6 @@ class NotificationReceiver: HiltBroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         NotificationController.fetchAndUpdateNotifiedCounterList(counterRepository,context!!)
-     //   Toast.makeText(context,"NOTIFICATION RECEIVER WORKING",Toast.LENGTH_LONG).show()
         setAlarmToUpdateAtDayChanged(context)
     }
 

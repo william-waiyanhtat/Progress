@@ -1,15 +1,12 @@
 package com.celestial.progress.ui.fragment
 
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.os.Looper
 import android.os.Parcelable
 import android.util.Log
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,6 +17,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import co.mobiwise.materialintro.shape.Focus
+import co.mobiwise.materialintro.shape.FocusGravity
+import co.mobiwise.materialintro.shape.ShapeType
+import co.mobiwise.materialintro.view.MaterialIntroView
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
 import com.celestial.progress.data.model.Counter
@@ -51,13 +52,15 @@ class DashboardFragment : Fragment() {
 
     var notificationIssueList = ArrayList<Counter>()
 
+    lateinit var targetView: View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         if (bufferList.isNotEmpty())
@@ -77,8 +80,22 @@ class DashboardFragment : Fragment() {
 
         toolbar.inflateMenu(R.menu.btm_menu)
 
+
+
+        targetView = toolbar.findViewById(R.id.Add)
+
+        if(targetView!=null){
+            Log.d(TAG, "TargetView: $targetView")
+        }
+
+
         viewModel = ViewModelProvider(requireActivity())[CounterViewModel::class.java]
-        adapter = ItemAdapter(expandCollapse, itemMenuShow, notificationCb, ItemAdapter.ItemViewHolder::class)
+        adapter = ItemAdapter(
+            expandCollapse,
+            itemMenuShow,
+            notificationCb,
+            ItemAdapter.ItemViewHolder::class
+        )
         binding.counterRcy.adapter = adapter
         binding.counterRcy.layoutManager = LinearLayoutManager(context)
         val itemTouchHelper = ItemTouchHelper(itemTouchSimpleCallback)
@@ -89,6 +106,10 @@ class DashboardFragment : Fragment() {
 
         Log.d(TAG, "On Create View")
 
+
+
+        initMaterialGuideView()
+
         return view
     }
 
@@ -98,13 +119,18 @@ class DashboardFragment : Fragment() {
                 R.id.Add -> {
                     if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
                         val extras = FragmentNavigator.Extras.Builder()
-                                .addSharedElement(
-                                        binding.toolbarCreate, "fabBtn"
-                                ).build()
+                            .addSharedElement(
+                                binding.toolbarCreate, "fabBtn"
+                            ).build()
 
                         // val bundle = bundleOf("isCreate" to false)
 
-                        findNavController().navigate(R.id.navigateToCreateFragment, null, null, extras)
+                        findNavController().navigate(
+                            R.id.navigateToCreateFragment,
+                            null,
+                            null,
+                            extras
+                        )
                     }
                 }
                 R.id.archive -> {
@@ -170,15 +196,6 @@ class DashboardFragment : Fragment() {
     fun setListener() {
         binding.fab.setOnClickListener {
             (activity as MainActivity).showHideAppBar(false)
-
-//            if (findNavController().currentDestination?.id == R.id.dashboardFragment) {
-//                val extras = FragmentNavigator.Extras.Builder()
-//                    .addSharedElement(
-//                        binding.fab, "fabBtn"
-//                    ).build()
-//
-//               findNavController().navigate(R.id.navigateToCreateFragment, null, null, extras)
-//            }
         }
     }
 
@@ -216,13 +233,13 @@ class DashboardFragment : Fragment() {
     }
 
     val itemTouchSimpleCallback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
-            0
+        ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
+        0
     ) {
         override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
         ): Boolean {
             val from = viewHolder.layoutPosition
             val to = target.layoutPosition
@@ -256,8 +273,14 @@ class DashboardFragment : Fragment() {
 
                     for (i in 0 until bufferList.size) {
                         bufferList[i].order = i
-                        Log.d("DragTest", "CurrentList ${adapter.currentList[i].title} Order:${adapter.currentList[i].order}")
-                        Log.d("DragTest", "Counter: ${bufferList[i].title} Order: ${bufferList[i].order}")
+                        Log.d(
+                            "DragTest",
+                            "CurrentList ${adapter.currentList[i].title} Order:${adapter.currentList[i].order}"
+                        )
+                        Log.d(
+                            "DragTest",
+                            "Counter: ${bufferList[i].title} Order: ${bufferList[i].order}"
+                        )
                     }
                     Log.d("DragTest", "*****************")
                     Log.d("DragTest", "End action: $actionState")
@@ -289,11 +312,16 @@ class DashboardFragment : Fragment() {
         createPopUpMenuAndShow(v, c)
     }
 
-    val notificationCb: (Counter,Boolean) -> Unit = {it,isChecked->
+    val notificationCb: (Counter, Boolean) -> Unit = { it, isChecked->
         if(isChecked) {
-            Utils.isOverallNotificationOn(requireContext()) {
+          val result =  Utils.isOverallNotificationOn(requireContext()) {
                 goToSetting()
             }
+
+            if(result){
+                NotificationHelper.createNotification(requireContext(),it)
+            }
+
         }
         if (!notificationIssueList.contains(it)) {
             notificationIssueList.add(it)
@@ -313,15 +341,24 @@ class DashboardFragment : Fragment() {
                             viewModel.editCounter = c
 
                             val extras = FragmentNavigator.Extras.Builder()
-                                    .addSharedElement(
-                                            binding.toolbarCreate, "fabBtn"
-                                    ).build()
+                                .addSharedElement(
+                                    binding.toolbarCreate, "fabBtn"
+                                ).build()
 
-                            findNavController().navigate(R.id.navigateToCreateFragment, bundle, null, extras)
+                            findNavController().navigate(
+                                R.id.navigateToCreateFragment,
+                                bundle,
+                                null,
+                                extras
+                            )
                         }
                     }
                     R.id.item_archive -> {
-                        Utils.createDialogWithYesNo(requireContext(), "", getString(R.string.archive_prompt_msg)) {
+                        Utils.createDialogWithYesNo(
+                            requireContext(),
+                            "",
+                            getString(R.string.archive_prompt_msg)
+                        ) {
 
                             lifecycleScope.launch {
                                 var counter = c
@@ -376,5 +413,26 @@ class DashboardFragment : Fragment() {
             findNavController().navigate(R.id.dashToSetting)
         }
     }
+
+
+    private fun initMaterialGuideView(){
+
+        if(!SharePrefHelper.isGuideShown(requireContext())) {
+            MaterialIntroView.Builder(requireActivity())
+                .enableDotAnimation(false)
+                .enableIcon(false)
+                .setFocusGravity(FocusGravity.CENTER)
+                .setFocusType(Focus.MINIMUM)
+                .setDelayMillis(500)
+                .enableFadeAnimation(true)
+                .performClick(true)
+                .setInfoText("Hi There! Click this button to add new year countdown")
+                .setShape(ShapeType.CIRCLE)
+                .setTarget(targetView)
+                .setUsageId(System.currentTimeMillis().toString()) //THIS SHOULD BE UNIQUE ID
+                .show()
+        }
+    }
+
 
 }

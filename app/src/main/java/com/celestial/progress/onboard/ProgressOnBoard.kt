@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
+import com.celestial.progress.others.SharePrefHelper
 import com.limerse.onboard.OnboardAdvanced
 import com.limerse.onboard.OnboardFragment
 
@@ -20,8 +21,8 @@ class ProgressOnBoard : OnboardAdvanced() {
                 description = getString(R.string.slide1_description),
                 resourceId = R.drawable.slider1_content, //or R.raw.your_json for LottieAnimationView
                 backgroundDrawable = R.drawable.slider1_background,
-                titleColor = Color.BLACK,
-                descriptionColor = Color.GRAY,
+                titleColor = getColor(R.color.dark_gray),
+                descriptionColor = getColor(R.color.gray),
                 backgroundColor = Color.BLUE,
                 // titleTypefaceFontRes = R.font.opensans_regular,
                 //    descriptionTypefaceFontRes = R.font.opensans_regular,
@@ -35,8 +36,8 @@ class ProgressOnBoard : OnboardAdvanced() {
                 description = getString(R.string.slide2_description),
                 resourceId = R.drawable.slider2_content, //or R.raw.your_json for LottieAnimationView
                 backgroundDrawable = R.drawable.slider2_background,
-                titleColor = Color.BLACK,
-                descriptionColor = Color.GRAY,
+                titleColor = getColor(R.color.dark_gray),
+                descriptionColor = getColor(R.color.gray),
                 backgroundColor = Color.BLUE,
                 // titleTypefaceFontRes = R.font.opensans_regular,
                 //    descriptionTypefaceFontRes = R.font.opensans_regular,
@@ -50,8 +51,8 @@ class ProgressOnBoard : OnboardAdvanced() {
                 description = getString(R.string.slide3_description),
                 resourceId = R.drawable.slider3_content, //or R.raw.your_json for LottieAnimationView
                 backgroundDrawable = R.drawable.slider3_background,
-                titleColor = Color.BLACK,
-                descriptionColor = Color.GRAY,
+                titleColor = getColor(R.color.dark_gray),
+                descriptionColor = getColor(R.color.gray),
                 backgroundColor = Color.BLUE,
                  //titleTypefaceFontRes = R.font.opensans_regular,
                //    descriptionTypefaceFontRes = R.font.opensans_regular,
@@ -65,8 +66,8 @@ class ProgressOnBoard : OnboardAdvanced() {
                 description = getString(R.string.slide4_description),
                 resourceId = R.drawable.slider4_content, //or R.raw.your_json for LottieAnimationView
                 backgroundDrawable = R.drawable.slider4_background,
-                titleColor = Color.BLACK,
-                descriptionColor = Color.GRAY,
+                titleColor = getColor(R.color.dark_gray),
+                descriptionColor = getColor(R.color.gray),
                 backgroundColor = Color.BLUE,
                 // titleTypefaceFontRes = R.font.opensans_regular,
                 //    descriptionTypefaceFontRes = R.font.opensans_regular,
@@ -80,8 +81,8 @@ class ProgressOnBoard : OnboardAdvanced() {
                 description = getString(R.string.slide5_description),
                      resourceId = R.drawable.slider5_content, //or R.raw.your_json for LottieAnimationView
                 backgroundDrawable = R.drawable.slider5_background,
-                titleColor = Color.BLACK,
-                descriptionColor = Color.GRAY,
+                titleColor = getColor(R.color.dark_gray),
+                descriptionColor = getColor(R.color.gray),
                 backgroundColor = Color.BLUE,
                 // titleTypefaceFontRes = R.font.opensans_regular,
                 //    descriptionTypefaceFontRes = R.font.opensans_regular,
@@ -99,6 +100,7 @@ class ProgressOnBoard : OnboardAdvanced() {
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
+        SharePrefHelper.setOnBoardingShow(this)
         startActivity(Intent(this,MainActivity::class.java))
         finish()
     }

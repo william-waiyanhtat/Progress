@@ -16,20 +16,15 @@
         android:id="@+id/Add"
         android:enabled="true"
         android:icon="@drawable/ic_add"
-        app:cnb_backgroundColor="#606060"
-        app:cnb_iconColor="#FFAB91"
         app:showAsAction="always"
-        app:cnb_iconTintMode="src_in"
-        app:cnb_textColor="#90CAF9"/>
+       />
 
     <item android:title="Archive"
         android:id="@+id/archive"
         android:enabled="true"
+        app:actionViewClass="androidx.appcompat.widget.AppCompatImageButton"
         android:icon="@drawable/ic_archive"
-        app:cnb_backgroundColor="#606060"
-        app:cnb_iconColor="#FFAB91"
-        app:cnb_iconTintMode="src_in"
-        app:cnb_textColor="#90CAF9"/>
+       />
 
 <!--    <item android:title="Add"-->
 <!--        android:id="@+id/def"-->

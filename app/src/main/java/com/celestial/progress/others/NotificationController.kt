@@ -14,7 +14,6 @@ object NotificationController {
     fun fetchAndUpdateNotifiedCounterList(counterRepository: CounterRepository, context: Context) {
         GlobalScope.launch {
             val list = counterRepository.fetchAllCountersWhichRequiredNotification()
-
             for (i in list) {
                 NotificationHelper.createNotification(context, i)
             }

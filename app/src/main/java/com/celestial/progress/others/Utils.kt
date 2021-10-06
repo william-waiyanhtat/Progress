@@ -18,6 +18,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.celestial.progress.R
 import com.celestial.progress.ui.component.DeviceUtils
+import java.time.Year
+import java.util.*
 
 
 object Utils {
@@ -171,12 +173,52 @@ object Utils {
         alertDialog.show()
     }
 
-    fun isOverallNotificationOn(context: Context,cb:()->Unit){
-        val result = SharePrefHelper.isAllNotificationOff(context)
-        if(!result){
-            createDialogWithYesNo(context,"",context.getString(R.string.notifcation_off_alert_msg),cb)
-        }
+    fun createDialogOkButton(context: Context, title: String, msg: String, callback:()->Unit) {
+        val builder = AlertDialog.Builder(context).apply {
+            setMessage(msg)
+            setTitle(title)
+            setCancelable(false)
+            setPositiveButton("OK", DialogInterface.OnClickListener { dialog, id ->
+                callback.invoke()
+                dialog.cancel()
+            })
 
+
+        }
+        val alertDialog = builder.create()
+        alertDialog.setTitle(title)
+        alertDialog.show()
     }
+
+    fun isOverallNotificationOn(context: Context,cb:()->Unit): Boolean {
+        val result = SharePrefHelper.isAllNotificationOff(context)
+        return if(!result){
+            createDialogOkButton(context,"",context.getString(R.string.notifcation_off_alert_msg),cb)
+            false
+        }else{
+            true
+        }
+    }
+
+    fun getStartDateStringForTutorial(): String {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)+1
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        return "$year-$month-$day"
+    }
+
+    fun getEndDateStringForTutorial(): String {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.YEAR,+1)
+        calendar.set(Calendar.MONTH,0)
+        calendar.set(Calendar.DAY_OF_MONTH,1)
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)+1
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        return "$year-$month-$day"
+    }
+
 }
 

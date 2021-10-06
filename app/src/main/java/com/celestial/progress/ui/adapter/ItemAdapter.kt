@@ -149,7 +149,7 @@ class ItemAdapter<T : RecyclerView.ViewHolder>(
 
             binding.swNoti.setOnClickListener {
                 if (binding.swNoti.isChecked) {
-                    createNotification(model)
+               //     createNotification(model)
                     model.requiredNotification = true
                     notiIssueCb?.invoke(model,true)
                 } else {

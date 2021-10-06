@@ -22,6 +22,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 
 import androidx.navigation.fragment.NavHostFragment
+import co.mobiwise.materialintro.MaterialIntroConfiguration
+import co.mobiwise.materialintro.shape.Focus
+import co.mobiwise.materialintro.shape.FocusGravity
+import co.mobiwise.materialintro.shape.ShapeType
+import co.mobiwise.materialintro.view.MaterialIntroView
 
 import com.celestial.progress.MainActivity
 import com.celestial.progress.R
@@ -29,12 +34,18 @@ import com.celestial.progress.data.model.Counter
 import com.celestial.progress.data.model.DisplayFormat
 import com.celestial.progress.data.model.DisplayFormatTC
 import com.celestial.progress.databinding.FragmentCreateBinding
+import com.celestial.progress.others.SharePrefHelper
 import com.celestial.progress.others.Status
+import com.celestial.progress.others.Utils
 import com.celestial.progress.others.Validator.verifyCounterName
 import com.celestial.progress.others.Validator.verifyInputDateString
 import com.celestial.progress.ui.CounterViewModel
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import petrov.kristiyan.colorpicker.ColorPicker
 import petrov.kristiyan.colorpicker.ColorPicker.OnChooseColorListener
+import smartdevelop.ir.eram.showcaseviewlib.GuideView
+import smartdevelop.ir.eram.showcaseviewlib.config.Gravity
+import smartdevelop.ir.eram.showcaseviewlib.config.PointerType
 import java.util.*
 
 
@@ -57,9 +68,15 @@ class CreateFragment : Fragment() {
 
     private var colorValue: Int? = null
 
+    private var datePickerDialog: DatePickerDialog? = null
+
+    private var dialogOkBtn: View? = null
 
     private val TAG = CreateFragment::class.simpleName
 
+
+    private lateinit var startDateChooseGuide: MaterialIntroView.Builder
+    private lateinit var config: MaterialIntroConfiguration
 
     fun goBack() {
         NavHostFragment.findNavController(this@CreateFragment)
@@ -91,6 +108,9 @@ class CreateFragment : Fragment() {
         // Inflate the layout for this fragment
 
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
+
+
+
         val view = binding.root
         setUpViewModel()
         toolbar = binding.toolbarCreate
@@ -110,6 +130,12 @@ class CreateFragment : Fragment() {
             }
             return@setOnMenuItemClickListener true
         }
+
+        if(!SharePrefHelper.isGuideShown(requireContext())){
+            initializeGuide()
+        }
+
+
 
         setUpListener()
         if (!isCreate) {
@@ -313,6 +339,10 @@ class CreateFragment : Fragment() {
                 displayFormat
         )
         if (isCreate) {
+                if(!SharePrefHelper.isGuideShown(requireContext())){
+                    SharePrefHelper.setGuideShown(requireContext())
+                }
+
             (requireActivity() as MainActivity).insertCounter(counter, { goBack() })
         } else {
 
@@ -370,7 +400,7 @@ class CreateFragment : Fragment() {
         v.isSelected = true
         val calendar = Calendar.getInstance()
 
-        val datePickerDialog: DatePickerDialog = DatePickerDialog(
+         datePickerDialog = DatePickerDialog(
                 requireActivity(),
                 DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                     val mONTH = month + 1
@@ -403,7 +433,8 @@ class CreateFragment : Fragment() {
                     })
         }
 
-        datePickerDialog.show()
+        datePickerDialog!!.show()
+
     }
 
     private fun chooseColorCompoundListener() {
@@ -495,6 +526,250 @@ class CreateFragment : Fragment() {
         createButtonClickEvent()
     }
 
+
+    private fun createAndShowGuide(){
+
+        val displayFormatGuide = GuideView.Builder(requireContext())
+            .setTitle("Tap Here")
+            .setContentText("To set the end date")
+            .setTargetView(binding.endDateInput)
+            .setGravity(Gravity.center)
+            .setPointerType(PointerType.none)
+            .setGuideListener {
+
+
+            }
+            .build()
+
+        val endDateInputGuide = GuideView.Builder(requireContext())
+            .setTitle("Tap Here")
+            .setContentText("To set the end date")
+            .setTargetView(binding.endDateInput)
+            .setGravity(Gravity.center)
+            .setPointerType(PointerType.none)
+            .setGuideListener {
+                displayFormatGuide.show()
+
+            }
+            .build()
+
+        val endDateChkBoxGuide =  GuideView.Builder(requireContext())
+            .setTitle("Tap Here")
+            .setContentText("To make the period tracking progress")
+            .setTargetView(binding.countdownChkBox)
+            .setGravity(Gravity.center)
+            .setPointerType(PointerType.none)
+            .setGuideListener {
+                endDateInputGuide.show()
+
+            }
+            .build()
+        val startDateGuide = GuideView.Builder(requireContext())
+            .setTitle("Tap Here")
+            .setContentText("To set the start date")
+            .setTargetView(binding.startDateInput)
+            .setGravity(Gravity.center)
+            .setPointerType(PointerType.none)
+            .setGuideListener {
+                    endDateChkBoxGuide.show()
+
+            }
+            .build()
+
+
+
+        GuideView.Builder(requireContext())
+            .setTitle("Tap Here")
+            .setContentText("To enter progress name")
+            .setTargetView(binding.inputName)
+            .setPointerType(PointerType.none)
+            .setGravity(Gravity.center)
+            .setGuideListener {
+                startDateGuide.show()
+
+            }
+            .build()
+            .show()
+
+
+    }
+
+    private fun showGuide() {
+        val createButtonTarget = binding.toolbarCreate.findViewById<View>(R.id.toolbar_menu_create)
+
+        startDateChooseGuide = MaterialIntroView.Builder(requireActivity())
+            .performClick(true)
+            .setInfoText("Tap this date input to set the Today Date")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(binding.root)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setTargetPadding(-100)
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+            }
+
+
+        val createGuide = MaterialIntroView.Builder(requireActivity())
+            .performClick(true)
+            .setInfoText("Press this button to create progress")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(createButtonTarget)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+                //startDate = "$year-$mONTH-$dayOfMonth"
+                //  binding.endDateInput.text = "ABC"
+
+            }
+
+
+
+        val noteGuide = MaterialIntroView.Builder(requireActivity())
+            .performClick(true)
+            .setInfoText("Tap this input to enter the note for your progress, this time we will enter for you.")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(binding.noteInput)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+                binding.noteInput.setText("Make new year party with friends")
+                createGuide.show()
+
+            }
+
+
+
+
+        val notificationGuide = MaterialIntroView.Builder(requireActivity())
+            .performClick(true)
+            .setInfoText("Check this box to create the notification")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(binding.requiredNotiChkBox)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+                noteGuide.show()
+            }
+
+
+        val colorChooseGuide = MaterialIntroView.Builder(requireActivity())
+            .performClick(true)
+            .setInfoText("Tap this color to set the Progress bar color")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(binding.presetColor1)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+                notificationGuide.show()
+
+            }
+
+        val dayFormatGuide = MaterialIntroView.Builder(requireActivity())
+            .performClick(false)
+            .setInfoText("Tap this dropdown to choose the display format, this time we will choose Month-Week-Day format for you")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(binding.spinnerDisplayformat)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+                //startDate = "$year-$mONTH-$dayOfMonth"
+                //  binding.endDateInput.text = "ABC"
+                binding.spinnerDisplayformat.setSelection(2)
+                displayFormat = DisplayFormatTC().getValue(2)
+                colorChooseGuide.show()
+            }
+
+
+
+
+        val endDateInputGuide =  MaterialIntroView.Builder(requireActivity())
+            .performClick(false)
+            .setInfoText("Tap this checkbox to make the Countdown Progress")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(binding.endDateInput)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+                setEndDateText(binding.endDateInput,Utils.getEndDateStringForTutorial())
+                dayFormatGuide.show()
+            }
+
+
+
+        val checkBoxGuide = MaterialIntroView.Builder(requireActivity())
+            .performClick(true)
+            .setInfoText("Tap this checkbox to make the Countdown Progress")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(binding.countdownChkBox)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+                endDateInputGuide.show()
+
+            }
+
+
+        val startDateInput = MaterialIntroView.Builder(requireActivity())
+            .performClick(false)
+            .setInfoText("Tap this date input to set the start date, this time we will set today date as Start Date")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(binding.startDateInput)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+                //startDate = "$year-$mONTH-$dayOfMonth"
+                setStartDateText(binding.startDateInput, Utils.getStartDateStringForTutorial())
+                checkBoxGuide.show()
+
+            }
+
+
+        MaterialIntroView.Builder(requireActivity())
+            .performClick(true)
+            .setInfoText("Hi There! \nTap this input to enter the name for new year countdown, this time we will enter the name for you.")
+            .setShape(ShapeType.RECTANGLE)
+            .setTarget(binding.inputName)
+            .setUsageId(System.currentTimeMillis().toString())
+            .setConfiguration(config)
+            .enableIcon(false)
+            .setListener {
+                binding.inputName.setText("New Year Countdown")
+                startDateInput.show()
+            }
+            .show()
+    }
+
+    private fun initializeGuide(){
+         config = MaterialIntroConfiguration()
+        config.delayMillis = 0
+        config.isFadeAnimationEnabled = true
+        config.apply {
+            focusGravity = FocusGravity.CENTER
+            focusType = Focus.MINIMUM
+        }
+
+
+        showGuide()
+    }
+
+    private fun setStartDateText(v:TextView,dateString: String){
+        v.text = "Start Date: $dateString"
+        startDate = dateString
+    }
+
+    private fun setEndDateText(v:TextView,dateString: String){
+        v.text = "End Date: $dateString"
+        endDate = dateString
+    }
 
 }
 

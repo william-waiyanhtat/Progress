@@ -64,7 +64,6 @@ class SingleProgressWidget : AppWidgetProvider() {
                 }
 
             }
-            val id = loadTitlePref(context, appWidgetId)
 
         }
 

@@ -34,7 +34,7 @@
 
     <string name="start_date_error_label">Start Date can\'t be empty!</string>
 
-    <string name="count_down_chkbox_label">Make as countdown counter</string>
+    <string name="count_down_chkbox_label">Make as countdown progress</string>
 
     <string name="color_error_label">Please select one color for counter</string>
 
@@ -82,7 +82,7 @@
     <string name="archive_prompt_msg">"Archiving progress will disable related notification and widget,"
                                 "Are you sure?"</string>
 
-    <string name="notifcation_off_alert_msg">App overall notification is off, would you like to go app setting and turn on?</string>
+    <string name="notifcation_off_alert_msg">App overall notification is off, please go to app setting and turn on</string>
 
     <!--    About-->
     <string name="about_love">Made with ❤ by Aero IT</string>
